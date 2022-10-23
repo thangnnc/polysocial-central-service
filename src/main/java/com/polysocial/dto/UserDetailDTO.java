@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -13,7 +14,7 @@ public class UserDetailDTO {
 
     private Long userDetailCode;
 
-    private LocalDate birthday;
+    private LocalDateTime birthday;
 
     private boolean gender;
 
@@ -23,6 +24,6 @@ public class UserDetailDTO {
 
     private String course;
 
-    private LocalDate createdDate;
+    private LocalDateTime createdDate;
 
 }

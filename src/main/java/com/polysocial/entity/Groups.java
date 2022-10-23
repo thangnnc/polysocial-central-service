@@ -1,0 +1,52 @@
+package com.polysocial.entity;
+
+import lombok.*;
+import org.hibernate.Hibernate;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+
+@Getter
+@Setter
+@RequiredArgsConstructor
+@Entity
+public class Groups implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long groupId;
+
+    private String name;
+
+    private Long totalMember;
+
+    private String description;
+
+    private Boolean status;
+
+    private LocalDateTime createdDate;
+
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Posts> posts;
+
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Exercises> exercises;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Groups groups = (Groups) o;
+        return groupId != null && Objects.equals(groupId, groups.groupId);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+}

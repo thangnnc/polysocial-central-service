@@ -4,8 +4,8 @@ import com.polysocial.config.jwt.JwtTokenProvider;
 import com.polysocial.config.security.CustomUserDetails;
 import com.polysocial.dto.RegisterRequestDTO;
 import com.polysocial.dto.UserDTO;
-import com.polysocial.entity.Role;
-import com.polysocial.entity.UserDetail;
+import com.polysocial.entity.Roles;
+import com.polysocial.entity.UserDetails;
 import com.polysocial.entity.Users;
 import com.polysocial.repo.RoleRepo;
 import com.polysocial.repo.UserRepo;
@@ -71,10 +71,9 @@ public class LoginServiceImpl implements LoginService {
             Users user = modelMapper.map(requestDTO, Users.class);
             user.setPassword(bCrypt.encode(user.getPassword()));
             user.setActive(true);
-            UserDetail userDetail = modelMapper.map(requestDTO, UserDetail.class);
-            userDetail.setCreatedDate(LocalDate.now());
+            UserDetails userDetail = modelMapper.map(requestDTO, UserDetails.class);
 
-            Role role = roleRepo.findByName(requestDTO.getRole());
+            Roles role = roleRepo.findByName(requestDTO.getRole());
             if(ValidateUtils.isNullOrEmpty(role)){
                 return null;
             }
