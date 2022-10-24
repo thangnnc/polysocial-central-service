@@ -21,6 +21,8 @@ public class Posts implements Serializable {
 
     private String content;
 
+    private Boolean isActive;
+
     private LocalDateTime createdDate;
 
     @ManyToOne
