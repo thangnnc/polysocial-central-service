@@ -5,7 +5,7 @@ import com.polysocial.config.security.CustomUserDetails;
 import com.polysocial.dto.RegisterRequestDTO;
 import com.polysocial.dto.UserDTO;
 import com.polysocial.entity.Roles;
-import com.polysocial.entity.UserDetails;
+import com.polysocial.entity.UserDetail;
 import com.polysocial.entity.Users;
 import com.polysocial.repo.RoleRepo;
 import com.polysocial.repo.UserRepo;
@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -71,7 +71,7 @@ public class LoginServiceImpl implements LoginService {
             Users user = modelMapper.map(requestDTO, Users.class);
             user.setPassword(bCrypt.encode(user.getPassword()));
             user.setActive(true);
-            UserDetails userDetail = modelMapper.map(requestDTO, UserDetails.class);
+            UserDetail userDetail = modelMapper.map(requestDTO, UserDetail.class);
 
             Roles role = roleRepo.findByName(requestDTO.getRole());
             if(ValidateUtils.isNullOrEmpty(role)){
@@ -79,6 +79,7 @@ public class LoginServiceImpl implements LoginService {
             }
             user.setRoleId(role.getRoleId());
             user.setUserDetail(userDetail);
+            user.setCreatedDate(LocalDateTime.now());
             userDetail.setUser(user);
 
             user = userRepo.save(user);

@@ -12,11 +12,11 @@ import java.util.Objects;
 @Setter
 @RequiredArgsConstructor
 @Entity
-public class UserDetails implements Serializable {
+public class UserDetail implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userDetailCode;
+    private Long userDetailId;
 
     private LocalDate birthday;
 
@@ -36,8 +36,8 @@ public class UserDetails implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        UserDetails that = (UserDetails) o;
-        return userDetailCode != null && Objects.equals(userDetailCode, that.userDetailCode);
+        UserDetail that = (UserDetail) o;
+        return userDetailId != null && Objects.equals(userDetailId, that.userDetailId);
     }
 
     @Override

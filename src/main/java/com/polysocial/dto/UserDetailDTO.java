@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDetailDTO {
 
-    private Long userDetailCode;
+    private Long userDetailId;
 
     private LocalDateTime birthday;
 
