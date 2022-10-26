@@ -15,10 +15,11 @@ public class UserService implements UserDetailsService {
     private UserRepo userRepo;
 
     @Override
-    public UserDetails loadUserByUsername(String email) {
-        Users user = userRepo.findByEmailAndIsActive(email, true);
+    public UserDetails loadUserByUsername(String userId) {
+        Long userCode = Long.parseLong(userId);
+        Users user = userRepo.findByUserIdAndIsActive(userCode, true);
         if (user == null) {
-            throw new UsernameNotFoundException(email);
+            throw new UsernameNotFoundException(userCode.toString());
         }
         return new CustomUserDetails(user);
     }

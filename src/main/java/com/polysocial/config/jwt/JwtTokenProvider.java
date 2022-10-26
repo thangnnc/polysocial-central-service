@@ -22,7 +22,7 @@ public class JwtTokenProvider {
 
         // Tạo chuỗi json web token từ email của user.
         return Jwts.builder()
-                .setSubject(userDetails.getUser().getEmail())
+                .setSubject(userDetails.getUser().getRoleId().toString())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
@@ -30,13 +30,13 @@ public class JwtTokenProvider {
     }
 
     // Lấy thông tin user từ jwt
-    public String getEmaillFromJWT(String token) {
+    public Long getIdFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(JWT_SECRET)
                 .parseClaimsJws(token)
                 .getBody();
 
-        return claims.getSubject();
+        return Long.parseLong(claims.getSubject());
     }
 
     public boolean validateToken(String authToken) {

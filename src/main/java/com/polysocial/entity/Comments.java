@@ -6,7 +6,10 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,6 +26,13 @@ public class Comments implements Serializable {
     private Boolean status;
 
     private LocalDateTime createdDate;
+
+    @ManyToOne()
+    @JoinColumn(name="manageCmt", insertable = false, updatable = false)
+    private Comments manager;
+
+    @OneToMany(mappedBy="manager")
+    private List<Comments> comments;
 
     @ManyToOne
     @JoinColumn(name = "userId", insertable = false, updatable = false)
