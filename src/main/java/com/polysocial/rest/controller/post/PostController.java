@@ -18,4 +18,8 @@ public class PostController {
         PostDTO response = postService.getPost();
         return response;
     }
+    
+    public String pushTest() {
+    	return null;
+    }
 }
