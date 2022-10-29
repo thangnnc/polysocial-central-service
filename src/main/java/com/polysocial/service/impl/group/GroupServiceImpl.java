@@ -1,6 +1,7 @@
 package com.polysocial.service.impl.group;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.polysocial.consts.GroupAPI;
 import com.polysocial.consts.PostAPI;
+import com.polysocial.dto.GroupDTO;
 import com.polysocial.dto.ListPostDTO;
 import com.polysocial.entity.Groups;
 import com.polysocial.entity.Members;
@@ -29,15 +31,16 @@ public class GroupServiceImpl implements GroupService {
     private RestTemplate restTemplate;
 
     @Override
-    public Groups[] getAll(Pageable page) {
+    public List<GroupDTO> getAll(Integer page, Integer limit) {
         try {
             String url = GroupAPI.API_GET_ALL_GROUP;
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
                     .queryParam("page",page)
+                    .queryParam("limit", limit)
                          .build();
-            
-            ResponseEntity<Groups[]> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null, Groups[].class);
-            return entity.getBody();
+                
+            ResponseEntity<GroupDTO[]> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null, GroupDTO[].class);
+            return Arrays.asList(entity.getBody());
         } catch (Exception e) {
             e.printStackTrace();
             return null;

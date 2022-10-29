@@ -7,13 +7,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.polysocial.dto.GroupDTO;
 import com.polysocial.entity.Groups;
 import com.polysocial.entity.Members;
 import com.polysocial.entity.Users;
 
 public interface GroupService {
 
-    Groups[] getAll(Pageable page);
+    List<GroupDTO> getAll(Integer page, Integer limit);
     
     Groups getOne(Long id);
     
