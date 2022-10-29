@@ -8,10 +8,10 @@ import java.io.Serializable;
 @Data
 public class FriendId implements Serializable {
 
-    @Column
+    @Column(name = "userInvite")
     private Long userInviteId;
 
-    @Column
+    @Column(name = "userConfirm")
     private Long userConfirmId;
 
 }

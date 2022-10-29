@@ -1,5 +1,6 @@
 package com.polysocial.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -29,10 +30,12 @@ public class Groups implements Serializable {
 
     private LocalDateTime createdDate;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Posts> posts;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Exercises> exercises;

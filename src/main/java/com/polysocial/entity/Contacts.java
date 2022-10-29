@@ -1,5 +1,7 @@
 package com.polysocial.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -20,14 +22,17 @@ public class Contacts implements Serializable {
 
     private Boolean isAdmin;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", insertable = false, updatable = false)
     private Users user;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "roomId", insertable = false, updatable = false)
     private RoomChats room;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "contact", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Messages> message;
