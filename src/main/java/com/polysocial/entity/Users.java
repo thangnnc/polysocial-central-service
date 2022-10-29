@@ -38,7 +38,7 @@ public class Users implements Serializable {
     private Long roleId;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "roleId", insertable = false, updatable = false)
     private Roles role;
 

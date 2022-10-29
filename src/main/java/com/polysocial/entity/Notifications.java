@@ -28,7 +28,7 @@ public class Notifications implements Serializable {
     private LocalDateTime createdDate;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "userId", insertable = false, updatable = false)
     private Users user;
 

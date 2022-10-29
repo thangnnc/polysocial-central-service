@@ -23,12 +23,12 @@ public class Contacts implements Serializable {
     private Boolean isAdmin;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "userId", insertable = false, updatable = false)
     private Users user;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "roomId", insertable = false, updatable = false)
     private RoomChats room;
 

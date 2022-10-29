@@ -30,7 +30,7 @@ public class Comments implements Serializable {
     private LocalDateTime createdDate;
 
     @JsonBackReference
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name="manageCmt", insertable = false, updatable = false)
     private Comments manager;
 

@@ -28,7 +28,7 @@ public class Messages implements Serializable {
     private LocalDateTime createdDate;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "contactId", insertable = false, updatable = false)
     private Contacts contact;
 
