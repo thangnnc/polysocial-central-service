@@ -8,18 +8,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.polysocial.dto.GroupDTO;
+import com.polysocial.dto.ListMembersDTO;
+import com.polysocial.dto.MemberDTO;
+import com.polysocial.dto.PageObject;
 import com.polysocial.entity.Groups;
 import com.polysocial.entity.Members;
 import com.polysocial.entity.Users;
 
 public interface GroupService {
 
-    List<GroupDTO> getAll(Integer page, Integer limit);
+    PageObject<GroupDTO> getAll(Integer page, Integer limit);
     
-    Groups getOne(Long id);
+    GroupDTO getOne(Long id);
     
-    void addMemberToGroup(Users user, Groups group);
-    
+    Groups updateGroup(Groups group);
+        
     void deleteMemberToGroup(Long groupId, Long userId);
     
     void deleteGroup(Long groupId);
@@ -32,17 +35,13 @@ public interface GroupService {
     
     Users getOneMemberInGroup(String email, Long groupId);
     
-    List<Members> getMemberInGroup(Long id);
-    
-    List<Groups> findByGroupName(String name);
-    
+    List<Object> getMemberInGroup(Long id);
+        
     Users getUserById(Long userId);
-    
-    void updateGroup(String name, Integer totalMember, String description, Long groupId);
-    
+        
     void createExcel(MultipartFile multipartFile) throws IOException;
     
-    List<Groups> findByKeywork(String keywork);
+    List<GroupDTO> findByKeywork(String keywork);
     
-    Members saveMember(Long userId, Long groupId);
+    MemberDTO saveMember(Long userId, Long groupId);
 }

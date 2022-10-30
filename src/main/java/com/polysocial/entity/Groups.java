@@ -2,10 +2,12 @@ package com.polysocial.entity;
 
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,7 +27,7 @@ public class Groups implements Serializable {
 
     private String description;
 
-    private Boolean status;
+    private Boolean status = true;
 
     private LocalDateTime createdDate;
 
