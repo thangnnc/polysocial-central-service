@@ -24,4 +24,7 @@ public class CentralAPI {
     public static final String API_CREATE_GROUP_EXCEL = "/group/api/create-file";
     public static final String API_FIND_GROUP_BY_KEYWORK = "/group/api/find-group";
     public static final String API_UPDATE_GROUP = "/group/api/update-group";
+    
+    public static final String API_GET_ALL_GROUP_BY_STUDENT = "/group/api/get-all/student";
+    public static final String API_GET_ALL_GROUP_BY_TEACHER = "/group/api/get-all/teacher";
 }

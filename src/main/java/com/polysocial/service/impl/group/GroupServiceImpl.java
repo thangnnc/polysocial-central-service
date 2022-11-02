@@ -237,6 +237,36 @@ public class GroupServiceImpl implements GroupService {
         }
     }
 
+    @Override
+    public List<MemberDTO> getAllGroupByStudent(Long userId) {
+        try {
+            String url = GroupAPI.API_GET_ALL_GROUP_BY_STUDENT;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("userId",userId)
+                         .build();
+            ResponseEntity<MemberDTO> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null, MemberDTO.class);
+            return  (List<MemberDTO>) entity.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<Object> getAllGroupByTeacher(Long userId) {
+        try {
+            String url = GroupAPI.API_GET_ALL_GROUP_BY_TEACHER;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("userId",userId)
+                         .build();
+            ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null, Object.class);
+            return  (List<Object>) entity.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 
 }

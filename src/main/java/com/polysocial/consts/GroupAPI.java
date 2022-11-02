@@ -25,4 +25,8 @@ public class GroupAPI {
     public static final String API_REMOVE_STUDENT = HostURL.GROUP_HOST+"/api/remove-student";
     
     public static final String API_CREATE_GROUP_EXCEL = HostURL.GROUP_HOST+"/api/create-file";
+    
+    public static final String API_GET_ALL_GROUP_BY_STUDENT = HostURL.GROUP_HOST+"/api/get-all/group/student";
+    
+    public static final String API_GET_ALL_GROUP_BY_TEACHER = HostURL.GROUP_HOST+"/api/get-all/group/teacher";
 }

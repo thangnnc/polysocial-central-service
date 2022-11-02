@@ -44,4 +44,12 @@ public interface GroupService {
     List<GroupDTO> findByKeywork(String keywork);
     
     MemberDTO saveMember(Long userId, Long groupId);
+    
+    List<MemberDTO> getAllGroupByStudent(Long userId);
+    
+    List<Object> getAllGroupByTeacher(Long userId);
+
+    
+    
+
 }

@@ -42,7 +42,7 @@ public class GroupController {
     private GroupServiceImpl groupService;
     
     @GetMapping(value=CentralAPI.GET_ALL_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE )
-    public ResponseEntity getAllPost(@RequestParam("page") Optional<Integer> page,
+    public ResponseEntity getAllGroup(@RequestParam("page") Optional<Integer> page,
             @RequestParam("limit") Optional<Integer> limit) {
         PageObject<GroupDTO> response = groupService.getAll(page.orElse(0),limit.orElse(3));
         return new ResponseEntity(response, HttpStatus.OK);
@@ -118,5 +118,17 @@ public class GroupController {
        }catch(Exception e) {
            return new ResponseEntity(e, HttpStatus.FAILED_DEPENDENCY);
        }
+    }
+    
+    @GetMapping(value = CentralAPI.API_GET_ALL_GROUP_BY_STUDENT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getAllGroupStudent(@RequestParam("userId") Long userId) {
+        List<MemberDTO> response = groupService.getAllGroupByStudent(userId);
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+    
+    @GetMapping(value = CentralAPI.API_GET_ALL_GROUP_BY_TEACHER, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getAllGroupTeacher(@RequestParam("userId") Long userId) {
+        List<Object> response = groupService.getAllGroupByTeacher(userId);
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 }
