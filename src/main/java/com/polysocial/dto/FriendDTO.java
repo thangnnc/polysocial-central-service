@@ -10,10 +10,9 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FriendDTO {
   
-    private Long userInvite;
+    private Long userInviteId;
 
-    private Long userConfirm;
+    private Long userConfirmId;
 
     private Boolean status;
-
 }

@@ -2,13 +2,21 @@ package com.polysocial.service.users;
 
 import java.util.List;
 
+import com.polysocial.dto.FriendDTO;
 import com.polysocial.dto.UserDTO;
+import com.polysocial.entity.Friends;
+import com.polysocial.entity.Users;
 
 public interface UserService {
-    List<UserDTO> getAllUsers();
+    List<Users> getAllUsers();
 
-    UserDTO getOneUser(Long userId);
+    Users getOneUser(Long userId);
 
-    Boolean getUserFriend(Long userId, Long friendId);
+    Friends getUserFriend(Long userId, Long friendId);
     
+    List<Friends> getAllFriend(Long userId);
+
+    List<Users> searchUserByEmail(String email);
+
+    List<Users> searchUserByName(String name);
 }

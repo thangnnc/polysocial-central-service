@@ -1,24 +1,97 @@
 package com.polysocial.rest.controller.user;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.polysocial.dto.FriendDTO;
+import com.polysocial.dto.UserDTO;
+import com.polysocial.entity.Friends;
+import com.polysocial.entity.Users;
 import com.polysocial.repo.FriendRepo;
 import com.polysocial.repo.UserRepo;
+import com.polysocial.service.users.UserService;
+
+import scala.collection.immutable.Stream;
+
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 public class UserController {
-    
+
     @Autowired
-    UserRepo userRepo;
+    UserService userService;
 
     @Autowired
     FriendRepo friendRepo;
-    
-    @GetMapping("/test/user")
-    public ResponseEntity getAll() {
-        return ResponseEntity.ok(friendRepo.getFriendByUserInviteIdAndUserConfirm(1L, 2L));
+
+    @GetMapping("/user/get-all")
+    public ResponseEntity getAllUser() {
+        try {
+            List<Users> list = userService.getAllUsers();
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @GetMapping("/user/get-one")
+    public ResponseEntity getOneUser(@RequestParam Long userId) {
+        try {
+            Users user = userService.getOneUser(userId);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @GetMapping("/user/get-friend")
+    public ResponseEntity getFriend(@RequestParam Long userId, @RequestParam Long friendId) {
+        try {
+            Friends friend = userService.getUserFriend(userId, friendId);
+            return ResponseEntity.ok(friend);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @GetMapping("/user/get-all-friend")
+    public ResponseEntity getAllFriends(@RequestParam Long userId){
+        try{
+            List<Friends> list = userService.getAllFriend(userId);
+            return ResponseEntity.ok(list);
+        }catch(Exception e){
+            return null;
+        }
+    }
+    @GetMapping("/user/search-by-email")
+    public ResponseEntity searchUserByEmail(@RequestParam String email){
+        try{
+            List<Users> list = userService.searchUserByEmail(email);
+            return ResponseEntity.ok(list);
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @GetMapping("/user/search-by-name")
+    public ResponseEntity searchUserByName(@RequestParam String name){
+        try{
+            List<Users> list = userService.searchUserByName(name);
+            return ResponseEntity.ok(list);
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 }

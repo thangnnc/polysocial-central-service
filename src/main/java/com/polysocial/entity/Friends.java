@@ -26,25 +26,27 @@ public class Friends implements Serializable {
 
     private Boolean status;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userInvite", insertable = false, updatable = false)
     private Users userInvite;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userConfirm", insertable = false, updatable = false)
     private Users userConfirm;
 
-    // @Override
-    // public boolean equals(Object o) {
-    //     if (this == o) return true;
-    //     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-    //     Friends friends = (Friends) o;
-    //     return userInviteId != null && Objects.equals(userInviteId, friends.userInviteId)
-    //             && userConfirmId != null && Objects.equals(userConfirmId, friends.userConfirmId);
-    // }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Friends friends = (Friends) o;
+        return userInviteId != null && Objects.equals(userInviteId, friends.userInviteId)
+                && userConfirmId != null && Objects.equals(userConfirmId, friends.userConfirmId);
+    }
 
-    // @Override
-    // public int hashCode() {
-    //     return Objects.hash(userInviteId, userConfirmId);
-    // }
+    @Override
+    public int hashCode() {
+        return Objects.hash(userInviteId, userConfirmId);
+    }
 }
