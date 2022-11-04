@@ -8,15 +8,15 @@ import com.polysocial.entity.Friends;
 import com.polysocial.entity.Users;
 
 public interface UserService {
-    List<Users> getAllUsers();
+    List<UserDTO> getAllUsers();
 
-    Users getOneUser(Long userId);
+    UserDTO getOneUser(Long userId);
 
-    Friends getUserFriend(Long userId, Long friendId);
+    FriendDTO getUserFriend(Long userId, Long friendId);
     
     List<Friends> getAllFriend(Long userId);
 
-    List<Users> searchUserByEmail(String email);
+    List<UserDTO> searchUserByEmail(String email);
 
-    List<Users> searchUserByName(String name);
+    List<UserDTO> searchUserByName(String name);
 }

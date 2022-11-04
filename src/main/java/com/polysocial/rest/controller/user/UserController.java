@@ -1,26 +1,22 @@
 package com.polysocial.rest.controller.user;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.polysocial.consts.UserAPI;
 import com.polysocial.dto.FriendDTO;
 import com.polysocial.dto.UserDTO;
 import com.polysocial.entity.Friends;
 import com.polysocial.entity.Users;
 import com.polysocial.repo.FriendRepo;
-import com.polysocial.repo.UserRepo;
 import com.polysocial.service.users.UserService;
-
-import scala.collection.immutable.Stream;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -33,38 +29,42 @@ public class UserController {
     @Autowired
     FriendRepo friendRepo;
 
-    @GetMapping("/user/get-all")
+    @Autowired
+    ModelMapper modelMapper;
+
+    @GetMapping(UserAPI.API_GET_ALL_USER)
     public ResponseEntity getAllUser() {
         try {
-            List<Users> list = userService.getAllUsers();
-            return ResponseEntity.ok(list);
+            List<UserDTO> listDTO = userService.getAllUsers();
+            return ResponseEntity.ok(listDTO);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @GetMapping(UserAPI.API_GET_ONE_USER)
+    public ResponseEntity getOneUser(@RequestParam Long userId) {
+        try {
+            UserDTO userDTO = userService.getOneUser(userId);
+          
+            return ResponseEntity.ok(userDTO);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    @GetMapping("/user/get-one")
-    public ResponseEntity getOneUser(@RequestParam Long userId) {
-        try {
-            Users user = userService.getOneUser(userId);
-            return ResponseEntity.ok(user);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    @GetMapping("/user/get-friend")
+    @GetMapping(UserAPI.API_GET_FRIEND)
     public ResponseEntity getFriend(@RequestParam Long userId, @RequestParam Long friendId) {
         try {
-            Friends friend = userService.getUserFriend(userId, friendId);
+            FriendDTO friend = userService.getUserFriend(userId, friendId);
             return ResponseEntity.ok(friend);
         } catch (Exception e) {
             return null;
         }
     }
 
-    @GetMapping("/user/get-all-friend")
+    @GetMapping(UserAPI.API_GET_ALL_FRIEND)
     public ResponseEntity getAllFriends(@RequestParam Long userId){
         try{
             List<Friends> list = userService.getAllFriend(userId);
@@ -73,10 +73,10 @@ public class UserController {
             return null;
         }
     }
-    @GetMapping("/user/search-by-email")
+    @GetMapping(UserAPI.API_SEARCH_USER_BY_EMAIL)
     public ResponseEntity searchUserByEmail(@RequestParam String email){
         try{
-            List<Users> list = userService.searchUserByEmail(email);
+            List<UserDTO> list = userService.searchUserByEmail(email);
             return ResponseEntity.ok(list);
         }catch(Exception e){
             e.printStackTrace();
@@ -84,10 +84,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/search-by-name")
+    @GetMapping(UserAPI.API_SEARCH_USER_BY_NAME)
     public ResponseEntity searchUserByName(@RequestParam String name){
         try{
-            List<Users> list = userService.searchUserByName(name);
+            List<UserDTO> list = userService.searchUserByName(name);
             return ResponseEntity.ok(list);
         }catch(Exception e){
             e.printStackTrace();

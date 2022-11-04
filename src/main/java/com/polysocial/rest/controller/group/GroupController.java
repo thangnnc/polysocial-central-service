@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,14 +60,14 @@ public class GroupController {
     @DeleteMapping(value = CentralAPI.DELETE_MEMBER_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity removeStudentGroup(@RequestParam Long groupId, @RequestParam Long userId) {
         groupService.deleteMemberToGroup(groupId, userId);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity("Delete success", HttpStatus.OK);
     }
     
 
     @DeleteMapping(value = CentralAPI.API_DELETE_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity removeroup(@RequestParam Long groupId) {
-        groupService.deleteGroup(groupId);
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity removeGroup(@RequestParam Long groupId) {
+        GroupDTO group = groupService.deleteGroup(groupId);
+        return new ResponseEntity(group, HttpStatus.OK);
     }
     
     @GetMapping(value = CentralAPI.API_GET_TEACHER, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -98,10 +101,11 @@ public class GroupController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
     
-    @PostMapping(value = CentralAPI.API_CREATE_GROUP_EXCEL, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity createExcel(@RequestParam(value="file", required = false)  MultipartFile file) throws IOException {
-        groupService.createExcel(file);
-        return new ResponseEntity(HttpStatus.OK);
+    @PostMapping(value = CentralAPI.API_CREATE_GROUP_EXCEL, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity createExcel(@RequestParam(value="file", required = false) MultipartFile file) throws IOException {
+        Object group = groupService.createExcel(file);
+        System.out.println("hone");
+        return new ResponseEntity(group,HttpStatus.OK);
     }
     
     @GetMapping(value = CentralAPI.API_FIND_GROUP_BY_KEYWORK, consumes = MediaType.APPLICATION_JSON_VALUE)

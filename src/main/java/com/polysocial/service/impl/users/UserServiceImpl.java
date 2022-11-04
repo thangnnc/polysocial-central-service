@@ -1,7 +1,9 @@
 package com.polysocial.service.impl.users;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,22 +24,28 @@ public class UserServiceImpl implements UserService{
     @Autowired
     FriendRepo friendRepo;
 
+    @Autowired
+    ModelMapper modelMapper;
+
     @Override
-    public List<Users> getAllUsers() {
-        List<Users> list = userRepo.getAllUsers();
-        return list;
+    public List<UserDTO> getAllUsers() {
+        List<Users> list = userRepo.findAll();
+        List<UserDTO> listDTO = list.stream().map(element -> modelMapper.map(element, UserDTO.class)).collect(Collectors.toList());
+        return listDTO;
     }
 
     @Override
-    public Users getOneUser(Long userId) {
-        Users user = userRepo.getOneUser(userId);
-        return user;
+    public UserDTO getOneUser(Long userId) {
+        Users user = userRepo.findByUserId(userId);
+        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        return userDTO;
     }
 
     @Override
-    public Friends getUserFriend(Long userId, Long friendId) {
+    public FriendDTO getUserFriend(Long userId, Long friendId) {
         Friends friend = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, friendId, friendId, userId);
-        return friend;
+        FriendDTO friendDTO = modelMapper.map(friend, FriendDTO.class);
+        return friendDTO;
     }
 
     @Override
@@ -47,15 +55,17 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<Users> searchUserByEmail(String email) {
-        List<Users> list = userRepo.searchUserByEmail(email);
-        return list;
+    public List<UserDTO> searchUserByEmail(String email) {
+        List<Users> list = userRepo.findByEmail(email);
+        List<UserDTO> listDTO = list.stream().map(element -> modelMapper.map(element, UserDTO.class)).collect(Collectors.toList());
+        return listDTO;
     }
 
     @Override
-    public List<Users> searchUserByName(String name) {
-        List<Users> list = userRepo.searchUserByName(name);
-        return list;
+    public List<UserDTO> searchUserByName(String name) {
+        List<Users> list = userRepo.findByFullName(name);
+        List<UserDTO> listDTO = list.stream().map(element -> modelMapper.map(element, UserDTO.class)).collect(Collectors.toList());
+        return listDTO;
     }
     
 }

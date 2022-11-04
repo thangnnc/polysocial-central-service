@@ -23,9 +23,9 @@ public interface GroupService {
     
     Groups updateGroup(Groups group);
         
-    void deleteMemberToGroup(Long groupId, Long userId);
+    String deleteMemberToGroup(Long groupId, Long userId);
     
-    void deleteGroup(Long groupId);
+    GroupDTO deleteGroup(Long groupId);
     
     Object getTeacherFromGroup(Long groupId);
     
@@ -39,7 +39,7 @@ public interface GroupService {
         
     Users getUserById(Long userId);
         
-    void createExcel(MultipartFile multipartFile) throws IOException;
+    Object createExcel(MultipartFile multipartFile) throws IOException;
     
     List<GroupDTO> findByKeywork(String keywork);
     

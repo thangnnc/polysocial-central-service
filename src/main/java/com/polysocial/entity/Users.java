@@ -37,7 +37,6 @@ public class Users implements Serializable {
 
     private Long roleId;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JoinColumn(name = "roleId", insertable = false, updatable = false)
     private Roles role;
@@ -55,7 +54,6 @@ public class Users implements Serializable {
     @ToString.Exclude
     private List<Friends> friendConfirms;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Notifications> notification;
@@ -64,17 +62,15 @@ public class Users implements Serializable {
     @ToString.Exclude
     private List<Contacts> contacts;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Posts> posts;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Likes> likes;
     
-    @JsonIgnore
+    
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Comments> comments;
