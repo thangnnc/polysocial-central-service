@@ -50,6 +50,13 @@ public class GroupController {
         PageObject<GroupDTO> response = groupService.getAll(page.orElse(0),limit.orElse(3));
         return new ResponseEntity(response, HttpStatus.OK);
     }
+
+    @GetMapping(value=CentralAPI.GET_ALL_GROUP_FALSE, consumes = MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity getAllGroupFalse(@RequestParam("page") Optional<Integer> page,
+            @RequestParam("limit") Optional<Integer> limit) {
+        PageObject<GroupDTO> response = groupService.getAllGroupFalse(page.orElse(0),limit.orElse(3));
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
     
     @GetMapping(value = CentralAPI.GET_ONE_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getOneGroup(@RequestParam("groupId") Long groupId) {
@@ -60,7 +67,7 @@ public class GroupController {
     @DeleteMapping(value = CentralAPI.DELETE_MEMBER_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity removeStudentGroup(@RequestParam Long groupId, @RequestParam Long userId) {
         groupService.deleteMemberToGroup(groupId, userId);
-        return new ResponseEntity("Delete success", HttpStatus.OK);
+        return new ResponseEntity("Deleted", HttpStatus.OK);
     }
     
 

@@ -10,7 +10,8 @@ public class CentralAPI {
     public static final String GET_ALL_POST = "/api/posts";
     
     // group
-    public static final String GET_ALL_GROUP = "/group/api/get/all";    
+    public static final String GET_ALL_GROUP = "/group/api/get/all";   
+    public static final String GET_ALL_GROUP_FALSE = "/group/api/get/all/false"; 
     public static final String GET_ONE_GROUP = "/group/api/get/class";
     public static final String DELETE_MEMBER_GROUP = "/group/api/remove-student";
     public static final String API_DELETE_GROUP = "/group/api/delete-group";

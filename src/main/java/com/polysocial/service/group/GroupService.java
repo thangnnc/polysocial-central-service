@@ -36,9 +36,7 @@ public interface GroupService {
     Users getOneMemberInGroup(String email, Long groupId);
     
     List<Object> getMemberInGroup(Long id);
-        
-    Users getUserById(Long userId);
-        
+                
     Object createExcel(MultipartFile multipartFile) throws IOException;
     
     List<GroupDTO> findByKeywork(String keywork);
@@ -48,6 +46,8 @@ public interface GroupService {
     List<MemberDTO> getAllGroupByStudent(Long userId);
     
     List<Object> getAllGroupByTeacher(Long userId);
+
+    PageObject<GroupDTO> getAllGroupFalse(Integer page, Integer limit);
 
     
     
