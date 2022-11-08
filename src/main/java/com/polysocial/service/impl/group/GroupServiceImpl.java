@@ -208,7 +208,6 @@ public class GroupServiceImpl implements GroupService {
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "multipart/form-data");
-
             HttpEntity httpEntity = new HttpEntity<>(parameters, headers);
 
             ResponseEntity<String> group = restTemplate.exchange(url, HttpMethod.POST,
