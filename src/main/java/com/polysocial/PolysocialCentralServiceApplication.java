@@ -25,6 +25,8 @@ public class PolysocialCentralServiceApplication {
     public BCryptPasswordEncoder getBCrypt(){
         return new BCryptPasswordEncoder();
     }
+    
+    
 
     public static void main(String[] args) {
         SpringApplication.run(PolysocialCentralServiceApplication.class, args);
