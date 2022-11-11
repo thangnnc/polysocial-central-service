@@ -5,17 +5,27 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PostDTO implements Serializable {
 
-    private String post1;
+	 private Long postId;
 
-    private String post2;
+	    private String content;
 
-    private String post3;
+	    private Date createdDate;
 
-    private String post4;
+	    private Long createdBy;
+
+	    private Long groupId;
+	    
+	    private Long countLike;
+	    
+	    private Long countComment;
+	    
+		private List<CommentDTO> listComment;
 }

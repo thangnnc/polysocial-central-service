@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -45,11 +47,13 @@ public class Users implements Serializable {
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     private UserDetail userDetail;
 
+    // @JsonIgnore
     @JsonManagedReference
     @OneToMany(mappedBy = "userInvite", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Friends> friendInvites;
 
+    // @JsonIgnore
     @JsonManagedReference
     @OneToMany(mappedBy = "userConfirm", fetch = FetchType.LAZY)
     @ToString.Exclude
@@ -74,6 +78,9 @@ public class Users implements Serializable {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Likes> likes;
+    
+    
+
 
     @JsonManagedReference
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)

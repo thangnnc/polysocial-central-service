@@ -1,5 +1,6 @@
 package com.polysocial.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.polysocial.entity.id.FriendId;
 import lombok.*;
@@ -26,6 +27,13 @@ public class Friends implements Serializable {
 
     private Boolean status;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "userInvite", insertable = false, updatable = false)
+    private Users userInvite;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "userInvite", insertable = false, updatable = false)
