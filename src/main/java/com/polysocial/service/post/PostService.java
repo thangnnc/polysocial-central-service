@@ -1,8 +1,8 @@
 package com.polysocial.service.post;
 
-import com.polysocial.dto.PostDTO;
+import com.polysocial.dto.ListPostDTO;
 
 public interface PostService {
 
-    PostDTO getPost();
+	ListPostDTO getAllPosts(Integer page, Integer limit);
 }
