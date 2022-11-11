@@ -1,11 +1,18 @@
 package com.polysocial.service.impl.users;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.polysocial.dto.FriendDTO;
 import com.polysocial.dto.UserDTO;
@@ -14,6 +21,7 @@ import com.polysocial.entity.Users;
 import com.polysocial.repo.FriendRepo;
 import com.polysocial.repo.UserRepo;
 import com.polysocial.service.users.UserService;
+import com.polysocial.utils.QrCode;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -26,6 +34,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     ModelMapper modelMapper;
+
+    @Autowired
+    QrCode qrCodeRepo;
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -67,5 +78,7 @@ public class UserServiceImpl implements UserService{
         List<UserDTO> listDTO = list.stream().map(element -> modelMapper.map(element, UserDTO.class)).collect(Collectors.toList());
         return listDTO;
     }
+
+
     
 }

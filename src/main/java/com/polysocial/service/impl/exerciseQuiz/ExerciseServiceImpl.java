@@ -1,29 +1,16 @@
 package com.polysocial.service.impl.exerciseQuiz;
 
-import com.polysocial.consts.CentralAPI;
-import com.polysocial.consts.DemoAPI;
+
 import com.polysocial.consts.ExerciseAPI;
-import com.polysocial.dto.DemoDTO;
-import com.polysocial.dto.ExerciseDTO;
 import com.polysocial.dto.ExercisesDTO;
-import com.polysocial.entity.Exercises;
-import com.polysocial.service.DemoService;
 import com.polysocial.service.exerciseQuiz.ExerciseService;
-import com.polysocial.utils.Logger;
-
-import ch.qos.logback.core.net.SyslogOutputStream;
-
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
