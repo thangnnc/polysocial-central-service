@@ -58,9 +58,9 @@ public class Users implements Serializable {
     @ToString.Exclude
     private List<Contacts> contacts;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private List<Posts> posts;
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//    @ToString.Exclude
+//    private List<Posts> posts;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
