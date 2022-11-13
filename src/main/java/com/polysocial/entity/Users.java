@@ -39,6 +39,8 @@ public class Users implements Serializable {
 
     private Long roleId;
 
+    private String qrCode;
+
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "roleId", insertable = false, updatable = false)

@@ -33,6 +33,6 @@ public class GroupDTO implements Serializable{
 
     private Boolean status;
 
-    private Date createdDate = new Date();
+    private LocalDateTime createdDate;
 
 }
