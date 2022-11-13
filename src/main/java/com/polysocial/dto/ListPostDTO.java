@@ -21,6 +21,6 @@ public class ListPostDTO {
 
     private int totalPage;
 
-    private List<PostDTO> listPostDTO;
+    private List<PostResponseDTO> listPostDTO;
     
 }

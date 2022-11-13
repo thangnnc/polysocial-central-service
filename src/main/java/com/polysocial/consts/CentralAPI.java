@@ -4,11 +4,14 @@ public class CentralAPI {
 
     public static final String GET_DEMO = "/api/demo-detail";
     public static final String GET_MESSAGE = "/api/message-detail";
-//    public static final String GET_POST = "/api/post-detail";
     public static final String GET_EXERCISE = "/api/exercise-detail";
     
     public static final String GET_ALL_POST = "/api/posts";
     
+    public static final String UPLOADFILE_POST = "/api/posts/upload";
+    
+    public static final String CREATE_COMMENT = "/api/comment";
+
     // group
     public static final String GET_ALL_GROUP = "/group/api/get/all";    
     public static final String GET_ONE_GROUP = "/group/api/get/class";
@@ -27,4 +30,5 @@ public class CentralAPI {
     
     public static final String API_GET_ALL_GROUP_BY_STUDENT = "/group/api/get-all/student";
     public static final String API_GET_ALL_GROUP_BY_TEACHER = "/group/api/get-all/teacher";
+
 }
