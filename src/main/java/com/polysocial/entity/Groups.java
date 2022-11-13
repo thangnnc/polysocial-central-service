@@ -30,7 +30,7 @@ public class Groups implements Serializable {
 
     private Boolean status = true;
 
-    private LocalDateTime createdDate;
+    private Date createdDate = new Date();
 
     @JsonManagedReference
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
