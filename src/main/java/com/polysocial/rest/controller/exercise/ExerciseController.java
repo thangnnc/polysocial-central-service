@@ -1,11 +1,8 @@
 package com.polysocial.rest.controller.exercise;
 
 import com.polysocial.consts.CentralAPI;
-import com.polysocial.dto.DemoDTO;
-import com.polysocial.dto.ExerciseDTO;
 import com.polysocial.dto.ExercisesDTO;
-import com.polysocial.entity.Exercises;
-import com.polysocial.service.DemoService;
+import com.polysocial.dto.TaskExDTO;
 import com.polysocial.service.exerciseQuiz.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -45,9 +42,9 @@ public class ExerciseController {
     }
 
     @DeleteMapping(value = CentralAPI.API_DELETE_EXERCISES, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity deleteExercise(@RequestParam Long exId) {
+    public ResponseEntity deleteExercise(@RequestBody TaskExDTO taskEx) {
         try {
-            return ResponseEntity.ok().body( exerciseService.deleteOne(exId));
+            return ResponseEntity.ok().body( exerciseService.deleteOne(taskEx.getExId()));
         } catch (Exception ex) {
             ex.printStackTrace();
             return ResponseEntity.badRequest().body(null);

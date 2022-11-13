@@ -20,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.polysocial.consts.TaskAPI;
 import com.polysocial.dto.TaskExDTO;
+import com.polysocial.dto.TaskFileCreateDTO;
 import com.polysocial.dto.TaskFileDTO;
 import com.polysocial.entity.TaskEx;
 import com.polysocial.entity.TaskFile;
@@ -44,7 +45,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskFile saveFile(MultipartFile file, Long exId, Long userId, Long groupId) {
+    public TaskFile saveFile(MultipartFile file, TaskFileCreateDTO taskFile) {
         try {
             String url = TaskAPI.API_TASK_FILE_CREATE;
             Path tempFile = Files.createTempFile(null, null);
@@ -55,9 +56,7 @@ public class TaskServiceImpl implements TaskService {
             MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
 
             parameters.add("file", new FileSystemResource(fileToSend));
-            parameters.add("exId", exId);
-            parameters.add("userId", userId);
-            parameters.add("groupId", groupId);
+            parameters.add("taskFile", taskFile);
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "multipart/form-data");
@@ -74,7 +73,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskFile updateFile(MultipartFile file, Long exId, Long userId, Long groupId) {
+    public TaskFile updateFile(MultipartFile file, TaskFileCreateDTO taskFile) {
         try {
             String url = TaskAPI.API_TASK_FILE_UPDATE;
             Path tempFile = Files.createTempFile(null, null);
@@ -85,9 +84,7 @@ public class TaskServiceImpl implements TaskService {
             MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
 
             parameters.add("file", new FileSystemResource(fileToSend));
-            parameters.add("exId", exId);
-            parameters.add("userId", userId);
-            parameters.add("groupId", groupId);
+            parameters.add("taskFile", taskFile);
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "multipart/form-data");
