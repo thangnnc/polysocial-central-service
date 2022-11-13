@@ -1,7 +1,11 @@
 package com.polysocial.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -35,37 +39,50 @@ public class Users implements Serializable {
 
     private Long roleId;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @JsonBackReference
+    @ManyToOne
     @JoinColumn(name = "roleId", insertable = false, updatable = false)
     private Roles role;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     private UserDetail userDetail;
 
+    // @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "userInvite", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Friends> friendInvites;
 
+    // @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "userConfirm", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Friends> friendConfirms;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Notifications> notification;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Contacts> contacts;
 
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    @ToString.Exclude
-//    private List<Posts> posts;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Posts> posts;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Likes> likes;
+    
+    
 
+
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Comments> comments;
