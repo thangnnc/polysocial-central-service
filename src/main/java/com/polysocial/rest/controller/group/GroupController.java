@@ -6,9 +6,9 @@ import java.util.Optional;
 
 import org.modelmapper.internal.util.Members;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+
+import org.springframework.data.domain.Pageable;import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,25 +19,22 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.polysocial.consts.CentralAPI;
-import com.polysocial.consts.CentralAPI;
 import com.polysocial.dto.GroupDTO;
-import com.polysocial.dto.ListMembersDTO;
-import com.polysocial.dto.ListPostDTO;
+
 import com.polysocial.dto.MemberDTO;
 import com.polysocial.dto.PageObject;
+import com.polysocial.dto.StudentDTO;
 import com.polysocial.entity.Groups;
 import com.polysocial.entity.Users;
 import com.polysocial.service.impl.group.GroupServiceImpl;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class GroupController {
 
@@ -65,16 +62,16 @@ public class GroupController {
     }
  
     @DeleteMapping(value = CentralAPI.DELETE_MEMBER_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity removeStudentGroup(@RequestParam Long groupId, @RequestParam Long userId) {
-        groupService.deleteMemberToGroup(groupId, userId);
+    public ResponseEntity removeStudentGroup(@RequestBody StudentDTO student) {
+        groupService.deleteMemberToGroup(student);
         return new ResponseEntity("Deleted", HttpStatus.OK);
     }
     
 
     @DeleteMapping(value = CentralAPI.API_DELETE_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity removeGroup(@RequestParam Long groupId) {
-        GroupDTO group = groupService.deleteGroup(groupId);
-        return new ResponseEntity(group, HttpStatus.OK);
+    public ResponseEntity removeGroup(@RequestBody GroupDTO group) {
+        GroupDTO groups = groupService.deleteGroup(group);
+        return new ResponseEntity(groups, HttpStatus.OK);
     }
     
     @GetMapping(value = CentralAPI.API_GET_TEACHER, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -84,14 +81,14 @@ public class GroupController {
     }
    
     @PostMapping(value = CentralAPI.API_CREATE_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity createGroup(@ModelAttribute Groups group) {
-        Groups response = groupService.createGroup(group);
+    public ResponseEntity createGroup(@RequestBody GroupDTO group) {
+        GroupDTO response = groupService.createGroup(group);
         return new ResponseEntity(response, HttpStatus.OK);
     }
     
     @PostMapping(value = CentralAPI.API_CREATE_MEMBER, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity saveMember(@RequestParam("userId") Long userId, @RequestParam("groupId") Long groupId) {
-        MemberDTO response = groupService.saveMember(userId, groupId);
+    public ResponseEntity saveMember(@RequestBody StudentDTO student) {
+        MemberDTO response = groupService.saveMember(student);
         return new ResponseEntity(response, HttpStatus.OK);
     }
     
@@ -111,7 +108,6 @@ public class GroupController {
     @PostMapping(value = CentralAPI.API_CREATE_GROUP_EXCEL, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity createExcel(@RequestParam(value="file", required = false) MultipartFile file) throws IOException {
         Object group = groupService.createExcel(file);
-        System.out.println("hone");
         return new ResponseEntity(group,HttpStatus.OK);
     }
     
@@ -122,9 +118,9 @@ public class GroupController {
     }
     
     @PutMapping(value = CentralAPI.API_UPDATE_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity updateGroup(@RequestBody Groups group) {
+    public ResponseEntity updateGroup(@RequestBody GroupDTO group) {
        try {
-           Groups response = groupService.updateGroup(group);
+           GroupDTO response = groupService.updateGroup(group);
            return new ResponseEntity(response, HttpStatus.OK);
        }catch(Exception e) {
            return new ResponseEntity(e, HttpStatus.FAILED_DEPENDENCY);

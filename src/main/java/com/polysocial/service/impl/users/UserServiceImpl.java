@@ -35,8 +35,8 @@ public class UserServiceImpl implements UserService{
     @Autowired
     ModelMapper modelMapper;
 
-    @Autowired
-    QrCode qrCodeRepo;
+    // @Autowired
+    // QrCode qrCodeRepo;
 
     @Override
     public List<UserDTO> getAllUsers() {

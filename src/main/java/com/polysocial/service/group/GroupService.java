@@ -11,6 +11,7 @@ import com.polysocial.dto.GroupDTO;
 import com.polysocial.dto.ListMembersDTO;
 import com.polysocial.dto.MemberDTO;
 import com.polysocial.dto.PageObject;
+import com.polysocial.dto.StudentDTO;
 import com.polysocial.entity.Groups;
 import com.polysocial.entity.Members;
 import com.polysocial.entity.Users;
@@ -21,17 +22,17 @@ public interface GroupService {
     
     GroupDTO getOne(Long id);
     
-    Groups updateGroup(Groups group);
+    GroupDTO updateGroup(GroupDTO group);
         
-    String deleteMemberToGroup(Long groupId, Long userId);
+    String deleteMemberToGroup(StudentDTO studentDTO);
     
-    GroupDTO deleteGroup(Long groupId);
+    GroupDTO deleteGroup(GroupDTO group);
     
     Object getTeacherFromGroup(Long groupId);
     
     Integer getUserId(String email);
     
-    Groups createGroup(Groups group);
+    GroupDTO createGroup(GroupDTO group);
     
     Users getOneMemberInGroup(String email, Long groupId);
     
@@ -41,7 +42,7 @@ public interface GroupService {
     
     List<GroupDTO> findByKeywork(String keywork);
     
-    MemberDTO saveMember(Long userId, Long groupId);
+    MemberDTO saveMember(StudentDTO student);
     
     List<MemberDTO> getAllGroupByStudent(Long userId);
     
