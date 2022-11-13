@@ -1,5 +1,6 @@
 package com.polysocial.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -36,6 +37,7 @@ public class TaskEx implements Serializable {
     })
     private Members member;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<TaskFile> taskFiles;

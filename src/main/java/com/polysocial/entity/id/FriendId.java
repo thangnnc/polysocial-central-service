@@ -12,6 +12,9 @@ public class FriendId implements Serializable {
     private Long userInviteId;
 
     @Column(name="userConfirm")
+    @Column(name = "userInvite")
+    private Long userInviteId;
+    @Column(name = "userConfirm")
     private Long userConfirmId;
 
 }
