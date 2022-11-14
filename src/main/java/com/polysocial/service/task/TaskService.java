@@ -12,7 +12,7 @@ public interface TaskService {
     
     TaskFileDTO createTaskFile(TaskFile taskFile);
 
-    void deleteTaskFile(TaskFileDTO taskFile);
+    void deleteTaskFile(Long taskFileId);
 
     TaskFile saveFile(MultipartFile file, TaskFileCreateDTO taskFile);
 
