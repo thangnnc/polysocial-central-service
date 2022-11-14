@@ -22,9 +22,9 @@ public class Posts implements Serializable {
 
     private String content;
 
-    private Boolean isActive;
-
     private LocalDateTime createdDate;
+    
+    private Long createdBy;
 
     @ManyToOne
     @JoinColumn(name = "createdBy", insertable = false, updatable = false)

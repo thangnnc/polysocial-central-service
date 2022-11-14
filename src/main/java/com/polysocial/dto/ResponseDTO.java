@@ -1,13 +1,11 @@
 package com.polysocial.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import org.springframework.http.HttpStatus;
-
 import java.io.Serializable;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+import org.springframework.http.HttpStatus;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class ResponseDTO implements Serializable {
 
     private Integer status;
