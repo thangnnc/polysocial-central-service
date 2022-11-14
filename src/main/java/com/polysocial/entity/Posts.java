@@ -1,5 +1,6 @@
 package com.polysocial.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -21,9 +22,9 @@ public class Posts implements Serializable {
 
     private String content;
 
-    private Boolean isActive;
-
     private LocalDateTime createdDate;
+    
+    private Long createdBy;
 
     @ManyToOne
     @JoinColumn(name = "createdBy", insertable = false, updatable = false)
@@ -33,14 +34,17 @@ public class Posts implements Serializable {
     @JoinColumn(name = "groupId", insertable = false, updatable = false)
     private Groups group;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<PostFile> posts;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Likes> likes;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Comments> comments;
