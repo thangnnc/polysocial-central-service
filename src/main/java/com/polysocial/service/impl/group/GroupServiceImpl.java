@@ -4,13 +4,19 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -23,15 +29,20 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.polysocial.consts.GroupAPI;
+import com.polysocial.consts.PostAPI;
 import com.polysocial.dto.GroupDTO;
+import com.polysocial.dto.ListMembersDTO;
 import com.polysocial.dto.PageObject;
 import com.polysocial.dto.StudentDTO;
+import com.polysocial.dto.ListPostDTO;
 import com.polysocial.dto.MemberDTO;
 import com.polysocial.entity.Groups;
+import com.polysocial.entity.Members;
 import com.polysocial.entity.Users;
 import com.polysocial.service.group.GroupService;
-import com.twilio.rest.supersim.v1.UsageRecord.Group;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -82,14 +93,14 @@ public class GroupServiceImpl implements GroupService {
         try {
             String url = GroupAPI.API_REMOVE_STUDENT;
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
-                    .queryParam("groupId",groupId)
+                    .queryParam("groupId", groupId)
                     .queryParam("userId", userId)
                     .build();
-            ResponseEntity<String> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, null,
+
+            ResponseEntity<String> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
                     String.class);
             return "OK";
         } catch (Exception e) {
-           e.printStackTrace();
             return null;
         }
     }
@@ -99,14 +110,12 @@ public class GroupServiceImpl implements GroupService {
         try {
             String url = GroupAPI.API_DELETE_GROUP;
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
-                    .queryParam("groupId",groupId)
+                    .queryParam("groupId", groupId)
                     .build();
-            HttpHeaders header = new HttpHeaders();
-            header.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity request = new HttpEntity(header);
-            ResponseEntity<Groups> responseEntity = restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, request,
-            Groups.class);
-            GroupDTO groupDTO = modelMapper.map(responseEntity.getBody(), GroupDTO.class);
+
+            ResponseEntity<Groups> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+                    Groups.class);
+            GroupDTO groupDTO = modelMapper.map(entity.getBody(), GroupDTO.class);
             return groupDTO;
         } catch (Exception e) {
             e.printStackTrace();

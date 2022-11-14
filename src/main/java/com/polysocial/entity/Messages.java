@@ -1,7 +1,5 @@
 package com.polysocial.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -27,12 +25,10 @@ public class Messages implements Serializable {
 
     private LocalDateTime createdDate;
 
-    @JsonBackReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contactId", insertable = false, updatable = false)
     private Contacts contact;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "message", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<MessageFile> messageFiles;

@@ -1,6 +1,5 @@
 package com.polysocial.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -23,7 +22,6 @@ public class Roles implements Serializable {
 
     private String description;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     @ToString.Exclude
     private List<Users> users;
