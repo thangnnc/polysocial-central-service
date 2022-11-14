@@ -1,9 +1,15 @@
 package com.polysocial.service.exerciseQuiz;
 
-import com.polysocial.dto.DemoDTO;
-import com.polysocial.dto.ExerciseDTO;
+import java.util.List;
+import com.polysocial.dto.ExercisesDTO;
 
 public interface ExerciseService {
 
-    ExerciseDTO getExercise();
+    ExercisesDTO createOne(ExercisesDTO exercise);
+
+    ExercisesDTO updateOne(ExercisesDTO exercise);
+
+    ExercisesDTO deleteOne(ExercisesDTO exercise);
+
+    List<Object> getAllExercisesEndDate(Long groupId);
 }

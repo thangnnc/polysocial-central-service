@@ -29,4 +29,7 @@ public class GroupAPI {
     public static final String API_GET_ALL_GROUP_BY_STUDENT = HostURL.GROUP_HOST+"/api/get-all/group/student";
     
     public static final String API_GET_ALL_GROUP_BY_TEACHER = HostURL.GROUP_HOST+"/api/get-all/group/teacher";
+
+    public static final String API_GET_ALL_GROUP_FALSE =  HostURL.GROUP_HOST+"/api/get-all/group/false";
+
 }

@@ -13,4 +13,6 @@ public class UserAPI {
     public static final String  API_SEARCH_USER_BY_EMAIL = "/user/search-by-email";
 
     public static final String  API_SEARCH_USER_BY_NAME = "/user/search-by-name";
+
+    public static final String  API_FIND_USER_BY_QR_CODE = "/user/find-by-qr-code";
 }

@@ -1,25 +1,23 @@
 package com.polysocial.dto;
 
-import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CommentDTO implements Serializable {
+public class TaskFileDTO {
+    private Long taskFileId;
 
-    private String content;
+    private String url;
 
-    private Date createdDate;
+    private String type;
 
-    private Long postId;
+    private LocalDateTime createdDate = LocalDateTime.now();
 
-    private Long userId;
+    private Long taskId;
 }
