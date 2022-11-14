@@ -1,19 +1,23 @@
 package com.polysocial.service.impl.task;
 
-
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.cloudinary.Cloudinary;
 import com.polysocial.consts.TaskAPI;
 import com.polysocial.dto.TaskExDTO;
 import com.polysocial.dto.TaskFileCreateDTO;
@@ -21,8 +25,6 @@ import com.polysocial.dto.TaskFileDTO;
 import com.polysocial.entity.TaskEx;
 import com.polysocial.entity.TaskFile;
 import com.polysocial.service.task.TaskService;
-import com.polysocial.utils.UploadToCloud;
-
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -30,25 +32,40 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Autowired 
-    private Cloudinary cloudinary;
+    @Override
+    public TaskFileDTO createTaskFile(TaskFile taskFile) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-    @Autowired
-    private UploadToCloud uploadToCloud;
-
+    @Override
+    public void deleteTaskFile(Long taskFileId) {
+        // TODO Auto-generated method stub
+        
+    }
 
     @Override
     public TaskFile saveFile(MultipartFile file, TaskFileCreateDTO taskFile) {
         try {
             String url = TaskAPI.API_TASK_FILE_CREATE;
-            String urlPath = uploadToCloud.saveFile(file);
-            taskFile.setPath(urlPath);
+            Path tempFile = Files.createTempFile(null, null);
+
+            Files.write(tempFile, file.getBytes());
+            File fileToSend = tempFile.toFile();
+
+            MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
+
+            parameters.add("file", new FileSystemResource(fileToSend));
+            parameters.add("taskFile", taskFile);
+
             HttpHeaders headers = new HttpHeaders();
-            headers.set("Content-Type", "application/json");
-            HttpEntity entity = new HttpEntity(taskFile, headers);
-            ResponseEntity<TaskFile> responseEntity = restTemplate.exchange(url, HttpMethod.POST,
-                    entity, TaskFile.class);
-            return responseEntity.getBody();
+            headers.set("Content-Type", "multipart/form-data");
+
+            HttpEntity httpEntity = new HttpEntity<>(parameters, headers);
+
+            ResponseEntity<TaskFile> group = restTemplate.exchange(url, HttpMethod.POST,
+                    httpEntity, TaskFile.class);
+            return group.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -59,14 +76,24 @@ public class TaskServiceImpl implements TaskService {
     public TaskFile updateFile(MultipartFile file, TaskFileCreateDTO taskFile) {
         try {
             String url = TaskAPI.API_TASK_FILE_UPDATE;
-            String urlPath = uploadToCloud.saveFile(file);
-            taskFile.setPath(urlPath);
+            Path tempFile = Files.createTempFile(null, null);
+
+            Files.write(tempFile, file.getBytes());
+            File fileToSend = tempFile.toFile();
+
+            MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
+
+            parameters.add("file", new FileSystemResource(fileToSend));
+            parameters.add("taskFile", taskFile);
+
             HttpHeaders headers = new HttpHeaders();
-            headers.set("Content-Type", "application/json");
-            HttpEntity entity = new HttpEntity(taskFile, headers);
-            ResponseEntity<TaskFile> responseEntity = restTemplate.exchange(url, HttpMethod.PUT,
-                    entity, TaskFile.class);
-            return responseEntity.getBody();
+            headers.set("Content-Type", "multipart/form-data");
+
+            HttpEntity httpEntity = new HttpEntity<>(parameters, headers);
+
+            ResponseEntity<TaskFile> group = restTemplate.exchange(url, HttpMethod.PUT,
+                    httpEntity, TaskFile.class);
+            return group.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -92,18 +119,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void deleteTaskFile(TaskFileDTO taskFile) {
-        try{
-            String url = TaskAPI.API_TASK_FILE_CREATE;
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Content-Type", "multipart/form-data");
-            HttpEntity httpEntity = new HttpEntity<>(taskFile, headers);
-            ResponseEntity<TaskFileDTO> entity = restTemplate.exchange(url, HttpMethod.DELETE, httpEntity, TaskFileDTO.class);
-        }catch(Exception e){
-        }
-    }
-
-    @Override
     public TaskExDTO createTaskEx(TaskEx taskExDTO) {
         // TODO Auto-generated method stub
         return null;
@@ -120,16 +135,5 @@ public class TaskServiceImpl implements TaskService {
         // TODO Auto-generated method stub
         
     }
-
-    @Override
-    public TaskFileDTO createTaskFile(TaskFile taskFile) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-
-    
-
     
 }
