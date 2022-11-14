@@ -32,13 +32,6 @@ public class Friends implements Serializable {
     @JoinColumn(name = "userInvite", insertable = false, updatable = false)
     private Users userInvite;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "userInvite", insertable = false, updatable = false)
-    private Users userInvite;
-
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "userConfirm", insertable = false, updatable = false)
