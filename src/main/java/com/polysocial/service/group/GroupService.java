@@ -24,9 +24,9 @@ public interface GroupService {
     
     GroupDTO updateGroup(GroupDTO group);
         
-    String deleteMemberToGroup(Long groupId, Long userId);
+    String deleteMemberToGroup(StudentDTO studentDTO);
     
-    GroupDTO deleteGroup(Long groupId);
+    GroupDTO deleteGroup(GroupDTO group);
     
     Object getTeacherFromGroup(Long groupId);
     

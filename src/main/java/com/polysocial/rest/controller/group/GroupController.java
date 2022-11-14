@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -75,21 +74,19 @@ public class GroupController {
     }
 
     @DeleteMapping(value = CentralAPI.DELETE_MEMBER_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity removeStudentGroup(@RequestParam("groupId") Long groupId,
-            @RequestParam("userId") Long userId) {
+    public ResponseEntity removeStudentGroup(@RequestBody StudentDTO student) {
         try {
-            groupService.deleteMemberToGroup(groupId, userId);
+            groupService.deleteMemberToGroup(student);
             return new ResponseEntity("Deleted", HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping(value = CentralAPI.API_DELETE_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity removeGroup(@RequestParam Long groupId) {
+    public ResponseEntity removeGroup(@RequestBody GroupDTO group) {
         try {
-            GroupDTO groups = groupService.deleteGroup(groupId);
+            GroupDTO groups = groupService.deleteGroup(group);
             return new ResponseEntity(groups, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
