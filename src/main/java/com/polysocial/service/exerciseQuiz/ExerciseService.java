@@ -9,7 +9,7 @@ public interface ExerciseService {
 
     ExercisesDTO updateOne(ExercisesDTO exercise);
 
-    ExercisesDTO deleteOne(Long exId);
+    ExercisesDTO deleteOne(ExercisesDTO exercise);
 
     List<Object> getAllExercisesEndDate(Long groupId);
 }
