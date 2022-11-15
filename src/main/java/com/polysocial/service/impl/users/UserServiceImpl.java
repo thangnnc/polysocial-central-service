@@ -54,10 +54,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public FriendDTO getUserFriend(Long userId, Long friendId) {
-        // Friends friend = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, friendId);
-        // FriendDTO friendDTO = modelMapper.map(friend, FriendDTO.class);
-        // return friendDTO;
-        return null;
+        List<Friends> friends = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, friendId);
+        Friends friend = friends.get(0);
+        FriendDTO friendDTO = modelMapper.map(friend, FriendDTO.class);
+        return friendDTO;
     }
 
     @Override
