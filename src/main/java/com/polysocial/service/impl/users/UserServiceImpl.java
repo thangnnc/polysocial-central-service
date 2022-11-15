@@ -96,22 +96,22 @@ public class UserServiceImpl implements UserService {
             friendRepo.getFriendByUserInviteIdAndUserConfirm(userConfirmId, user.getUserId(),
                     user.getUserId(),
                     userConfirmId);
-            Users userConfirm = userRepo.findByUserId(userConfirmId);
-            Users userInvite = userRepo.findByUserId(user.getUserId());
-            FriendDetailDTO friendDetailDTO = new FriendDetailDTO(userConfirmId, user.getUserId(),
-                    userConfirm.getFullName(), userInvite.getFullName());
+            Users userConfirm = userRepo.findByUserId(user.getUserId());
+            Users userInvite = userRepo.findByUserId(userConfirmId);
+            FriendDetailDTO friendDetailDTO = new FriendDetailDTO(user.getUserId(), userConfirmId,
+                    userInvite.getFullName(), userConfirm.getFullName());
             Friends friend = modelMapper.map(friendDetailDTO, Friends.class);
             friendRepo.save(friend);
             return friendDetailDTO;
         } catch (Exception e) {
             Users user = userRepo.findByStudentCode(studentCode);
-            Users userConfirm = userRepo.findByUserId(userConfirmId);
-            Users userInvite = userRepo.findByUserId(user.getUserId());
-            FriendDetailDTO friendDetailDTO = new FriendDetailDTO(userConfirmId, user.getUserId(),
-                    userConfirm.getFullName(), userInvite.getFullName());
+            Users userConfirm = userRepo.findByUserId(user.getUserId());
+            Users userInvite = userRepo.findByUserId(userConfirmId);
+            FriendDetailDTO friendDetailDTO = new FriendDetailDTO(user.getUserId(), userConfirmId,
+                    userInvite.getFullName(), userConfirm.getFullName());
             return friendDetailDTO;
         }
-       
+
     }
 
     @Override
