@@ -28,4 +28,6 @@ public interface UserService {
 
     List<FriendDetailDTO> getAllRequestAddFriend(Long userId);
 
+    List<FriendDetailDTO> getAllRequestAddFriendByUserIntive(Long userId);
+
 }

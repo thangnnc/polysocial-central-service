@@ -30,6 +30,9 @@ public interface FriendRepo extends JpaRepository<Friends, Long> {
     @Query("DELETE Friends o WHERE o.userInviteId =?1 and o.userConfirmId =?2")
     void deleteRequestAddFriend(Long userInviteId, Long userConfirmId);
 
-    @Query("SELECT o FROM Friends o WHERE o.status = false and (o.userInviteId =?1 or o.userConfirmId =?1)")
+    @Query("SELECT o FROM Friends o WHERE o.status = false and o.userConfirmId =?1")
     List<Friends> getAllRequestAddFriend(Long userId);
+
+    @Query("SELECT o FROM Friends o WHERE o.status = false and o.userInviteId =?1")
+    List<Friends> getAllRequestAddFriendByUserInviteId(Long userId);
 }

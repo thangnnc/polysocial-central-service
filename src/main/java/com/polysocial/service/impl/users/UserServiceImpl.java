@@ -125,6 +125,18 @@ public class UserServiceImpl implements UserService{
         return listDTO;
     }
 
+    @Override
+    public List<FriendDetailDTO> getAllRequestAddFriendByUserIntive(Long userId) {
+        List<Friends> list = friendRepo.getAllRequestAddFriendByUserInviteId(userId);
+        List<FriendDetailDTO> listDTO = new ArrayList<>();
+        for(Friends friend : list) {
+            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirmId(), friend.getUserInviteId(), userRepo.findById(friend.getUserConfirmId()).get().getFullName(), userRepo.findById(friend.getUserInviteId()).get().getFullName());
+            friendDTO.setStatus(friend.getStatus());
+            listDTO.add(friendDTO);
+        }
+        return listDTO;
+    }
+
 
     
 }

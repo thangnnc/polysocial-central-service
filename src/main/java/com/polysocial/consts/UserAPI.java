@@ -23,4 +23,6 @@ public class UserAPI {
     public static final String  API_DELETE_REQUEST_ADD_FRIEND = "/user/delete-request-add-friend";
 
     public static final String  API_GET_ALL_REQUEST_ADD_FRIEND = "/user/get-all-request-add-friend";
+
+    public static final String  API_GET_ALL_FRIEND_REQUEST = "/user/get-all-friend-request";
 }
