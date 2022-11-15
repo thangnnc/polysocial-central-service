@@ -23,15 +23,16 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import com.polysocial.consts.GroupAPI;
 import com.polysocial.dto.GroupDTO;
 import com.polysocial.dto.PageObject;
 import com.polysocial.dto.StudentDTO;
+import com.polysocial.dto.UserDTO;
 import com.polysocial.dto.MemberDTO;
+import com.polysocial.dto.MemberGroupDTO;
 import com.polysocial.entity.Groups;
-import com.polysocial.entity.Users;
 import com.polysocial.service.group.GroupService;
-import com.twilio.rest.supersim.v1.UsageRecord.Group;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -118,14 +119,14 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Object getTeacherFromGroup(Long groupId) {
+    public UserDTO getTeacherFromGroup(Long groupId) {
         try {
             String url = GroupAPI.API_GET_TEACHER;
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
                     .queryParam("groupId", groupId)
                     .build();
-            ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
-                    Object.class);
+            ResponseEntity<UserDTO> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+                    UserDTO.class);
             return entity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
@@ -147,7 +148,7 @@ public class GroupServiceImpl implements GroupService {
             System.out.println(group.getName());
             HttpEntity entity = new HttpEntity(group, header);
             ResponseEntity<GroupDTO> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity,
-            GroupDTO.class);
+                    GroupDTO.class);
             return responseEntity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,15 +157,15 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Users getOneMemberInGroup(String email, Long groupId) {
+    public UserDTO getOneMemberInGroup(String email, Long groupId) {
         try {
             String url = GroupAPI.API_GET_ONE_STUDENT;
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
                     .queryParam("email", email)
                     .queryParam("groupId", groupId)
                     .build();
-            ResponseEntity<Users> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
-                    Users.class);
+            ResponseEntity<UserDTO> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+                    UserDTO.class);
             return entity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
@@ -193,18 +194,13 @@ public class GroupServiceImpl implements GroupService {
         try {
             String url = GroupAPI.API_CREATE_GROUP_EXCEL;
             Path tempFile = Files.createTempFile(null, null);
-
             Files.write(tempFile, file.getBytes());
             File fileToSend = tempFile.toFile();
-
             MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
-
             parameters.add("file", new FileSystemResource(fileToSend));
-
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "multipart/form-data");
             HttpEntity httpEntity = new HttpEntity<>(parameters, headers);
-
             ResponseEntity<String> group = restTemplate.exchange(url, HttpMethod.POST,
                     httpEntity, String.class);
             return group.getBody();
@@ -242,7 +238,7 @@ public class GroupServiceImpl implements GroupService {
             header.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity entity = new HttpEntity(student, header);
             ResponseEntity<StudentDTO> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity,
-            StudentDTO.class);
+                    StudentDTO.class);
             MemberDTO memberDTO = modelMapper.map(responseEntity.getBody(), MemberDTO.class);
             return memberDTO;
         } catch (Exception e) {
@@ -259,7 +255,7 @@ public class GroupServiceImpl implements GroupService {
             header.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity entity = new HttpEntity(group, header);
             ResponseEntity<GroupDTO> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, entity,
-            GroupDTO.class);
+                    GroupDTO.class);
             return responseEntity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
@@ -268,15 +264,15 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<MemberDTO> getAllGroupByStudent(Long userId) {
+    public List<MemberGroupDTO> getAllGroupByStudent(Long userId) {
         try {
             String url = GroupAPI.API_GET_ALL_GROUP_BY_STUDENT;
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
                     .queryParam("userId", userId)
                     .build();
-            ResponseEntity<MemberDTO> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
-                    MemberDTO.class);
-            return (List<MemberDTO>) entity.getBody();
+            ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+                    Object.class);
+            return  (List<MemberGroupDTO>) entity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -284,7 +280,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<Object> getAllGroupByTeacher(Long userId) {
+    public List<MemberGroupDTO> getAllGroupByTeacher(Long userId) {
         try {
             String url = GroupAPI.API_GET_ALL_GROUP_BY_TEACHER;
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
@@ -292,7 +288,7 @@ public class GroupServiceImpl implements GroupService {
                     .build();
             ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
                     Object.class);
-            return (List<Object>) entity.getBody();
+            return (List<MemberGroupDTO>) entity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
