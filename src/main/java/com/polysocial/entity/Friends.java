@@ -1,7 +1,7 @@
 package com.polysocial.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.polysocial.entity.id.FriendId;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -29,13 +29,6 @@ public class Friends implements Serializable {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "userInvite", insertable = false, updatable = false)
-    private Users userInvite;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonBackReference
-    @ManyToOne
     @JoinColumn(name = "userInvite", insertable = false, updatable = false)
     private Users userInvite;
 

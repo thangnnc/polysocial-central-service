@@ -1,7 +1,5 @@
 package com.polysocial.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -29,12 +27,10 @@ public class Comments implements Serializable {
 
     private LocalDateTime createdDate;
 
-    @JsonBackReference
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name="manageCmt", insertable = false, updatable = false)
     private Comments manager;
 
-    @JsonManagedReference
     @OneToMany(mappedBy="manager")
     private List<Comments> comments;
 

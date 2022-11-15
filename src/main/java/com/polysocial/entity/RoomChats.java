@@ -1,6 +1,5 @@
 package com.polysocial.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -28,7 +27,6 @@ public class RoomChats implements Serializable {
 
     private LocalDateTime createdDate;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Contacts> contacts;

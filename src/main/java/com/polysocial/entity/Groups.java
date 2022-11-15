@@ -1,6 +1,5 @@
 package com.polysocial.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,12 +31,10 @@ public class Groups implements Serializable {
 
     private Date createdDate = new Date();
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Posts> posts;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Exercises> exercises;
