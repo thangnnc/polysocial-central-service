@@ -20,7 +20,7 @@ public interface UserService {
 
     List<UserDTO> searchUserByName(String name);
 
-    FriendDetailDTO addFriend(Long userConfirmId, Long userInviteId);
+    FriendDetailDTO addFriend(Long userConfirmId, String studentCode);
 
     FriendDetailDTO acceptFriend(Long userConfirmId, Long userInviteId);
 

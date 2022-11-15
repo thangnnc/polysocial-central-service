@@ -35,4 +35,5 @@ public interface FriendRepo extends JpaRepository<Friends, Long> {
 
     @Query("SELECT o FROM Friends o WHERE o.status = false and o.userInviteId =?1")
     List<Friends> getAllRequestAddFriendByUserInviteId(Long userId);
+
 }
