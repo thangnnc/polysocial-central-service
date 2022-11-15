@@ -82,14 +82,16 @@ public class GroupServiceImpl implements GroupService {
         try {
             String url = GroupAPI.API_REMOVE_STUDENT;
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
-                    .queryParam("groupId",groupId)
+                    .queryParam("groupId", groupId)
                     .queryParam("userId", userId)
                     .build();
-            ResponseEntity<String> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, null,
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity request = new HttpEntity(headers);
+            ResponseEntity<String> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, request,
                     String.class);
             return "OK";
         } catch (Exception e) {
-           e.printStackTrace();
             return null;
         }
     }
@@ -99,14 +101,14 @@ public class GroupServiceImpl implements GroupService {
         try {
             String url = GroupAPI.API_DELETE_GROUP;
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
-                    .queryParam("groupId",groupId)
+                    .queryParam("groupId", groupId)
                     .build();
-            HttpHeaders header = new HttpHeaders();
-            header.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity request = new HttpEntity(header);
-            ResponseEntity<Groups> responseEntity = restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, request,
-            Groups.class);
-            GroupDTO groupDTO = modelMapper.map(responseEntity.getBody(), GroupDTO.class);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity request = new HttpEntity(headers);
+            ResponseEntity<Groups> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, request,
+                    Groups.class);
+            GroupDTO groupDTO = modelMapper.map(entity.getBody(), GroupDTO.class);
             return groupDTO;
         } catch (Exception e) {
             e.printStackTrace();
