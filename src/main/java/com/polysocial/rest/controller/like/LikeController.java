@@ -1,4 +1,4 @@
-package com.polysocial.rest.controller.comment;
+package com.polysocial.rest.controller.like;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,37 +10,33 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.polysocial.config.jwt.JwtTokenProvider;
-import com.polysocial.consts.CentralAPI;
-import com.polysocial.dto.CommentDTO;
-import com.polysocial.dto.PostDTO;
+import com.polysocial.dto.LikeDTO;
 import com.polysocial.dto.ResponseDTO;
-import com.polysocial.service.comment.CommentService;
+import com.polysocial.service.like.LikeService;
 import com.polysocial.utils.ValidateUtils;
+import com.polysocial.consts.CentralAPI;
 
 @CrossOrigin("*")
 @RestController
-public class CommentController {
+public class LikeController {
 
+	@Autowired
+	private LikeService likeService;
+	
 	@Autowired
 	private JwtTokenProvider jwt;
-
-	@Autowired
-	private CommentService commentService;
-
-	@PostMapping(CentralAPI.CREATE_COMMENT)
-	public ResponseEntity createComment(@RequestBody CommentDTO request, @RequestHeader("Authorization") String token) {
-		System.out.println("run create comment-->" + request);
-		if (ValidateUtils.isNullOrEmpty(request.getContent())) {
+	
+	@PostMapping(CentralAPI.LIKE)
+	public ResponseEntity likeUnLike(@RequestBody LikeDTO request,@RequestHeader("Authorization") String token) {
+		if (ValidateUtils.isNullOrEmpty(request.getPostId())) {
 			ResponseDTO response = new ResponseDTO();
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
 		} else {
-//			System.out.println("run 1 tk-"+token);
+			System.out.println("dto"+request);
 			Long tokenId = jwt.getIdFromJWT(token);
-			System.out.println("token---->"+tokenId);
-			CommentDTO response = commentService.createComment(request, tokenId);
+			LikeDTO response = likeService.likeUnLike(request, tokenId);
 			return ResponseEntity.ok(response);
-
 		}
 	}
 }
