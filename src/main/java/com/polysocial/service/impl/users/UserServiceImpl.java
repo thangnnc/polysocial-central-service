@@ -54,7 +54,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public FriendDTO getUserFriend(Long userId, Long friendId) {
-        Friends friend = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, friendId, friendId, userId);
+        List<Friends> friends = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, friendId);
+        Friends friend = friends.get(0);
         FriendDTO friendDTO = modelMapper.map(friend, FriendDTO.class);
         return friendDTO;
     }
@@ -93,16 +94,17 @@ public class UserServiceImpl implements UserService {
     public FriendDetailDTO addFriend(Long userConfirmId, String studentCode) {
         try {
             Users user = userRepo.findByStudentCode(studentCode);
-            friendRepo.getFriendByUserInviteIdAndUserConfirm(userConfirmId, user.getUserId(),
-                    user.getUserId(),
-                    userConfirmId);
-            Users userConfirm = userRepo.findByUserId(user.getUserId());
-            Users userInvite = userRepo.findByUserId(userConfirmId);
-            FriendDetailDTO friendDetailDTO = new FriendDetailDTO(user.getUserId(), userConfirmId,
-                    userInvite.getFullName(), userConfirm.getFullName());
-            Friends friend = modelMapper.map(friendDetailDTO, Friends.class);
-            friendRepo.save(friend);
-            return friendDetailDTO;
+            List<Friends> list = friendRepo.getFriendByUserInviteIdAndUserConfirm(userConfirmId, user.getUserId());
+            if(list.size() > 0) {
+                Users userConfirm = userRepo.findByUserId(user.getUserId());
+                Users userInvite = userRepo.findByUserId(userConfirmId);
+                FriendDetailDTO friendDetailDTO = new FriendDetailDTO(user.getUserId(), userConfirmId,
+                        userInvite.getFullName(), userConfirm.getFullName());
+                Friends friend = modelMapper.map(friendDetailDTO, Friends.class);
+                friendRepo.save(friend);
+                return friendDetailDTO;
+            }
+           return null;
         } catch (Exception e) {
             Users user = userRepo.findByStudentCode(studentCode);
             Users userConfirm = userRepo.findByUserId(user.getUserId());
