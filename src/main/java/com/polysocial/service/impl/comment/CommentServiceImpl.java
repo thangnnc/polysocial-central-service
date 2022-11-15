@@ -24,8 +24,7 @@ public class CommentServiceImpl implements CommentService{
 	@Override
 	public CommentDTO createComment(CommentDTO dto, Long tokenId) {
 		try {
-
-			System.out.println("dto,"+dto);
+			
 			String url = CommentAPI.API_CREATE_POST;
 			HttpHeaders hedear = new HttpHeaders();
 			hedear.setContentType(MediaType.APPLICATION_JSON);
