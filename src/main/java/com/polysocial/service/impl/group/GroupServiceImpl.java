@@ -96,8 +96,10 @@ public class GroupServiceImpl implements GroupService {
                     .queryParam("groupId", groupId)
                     .queryParam("userId", userId)
                     .build();
-
-            ResponseEntity<String> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity request = new HttpEntity(headers);
+            ResponseEntity<String> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, request,
                     String.class);
             return "OK";
         } catch (Exception e) {
@@ -112,8 +114,10 @@ public class GroupServiceImpl implements GroupService {
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
                     .queryParam("groupId", groupId)
                     .build();
-
-            ResponseEntity<Groups> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity request = new HttpEntity(headers);
+            ResponseEntity<Groups> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, request,
                     Groups.class);
             GroupDTO groupDTO = modelMapper.map(entity.getBody(), GroupDTO.class);
             return groupDTO;
@@ -154,7 +158,7 @@ public class GroupServiceImpl implements GroupService {
             System.out.println(group.getName());
             HttpEntity entity = new HttpEntity(group, header);
             ResponseEntity<GroupDTO> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity,
-            GroupDTO.class);
+                    GroupDTO.class);
             return responseEntity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
@@ -249,7 +253,7 @@ public class GroupServiceImpl implements GroupService {
             header.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity entity = new HttpEntity(student, header);
             ResponseEntity<StudentDTO> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity,
-            StudentDTO.class);
+                    StudentDTO.class);
             MemberDTO memberDTO = modelMapper.map(responseEntity.getBody(), MemberDTO.class);
             return memberDTO;
         } catch (Exception e) {
@@ -266,7 +270,7 @@ public class GroupServiceImpl implements GroupService {
             header.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity entity = new HttpEntity(group, header);
             ResponseEntity<GroupDTO> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, entity,
-            GroupDTO.class);
+                    GroupDTO.class);
             return responseEntity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
