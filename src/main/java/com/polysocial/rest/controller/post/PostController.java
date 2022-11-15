@@ -56,18 +56,11 @@ public class PostController {
 			return ResponseEntity.ok(response);
 		}
 	}
-//
+
 	@PostMapping(CentralAPI.UPLOADFILE_POST)
 	public List<String> add(@RequestParam(value = "file", required = false) List<MultipartFile> fi) {
 		return postFileService.saveFile(fi);
 
 	}
 
-//	@PostMapping(CentralAPI.UPLOADFILE_POST)
-//	public ResponseEntity saveFile(@RequestPart("file") MultipartFile fi) {
-//		System.out.println("run 1");
-//		PostFileUploadDTO response = postFileService.saveFile(fi);
-//		return ResponseEntity.ok(response);
-//
-//	}
 }

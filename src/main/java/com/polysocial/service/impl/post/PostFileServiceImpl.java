@@ -33,36 +33,6 @@ public class PostFileServiceImpl implements PostFileService {
 	@Autowired
 	private RestTemplate restTemplate;
 
-//	public PostFileUploadDTO saveFile(MultipartFile fi) {
-//		try {
-//			String url = PostAPI.API_UPLOADFILE_POST;
-//			Path tempFile = Files.createTempFile(null, null);
-//
-//			Files.write(tempFile, fi.getBytes());
-//			File fileToSend = tempFile.toFile();
-//
-//			MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
-//
-//			parameters.add("file", new FileSystemResource(fileToSend));
-//			HttpHeaders headers = new HttpHeaders();
-//			headers.set("Content-Type", "multipart/form-data");
-//			
-//			HttpEntity<PostFileUploadDTO> httpEntity = new HttpEntity(parameters, headers);
-//
-//			try {
-//				ResponseEntity<PostFileUploadDTO> entity = restTemplate.exchange(url, HttpMethod.POST, httpEntity,
-//						PostFileUploadDTO.class);
-//				return entity.getBody();
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
-
 	@Override
 	public List<String> saveFile(List<MultipartFile> fi) {
 
