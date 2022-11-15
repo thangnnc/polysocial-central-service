@@ -38,4 +38,10 @@ public class CentralAPI {
     public static final String API_GET_ALL_GROUP_BY_STUDENT = "/group/api/get-all/student";
     public static final String API_GET_ALL_GROUP_BY_TEACHER = "/group/api/get-all/teacher";
 
+    
+    public static final String UPLOADFILE_POST = "/api/posts/upload";
+    
+    public static final String CREATE_COMMENT = "/api/comment";
+    
+    public static final String LIKE = "/api/like";
 }
