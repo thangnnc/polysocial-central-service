@@ -30,10 +30,12 @@ public class PostServiceImpl implements PostService {
 			String url = PostAPI.API_GET_ALL_POSTS;
 			UriComponents builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("page", page)
 					.queryParam("limit", limit).build();
-
-			ResponseEntity<ListPostDTO> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+			HttpHeaders hedear = new HttpHeaders();
+			hedear.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity entity = new HttpEntity<>(hedear);
+			ResponseEntity<ListPostDTO> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
 					ListPostDTO.class);
-			return entity.getBody();
+			return response.getBody();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

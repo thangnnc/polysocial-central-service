@@ -57,12 +57,11 @@ public class PostController {
 		}
 	}
 //
-//	@PostMapping(CentralAPI.UPLOADFILE_POST)
-//	public List<String> add(@RequestParam(value = "file", required = false) List<MultipartFile> fi) {
-//		System.out.println("run 1"+fi);
-//		return postFileService.saveFile(fi);
-//
-//	}
+	@PostMapping(CentralAPI.UPLOADFILE_POST)
+	public List<String> add(@RequestParam(value = "file", required = false) List<MultipartFile> fi) {
+		return postFileService.saveFile(fi);
+
+	}
 
 //	@PostMapping(CentralAPI.UPLOADFILE_POST)
 //	public ResponseEntity saveFile(@RequestPart("file") MultipartFile fi) {

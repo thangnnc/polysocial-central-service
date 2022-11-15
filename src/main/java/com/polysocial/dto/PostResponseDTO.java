@@ -1,5 +1,6 @@
 package com.polysocial.dto;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PostResponseDTO {
+public class PostResponseDTO implements Serializable {
     
     private Long postId;
 
