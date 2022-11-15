@@ -10,8 +10,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.polysocial.dto.GroupDTO;
 import com.polysocial.dto.ListMembersDTO;
 import com.polysocial.dto.MemberDTO;
+import com.polysocial.dto.MemberGroupDTO;
 import com.polysocial.dto.PageObject;
 import com.polysocial.dto.StudentDTO;
+import com.polysocial.dto.UserDTO;
 import com.polysocial.entity.Groups;
 import com.polysocial.entity.Members;
 import com.polysocial.entity.Users;
@@ -28,13 +30,13 @@ public interface GroupService {
     
     GroupDTO deleteGroup(Long groupId);
     
-    Object getTeacherFromGroup(Long groupId);
+    UserDTO getTeacherFromGroup(Long groupId);
     
     Integer getUserId(String email);
     
     GroupDTO createGroup(GroupDTO group);
     
-    Users getOneMemberInGroup(String email, Long groupId);
+    UserDTO getOneMemberInGroup(String email, Long groupId);
     
     List<Object> getMemberInGroup(Long id);
                 
@@ -44,9 +46,9 @@ public interface GroupService {
     
     MemberDTO saveMember(StudentDTO student);
     
-    List<MemberDTO> getAllGroupByStudent(Long userId);
+    List<MemberGroupDTO> getAllGroupByStudent(Long userId);
     
-    List<Object> getAllGroupByTeacher(Long userId);
+    List<MemberGroupDTO> getAllGroupByTeacher(Long userId);
 
     PageObject<GroupDTO> getAllGroupFalse(Integer page, Integer limit);
 

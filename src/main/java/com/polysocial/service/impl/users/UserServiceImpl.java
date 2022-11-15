@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.polysocial.dto.FriendDTO;
+import com.polysocial.dto.FriendDetailDTO;
 import com.polysocial.dto.UserDTO;
 import com.polysocial.entity.Friends;
 import com.polysocial.entity.Users;
@@ -74,6 +75,14 @@ public class UserServiceImpl implements UserService{
         List<Users> list = userRepo.findByFullName(name);
         List<UserDTO> listDTO = list.stream().map(element -> modelMapper.map(element, UserDTO.class)).collect(Collectors.toList());
         return listDTO;
+    }
+
+    @Override
+    public UserDTO addFriend(FriendDTO friendDTO) {
+        Users userInvite = userRepo.findByUserId(friendDTO.getUserInviteId());
+        Users userConfirm = userRepo.findByUserId(friendDTO.getUserConfirmId());
+        FriendDetailDTO friendDetailDTO = new FriendDetailDTO(userConfirm.getUserId(), userInvite.getUserId(), userConfirm.getFullName(), userInvite.getFullName());
+        return null;
     }
 
 

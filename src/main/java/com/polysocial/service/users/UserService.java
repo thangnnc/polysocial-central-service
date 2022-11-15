@@ -24,4 +24,5 @@ public interface UserService {
 
     List<UserDTO> searchUserByName(String name);
 
+    UserDTO addFriend(FriendDTO friendDTO);
 }

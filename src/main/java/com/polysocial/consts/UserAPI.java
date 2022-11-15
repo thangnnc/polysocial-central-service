@@ -8,6 +8,8 @@ public class UserAPI {
 
     public static final String  API_GET_FRIEND = "/user/get-friend";
 
+    public static final String API_ADD_FRIEND = "/user/add-friend";
+
     public static final String  API_GET_ALL_FRIEND = "/user/get-all-friend";
 
     public static final String  API_SEARCH_USER_BY_EMAIL = "/user/search-by-email";
