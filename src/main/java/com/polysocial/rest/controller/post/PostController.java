@@ -40,7 +40,7 @@ public class PostController {
 	@GetMapping(CentralAPI.GET_ALL_POST)
 	public ResponseEntity getAllPost(@RequestParam("page") Optional<Integer> page,
 			@RequestParam("limit") Optional<Integer> limit) {
-		ListPostDTO response = postService.getAllPosts(page.orElse(0), limit.orElse(10));
+		ListPostDTO response = postService.getAllPosts(page.orElse(0), limit.orElse(100));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
