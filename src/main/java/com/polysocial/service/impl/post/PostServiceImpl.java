@@ -5,7 +5,6 @@ import com.polysocial.dto.ListPostDTO;
 import com.polysocial.dto.PostDTO;
 import com.polysocial.service.post.PostService;
 
-import java.io.Console;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -50,6 +49,9 @@ public class PostServiceImpl implements PostService {
 			HttpHeaders hedear = new HttpHeaders();
 			hedear.setContentType(MediaType.APPLICATION_JSON);
 			dto.setCreatedBy(tokenId);
+			//API GROUP
+			dto.setGroupId(2l);
+			
 			HttpEntity<PostDTO> httpEntity = new HttpEntity(dto, hedear);
 			ResponseEntity<PostDTO> entity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, PostDTO.class);
 			return entity.getBody();
