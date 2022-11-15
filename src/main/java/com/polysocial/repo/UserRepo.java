@@ -26,5 +26,6 @@ public interface UserRepo extends JpaRepository<Users, Long> {
     @Query("SELECT o FROM Users o WHERE o.fullName Like %?1%")
     List<Users> findByFullName(String fullName);
 
-    
+    @Query("SELECT o FROM Users o WHERE o.studentCode = ?1")
+    Users findByStudentCode(String studentCode);
 }

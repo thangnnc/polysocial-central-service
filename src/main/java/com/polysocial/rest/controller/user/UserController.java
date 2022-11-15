@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import com.polysocial.consts.UserAPI;
 import com.polysocial.dto.FriendDTO;
 import com.polysocial.dto.FriendDetailDTO;
 import com.polysocial.dto.UserDTO;
+import com.polysocial.dto.UserDetailDTO;
 import com.polysocial.entity.Friends;
 import com.polysocial.repo.FriendRepo;
 import com.polysocial.service.users.UserService;
@@ -26,6 +28,7 @@ import com.twilio.rest.proxy.v1.service.Session;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
+@CrossOrigin("*")
 @RestController
 public class UserController {
 
@@ -106,9 +109,9 @@ public class UserController {
     }
 
     @PostMapping(UserAPI.API_ADD_FRIEND)
-    public ResponseEntity addFriend(@RequestBody FriendDTO friendDTO, @RequestHeader("Authorization") String token) {
+    public ResponseEntity addFriend(@RequestBody UserDTO user, @RequestHeader("Authorization") String token) {
         try {
-            FriendDetailDTO friend = userService.addFriend(jwt.getIdFromJWT(token), friendDTO.getUserInviteId());
+            FriendDetailDTO friend = userService.addFriend(jwt.getIdFromJWT(token), user.getStudentCode());
             return ResponseEntity.ok(friend);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
