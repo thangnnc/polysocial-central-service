@@ -26,7 +26,7 @@ import com.polysocial.service.users.UserService;
 import com.polysocial.utils.QrCode;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepo userRepo;
@@ -40,7 +40,8 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<UserDTO> getAllUsers() {
         List<Users> list = userRepo.findAll();
-        List<UserDTO> listDTO = list.stream().map(element -> modelMapper.map(element, UserDTO.class)).collect(Collectors.toList());
+        List<UserDTO> listDTO = list.stream().map(element -> modelMapper.map(element, UserDTO.class))
+                .collect(Collectors.toList());
         return listDTO;
     }
 
@@ -62,8 +63,10 @@ public class UserServiceImpl implements UserService{
     public List<FriendDetailDTO> getAllFriend(Long userId) {
         List<Friends> list = friendRepo.getAllFriends(userId);
         List<FriendDetailDTO> listDTO = new ArrayList<>();
-        for(Friends friend : list) {
-            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirmId(), friend.getUserInviteId(), userRepo.findById(friend.getUserConfirmId()).get().getFullName(), userRepo.findById(friend.getUserInviteId()).get().getFullName());
+        for (Friends friend : list) {
+            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirmId(), friend.getUserInviteId(),
+                    userRepo.findById(friend.getUserConfirmId()).get().getFullName(),
+                    userRepo.findById(friend.getUserInviteId()).get().getFullName());
             friendDTO.setStatus(friend.getStatus());
             listDTO.add(friendDTO);
         }
@@ -73,32 +76,49 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<UserDTO> searchUserByEmail(String email) {
         List<Users> list = userRepo.findByEmail(email);
-        List<UserDTO> listDTO = list.stream().map(element -> modelMapper.map(element, UserDTO.class)).collect(Collectors.toList());
+        List<UserDTO> listDTO = list.stream().map(element -> modelMapper.map(element, UserDTO.class))
+                .collect(Collectors.toList());
         return listDTO;
     }
 
     @Override
     public List<UserDTO> searchUserByName(String name) {
         List<Users> list = userRepo.findByFullName(name);
-        List<UserDTO> listDTO = list.stream().map(element -> modelMapper.map(element, UserDTO.class)).collect(Collectors.toList());
+        List<UserDTO> listDTO = list.stream().map(element -> modelMapper.map(element, UserDTO.class))
+                .collect(Collectors.toList());
         return listDTO;
     }
 
     @Override
     public FriendDetailDTO addFriend(Long userConfirmId, Long userInviteId) {
-        Users userConfirm = userRepo.findByUserId(userConfirmId);
-        Users userInvite = userRepo.findByUserId(userInviteId);
-        FriendDetailDTO friendDetailDTO = new FriendDetailDTO(userConfirmId, userInviteId, userConfirm.getFullName(), userInvite.getFullName());
-        Friends friend = modelMapper.map(friendDetailDTO, Friends.class);
-        friendRepo.save(friend);
-        return friendDetailDTO;
+        try {
+            friendRepo.getFriendByUserInviteIdAndUserConfirm(userConfirmId, userInviteId,
+                    userInviteId,
+                    userConfirmId);
+            Users userConfirm = userRepo.findByUserId(userConfirmId);
+            Users userInvite = userRepo.findByUserId(userInviteId);
+            FriendDetailDTO friendDetailDTO = new FriendDetailDTO(userConfirmId, userInviteId,
+                    userConfirm.getFullName(), userInvite.getFullName());
+            Friends friend = modelMapper.map(friendDetailDTO, Friends.class);
+            friendRepo.save(friend);
+            return friendDetailDTO;
+        } catch (Exception e) {
+            Users userConfirm = userRepo.findByUserId(userConfirmId);
+            Users userInvite = userRepo.findByUserId(userInviteId);
+            FriendDetailDTO friendDetailDTO = new FriendDetailDTO(userConfirmId, userInviteId,
+                    userConfirm.getFullName(), userInvite.getFullName());
+            return friendDetailDTO;
+        }
+       
     }
 
     @Override
     public FriendDetailDTO acceptFriend(Long userConfirmId, Long userInviteId) {
         friendRepo.acceptFriend(userConfirmId, userInviteId);
-        FriendDetailDTO friendDetailDTO = new FriendDetailDTO(userConfirmId, userInviteId, userRepo.findById(userConfirmId).get().getFullName(), userRepo.findById(userInviteId).get().getFullName()); 
-        friendDetailDTO.setStatus(true);       
+        FriendDetailDTO friendDetailDTO = new FriendDetailDTO(userConfirmId, userInviteId,
+                userRepo.findById(userConfirmId).get().getFullName(),
+                userRepo.findById(userInviteId).get().getFullName());
+        friendDetailDTO.setStatus(true);
         Friends friend = modelMapper.map(friendDetailDTO, Friends.class);
         friendRepo.save(friend);
         return friendDetailDTO;
@@ -106,9 +126,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void deleteRequestAddFriend(Long userConfirmId, Long userInviteId) {
-        try{
+        try {
             friendRepo.deleteRequestAddFriend(userInviteId, userConfirmId);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -117,8 +137,10 @@ public class UserServiceImpl implements UserService{
     public List<FriendDetailDTO> getAllRequestAddFriend(Long userId) {
         List<Friends> list = friendRepo.getAllRequestAddFriend(userId);
         List<FriendDetailDTO> listDTO = new ArrayList<>();
-        for(Friends friend : list) {
-            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirmId(), friend.getUserInviteId(), userRepo.findById(friend.getUserConfirmId()).get().getFullName(), userRepo.findById(friend.getUserInviteId()).get().getFullName());
+        for (Friends friend : list) {
+            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirmId(), friend.getUserInviteId(),
+                    userRepo.findById(friend.getUserConfirmId()).get().getFullName(),
+                    userRepo.findById(friend.getUserInviteId()).get().getFullName());
             friendDTO.setStatus(friend.getStatus());
             listDTO.add(friendDTO);
         }
@@ -129,14 +151,14 @@ public class UserServiceImpl implements UserService{
     public List<FriendDetailDTO> getAllRequestAddFriendByUserIntive(Long userId) {
         List<Friends> list = friendRepo.getAllRequestAddFriendByUserInviteId(userId);
         List<FriendDetailDTO> listDTO = new ArrayList<>();
-        for(Friends friend : list) {
-            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirmId(), friend.getUserInviteId(), userRepo.findById(friend.getUserConfirmId()).get().getFullName(), userRepo.findById(friend.getUserInviteId()).get().getFullName());
+        for (Friends friend : list) {
+            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirmId(), friend.getUserInviteId(),
+                    userRepo.findById(friend.getUserConfirmId()).get().getFullName(),
+                    userRepo.findById(friend.getUserInviteId()).get().getFullName());
             friendDTO.setStatus(friend.getStatus());
             listDTO.add(friendDTO);
         }
         return listDTO;
     }
 
-
-    
 }
