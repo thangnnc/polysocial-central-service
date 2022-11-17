@@ -2,7 +2,14 @@ package com.polysocial.service.impl.exerciseQuiz;
 
 import com.polysocial.consts.ExerciseAPI;
 import com.polysocial.dto.ExercisesDTO;
+import com.polysocial.dto.NotificationsDTO;
+import com.polysocial.entity.Members;
+import com.polysocial.notification.ContentNotifications;
+import com.polysocial.repo.MemberRepo;
 import com.polysocial.service.exerciseQuiz.ExerciseService;
+import com.polysocial.service.notifications.NotificationsService;
+import com.polysocial.type.TypeNotifications;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -21,6 +28,13 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Autowired
     private RestTemplate restTemplate;
 
+
+    @Autowired
+    private NotificationsService notificationsService;
+
+    @Autowired
+    private MemberRepo memberRepo;
+
     @Override
     public ExercisesDTO createOne(ExercisesDTO exercise) {
         try {
@@ -30,6 +44,12 @@ public class ExerciseServiceImpl implements ExerciseService {
             HttpEntity entity = new HttpEntity(exercise, headers);
             ResponseEntity<ExercisesDTO> response = restTemplate.exchange(url, HttpMethod.POST, entity,
                     ExercisesDTO.class);
+            List<Members> members = memberRepo.findByGroupId(exercise.getGroupId());
+            for (Members member : members) {
+                NotificationsDTO notiDTO = new NotificationsDTO(ContentNotifications.NOTI_CONTENT_CREATE_DEADLINE, TypeNotifications.NOTI_TYPE_CREATE_DEADLINE, member.getUserId());
+                notiDTO.setUser(member.getUserId());
+                notificationsService.createNoti(notiDTO);
+            }
             return response.getBody();
         } catch (Exception e) {
             e.printStackTrace();
