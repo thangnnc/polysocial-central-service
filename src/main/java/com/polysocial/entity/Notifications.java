@@ -25,7 +25,7 @@ public class Notifications implements Serializable {
 
     private Boolean status;
 
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDate = LocalDateTime.now();
 
     @JsonBackReference
     @ManyToOne
