@@ -15,7 +15,6 @@ public class UploadToCloud {
     private Cloudinary cloudinary;
 
     public String saveFile(MultipartFile file) throws IOException {
-        System.out.println("join");
 		String url = "";
 		File folder = new File("Files");
 		try {
@@ -42,10 +41,8 @@ public class UploadToCloud {
 		try {
             System.out.println(fi.getOriginalFilename());
             File file = new File("Files/" + fi.getOriginalFilename());
-            System.out.println(file);
 			String json = "" + this.cloudinary.uploader().upload(file,
 					ObjectUtils.asMap("resource_type", "auto"));
-                    System.out.println("done");
 			firtsIndex = json.indexOf("url=");
 			lastIndex = json.indexOf("created_at");
 			url = json.substring(firtsIndex + 4, lastIndex - 2);

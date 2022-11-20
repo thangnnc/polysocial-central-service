@@ -5,7 +5,7 @@ import com.polysocial.dto.ExercisesDTO;
 
 public interface ExerciseService {
 
-    ExercisesDTO createOne(ExercisesDTO exercise);
+    ExercisesDTO createOne(ExercisesDTO exercise, Long userId);
 
     ExercisesDTO updateOne(ExercisesDTO exercise);
 

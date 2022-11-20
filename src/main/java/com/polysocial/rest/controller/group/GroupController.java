@@ -67,7 +67,7 @@ public class GroupController {
         }
     }
 
-    @DeleteMapping(value = CentralAPI.DELETE_MEMBER_GROUP)
+    @DeleteMapping(value = CentralAPI.DELETE_MEMBER_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity removeStudentGroup(@RequestParam("groupId") Long groupId,
             @RequestParam("userId") Long userId) {
         try {
@@ -163,6 +163,7 @@ public class GroupController {
             GroupDTO response = groupService.updateGroup(group);
             return new ResponseEntity(response, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity(e, HttpStatus.FAILED_DEPENDENCY);
         }
     }
