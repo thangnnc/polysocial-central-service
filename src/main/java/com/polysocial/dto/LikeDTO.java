@@ -1,9 +1,5 @@
 package com.polysocial.dto;
 
-
-import java.io.Serializable;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -14,14 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ListPostDTO implements Serializable{
-
-    private int page;
+public class LikeDTO {
     
-    private int totalItem;
+ private Long postId;
 
-    private int totalPage;
-
-    private List<PostResponseDTO> listPostDTO;
-    
+ private Long userId;
 }

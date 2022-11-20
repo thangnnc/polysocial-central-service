@@ -8,6 +8,7 @@ import com.polysocial.service.exerciseQuiz.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin("*")
 @RestController
 public class ExerciseController {
 
@@ -29,7 +31,6 @@ public class ExerciseController {
     @PostMapping(value = CentralAPI.API_CREATE_EXERCISES, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity createExercise(@RequestBody ExercisesDTO e, @RequestHeader("Authorization") String token) {
         try {
-
             return ResponseEntity.ok().body( exerciseService.createOne(e, jwt.getIdFromJWT(token)));
         } catch (Exception ex) {
             ex.printStackTrace();
