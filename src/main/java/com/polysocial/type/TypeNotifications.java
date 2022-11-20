@@ -10,5 +10,7 @@ public class TypeNotifications {
     public static final Integer NOTI_TYPE_COMMENT_POST = 7;
     public static final Integer NOTI_TYPE_CREATE_DEADLINE = 8;
     public static final Integer NOTI_TYPE_UPLOAD_FILE_GROUP = 9;
+    public static final Integer NOTI_TYPE_DELETE_MEMBER_GROUP = 10;
+    public static final Integer NOTI_TYPE_UPDATE_GROUP = 11;
 
 }

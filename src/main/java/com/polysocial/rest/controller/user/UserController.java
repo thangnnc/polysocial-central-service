@@ -114,6 +114,7 @@ public class UserController {
             FriendDetailDTO friend = userService.addFriend(jwt.getIdFromJWT(token), user.getStudentCode());
             return ResponseEntity.ok(friend);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }

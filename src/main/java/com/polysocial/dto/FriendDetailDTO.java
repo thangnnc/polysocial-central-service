@@ -13,13 +13,15 @@ public class FriendDetailDTO implements Serializable {
     private String fullNameUserConfirm;
     private String fullNameUserInvite;
     private Boolean status = false;
+    private String avatarUserInvite;
 
 
     public FriendDetailDTO(Long userConfirmId, Long userInviteId, String fullNameUserConfirm,
-            String fullNameUserInvite) {
+            String fullNameUserInvite, String avatarUserInvite) {
         this.userConfirmId = userConfirmId;
         this.userInviteId = userInviteId;
         this.fullNameUserConfirm = fullNameUserConfirm;
         this.fullNameUserInvite = fullNameUserInvite;
+        this.avatarUserInvite = avatarUserInvite;
     }
 }

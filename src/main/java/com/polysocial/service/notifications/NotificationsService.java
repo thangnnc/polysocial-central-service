@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.polysocial.dto.NotificationsDTO;
 import com.polysocial.entity.Members;
-import com.polysocial.entity.Notifications;
 
 public interface NotificationsService {
 

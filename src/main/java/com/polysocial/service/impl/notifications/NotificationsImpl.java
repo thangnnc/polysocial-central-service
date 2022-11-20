@@ -32,8 +32,9 @@ public class NotificationsImpl implements NotificationsService {
     @Override
     public NotificationsDTO createNoti(NotificationsDTO notiDTO) {
         Notifications noti = modelMapper.map(notiDTO, Notifications.class);
-        noti = notificationsRepo.save(noti);
-        return modelMapper.map(noti, NotificationsDTO.class);
+        noti.setUser(userRepo.findById(notiDTO.getUser()).get());
+        notificationsRepo.save(noti);
+        return notiDTO;
     }
 
     @Override
@@ -54,7 +55,6 @@ public class NotificationsImpl implements NotificationsService {
         for (Members member : members) {
             Notifications noti = modelMapper.map(notiDTO, Notifications.class);
             noti.setUser(userRepo.findById(member.getUserId()).get());
-            System.out.println();
             notificationsRepo.save(noti);
         }
         return members;

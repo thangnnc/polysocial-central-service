@@ -29,7 +29,7 @@ public class Notifications implements Serializable {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    @JoinColumn(name = "userId")
     private Users user;
 
     @Override

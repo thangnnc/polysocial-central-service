@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.text.AbstractDocument.Content;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -31,8 +33,16 @@ import com.polysocial.dto.StudentDTO;
 import com.polysocial.dto.UserDTO;
 import com.polysocial.dto.MemberDTO;
 import com.polysocial.dto.MemberGroupDTO;
+import com.polysocial.dto.NotificationsDTO;
 import com.polysocial.entity.Groups;
+import com.polysocial.entity.Members;
+import com.polysocial.notification.ContentNotifications;
+import com.polysocial.repo.GroupRepo;
+import com.polysocial.repo.MemberRepo;
+import com.polysocial.repo.UserRepo;
 import com.polysocial.service.group.GroupService;
+import com.polysocial.service.notifications.NotificationsService;
+import com.polysocial.type.TypeNotifications;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -42,6 +52,18 @@ public class GroupServiceImpl implements GroupService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private NotificationsService notificationsService;
+
+    @Autowired
+    private MemberRepo memberRepo;
+
+    @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
+    private GroupRepo groupRepo;
 
     @Override
     public PageObject<GroupDTO> getAll(Integer page, Integer limit) {
@@ -91,6 +113,11 @@ public class GroupServiceImpl implements GroupService {
             HttpEntity request = new HttpEntity(headers);
             ResponseEntity<String> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, request,
                     String.class);
+
+            String nameGroup = groupRepo.findById(groupId).get().getName();
+            String nameAdmin = userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get().getFullName();
+            NotificationsDTO notificationsDTO = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_DELETE_USER_GROUP, nameAdmin, nameGroup), TypeNotifications.NOTI_TYPE_DELETE_MEMBER_GROUP, userId);
+            notificationsService.createNoti(notificationsDTO);
             return "OK";
         } catch (Exception e) {
             return null;
@@ -256,6 +283,14 @@ public class GroupServiceImpl implements GroupService {
             HttpEntity entity = new HttpEntity(group, header);
             ResponseEntity<GroupDTO> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, entity,
                     GroupDTO.class);
+
+            List<Members> listMember = memberRepo.findByGroupId(group.getGroupId());
+            String nameAdmin = userRepo.findById(memberRepo.getTeacherByMember(group.getGroupId()).getUserId()).get().getFullName();
+            String nameGroup = groupRepo.findById(group.getGroupId()).get().getName();
+            for (Members member : listMember) {
+                NotificationsDTO noti = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_UPDATE_GROUP, nameAdmin, nameGroup),TypeNotifications.NOTI_TYPE_UPDATE_GROUP,member.getUserId());
+                notificationsService.createNoti(noti);
+            }
             return responseEntity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
