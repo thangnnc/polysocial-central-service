@@ -33,4 +33,6 @@ public class PostDTO implements Serializable {
 	private Long createdBy;
 
 	private Long groupId;
+	
+	private Boolean status;
 }
