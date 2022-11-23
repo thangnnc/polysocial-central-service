@@ -137,10 +137,10 @@ public class GroupController {
     }
 
     @PostMapping(value = CentralAPI.API_CREATE_GROUP_EXCEL, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity createExcel(@RequestParam(value = "file", required = false) MultipartFile file)
+    public ResponseEntity createExcel(@RequestParam(value = "file", required = false) MultipartFile file, @RequestParam Long groupId) 
             throws IOException {
         try {
-            Object group = groupService.createExcel(file);
+            List<MemberDTO> group = groupService.createExcel(file, groupId);
             return new ResponseEntity(group, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);

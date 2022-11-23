@@ -24,4 +24,6 @@ public class GroupDTO implements Serializable{
 
     private LocalDateTime createdDate;
 
+    private Long adminId;
+
 }

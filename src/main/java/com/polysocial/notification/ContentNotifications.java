@@ -14,6 +14,7 @@ public class ContentNotifications {
     public static final String NOTI_CONTENT_UPLOAD_FILE_GROUP_UPDATE = "%s đã cập nhật tài liệu lên nhóm %s";
     public static final String NOTI_CONTENT_DELETE_USER_GROUP = "%s đã xóa bạn khỏi nhóm %s";
     public static final String NOTI_CONTENT_UPDATE_GROUP = "%s đã cập nhật thông tin nhóm %s";
+    public static final String NOTI_CONTENT_ADD_MEMBER_GROUP = "%s đã thêm bạn vào nhóm %s";
 
   
 

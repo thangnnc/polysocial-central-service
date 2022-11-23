@@ -66,5 +66,11 @@ public class NotificationsImpl implements NotificationsService {
         return modelMapper.map(notis, List.class);
     }
 
+    @Override
+    public List<NotificationsDTO> getAllNotifications(Long userId) {
+        List<Notifications> notis = notificationsRepo.findByUserId(userId);
+        return modelMapper.map(notis, List.class);
+    }
+
     
 }
