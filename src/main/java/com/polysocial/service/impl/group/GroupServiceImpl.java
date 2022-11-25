@@ -217,7 +217,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<MemberDTO> createExcel(MultipartFile file, Long groupId) throws IOException {
+    public List<MemberDTO> createExcel(MultipartFile file, Long groupId, Long teacherId) throws IOException {
         try {
             String url = GroupAPI.API_CREATE_GROUP_EXCEL;
             Path tempFile = Files.createTempFile(null, null);
@@ -226,6 +226,7 @@ public class GroupServiceImpl implements GroupService {
             MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
             parameters.add("file", new FileSystemResource(fileToSend));
             parameters.add("groupId", groupId);
+            parameters.add("teacherId", teacherId);
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "multipart/form-data");
             HttpEntity httpEntity = new HttpEntity<>(parameters, headers);

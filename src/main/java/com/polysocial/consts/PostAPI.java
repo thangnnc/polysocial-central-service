@@ -12,4 +12,5 @@ public class PostAPI {
     public static final String API_UPDATE_POST = HostURL.POST_HOST + "/api/post/update";
     
     public static final String API_UPLOADFILE_POST = HostURL.POST_HOST + "/api/upload";
+
 }
