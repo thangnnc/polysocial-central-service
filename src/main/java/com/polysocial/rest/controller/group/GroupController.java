@@ -3,21 +3,13 @@ package com.polysocial.rest.controller.group;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-
-import org.modelmapper.internal.util.Members;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,9 +22,10 @@ import com.polysocial.consts.CentralAPI;
 import com.polysocial.dto.GroupDTO;
 
 import com.polysocial.dto.MemberDTO;
+import com.polysocial.dto.MemberGroupDTO;
 import com.polysocial.dto.PageObject;
 import com.polysocial.dto.StudentDTO;
-import com.polysocial.entity.Users;
+import com.polysocial.dto.UserDTO;
 import com.polysocial.service.impl.group.GroupServiceImpl;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -84,9 +77,10 @@ public class GroupController {
             e.printStackTrace();
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
+
     }
 
-    @DeleteMapping(value = CentralAPI.API_DELETE_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = CentralAPI.API_DELETE_GROUP)
     public ResponseEntity removeGroup(@RequestParam Long groupId) {
         try {
             GroupDTO groups = groupService.deleteGroup(groupId);
@@ -109,8 +103,8 @@ public class GroupController {
     @PostMapping(value = CentralAPI.API_CREATE_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity createGroup(@RequestBody GroupDTO group) {
         try {
-            GroupDTO response = groupService.createGroup(group);
-            return new ResponseEntity(response, HttpStatus.OK);
+            GroupDTO groups = groupService.createGroup(group);
+            return new ResponseEntity(groups, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
@@ -129,7 +123,7 @@ public class GroupController {
     @GetMapping(value = CentralAPI.API_GET_ONE_STUDENT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getOneStudent(@RequestParam("email") String email, @RequestParam("userId") Long groupId) {
         try {
-            Users response = groupService.getOneMemberInGroup(email, groupId);
+            UserDTO response = groupService.getOneMemberInGroup(email, groupId);
             return new ResponseEntity(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
@@ -138,19 +132,15 @@ public class GroupController {
 
     @GetMapping(value = CentralAPI.API_GET_MEMBER_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getMemberGroup(@RequestParam("groupId") Long groupId) {
-        try {
-            List<Object> response = groupService.getMemberInGroup(groupId);
-            return new ResponseEntity(response, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
-        }
+        List<Object> response = groupService.getMemberInGroup(groupId);
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 
     @PostMapping(value = CentralAPI.API_CREATE_GROUP_EXCEL, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity createExcel(@RequestParam(value = "file", required = false) MultipartFile file)
+    public ResponseEntity createExcel(@RequestParam(value = "file", required = false) MultipartFile file, @RequestParam Long groupId) 
             throws IOException {
         try {
-            Object group = groupService.createExcel(file);
+            List<MemberDTO> group = groupService.createExcel(file, groupId);
             return new ResponseEntity(group, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
@@ -173,14 +163,15 @@ public class GroupController {
             GroupDTO response = groupService.updateGroup(group);
             return new ResponseEntity(response, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+            e.printStackTrace();
+            return new ResponseEntity(e, HttpStatus.FAILED_DEPENDENCY);
         }
     }
 
     @GetMapping(value = CentralAPI.API_GET_ALL_GROUP_BY_STUDENT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getAllGroupStudent(@RequestParam("userId") Long userId) {
         try {
-            List<MemberDTO> response = groupService.getAllGroupByStudent(userId);
+            List<MemberGroupDTO> response = groupService.getAllGroupByStudent(userId);
             return new ResponseEntity(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
@@ -190,7 +181,7 @@ public class GroupController {
     @GetMapping(value = CentralAPI.API_GET_ALL_GROUP_BY_TEACHER, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getAllGroupTeacher(@RequestParam("userId") Long userId) {
         try {
-            List<Object> response = groupService.getAllGroupByTeacher(userId);
+            List<MemberGroupDTO> response = groupService.getAllGroupByTeacher(userId);
             return new ResponseEntity(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);

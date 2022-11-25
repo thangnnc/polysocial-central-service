@@ -16,49 +16,60 @@ import java.util.Objects;
 @Entity
 public class Posts implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long postId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long postId;
 
-    private String content;
+	private String content;
 
-    private LocalDateTime createdDate;
-    
-    private Long createdBy;
+	private LocalDateTime createdDate;
 
-    @ManyToOne
-    @JoinColumn(name = "createdBy", insertable = false, updatable = false)
+	private Long createdBy;
+
+	private Long groupId;
+
+	private Boolean status;
+	
+	@ManyToOne
+    @JoinColumn(name = "createdBy",referencedColumnName = "userId", insertable = false, updatable = false)
     private Users user;
+	
 
-    @ManyToOne
-    @JoinColumn(name = "groupId", insertable = false, updatable = false)
-    private Groups group;
+//	@ManyToOne
+//	@JoinColumn(name = "createdBy", insertable = false, updatable = false)
+//	private Users user;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private List<PostFile> posts;
+	@ManyToOne
+	@JoinColumn(name = "groupId", insertable = false, updatable = false)
+	private Groups group;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private List<Likes> likes;
+	@JsonManagedReference	
+	@OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+	@ToString.Exclude
+	private List<PostFile> posts;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private List<Comments> comments;
+	@JsonManagedReference
+	@OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+	@ToString.Exclude
+	private List<Likes> likes;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Posts posts = (Posts) o;
-        return postId != null && Objects.equals(postId, posts.postId);
-    }
+	@JsonManagedReference
+	@OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+	@ToString.Exclude
+	private List<Comments> comments;
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+			return false;
+		Posts posts = (Posts) o;
+		return postId != null && Objects.equals(postId, posts.postId);
+	}
+
+	@Override
+	public int hashCode() {
+		return getClass().hashCode();
+	}
 }

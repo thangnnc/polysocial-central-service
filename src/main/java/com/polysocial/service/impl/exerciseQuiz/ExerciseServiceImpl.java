@@ -2,7 +2,15 @@ package com.polysocial.service.impl.exerciseQuiz;
 
 import com.polysocial.consts.ExerciseAPI;
 import com.polysocial.dto.ExercisesDTO;
+import com.polysocial.dto.NotificationsDTO;
+import com.polysocial.entity.Members;
+import com.polysocial.notification.ContentNotifications;
+import com.polysocial.repo.MemberRepo;
+import com.polysocial.repo.UserRepo;
 import com.polysocial.service.exerciseQuiz.ExerciseService;
+import com.polysocial.service.notifications.NotificationsService;
+import com.polysocial.type.TypeNotifications;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -21,8 +29,17 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Autowired
     private RestTemplate restTemplate;
 
+
+    @Autowired
+    private NotificationsService notificationsService;
+
+    @Autowired
+    private MemberRepo memberRepo;
+    
+    @Autowired UserRepo userRepo;
+
     @Override
-    public ExercisesDTO createOne(ExercisesDTO exercise) {
+    public ExercisesDTO createOne(ExercisesDTO exercise, Long userId) {
         try {
             String url = ExerciseAPI.API_CREATE_EXERCISES;
             HttpHeaders headers = new HttpHeaders();
@@ -30,6 +47,13 @@ public class ExerciseServiceImpl implements ExerciseService {
             HttpEntity entity = new HttpEntity(exercise, headers);
             ResponseEntity<ExercisesDTO> response = restTemplate.exchange(url, HttpMethod.POST, entity,
                     ExercisesDTO.class);
+            List<Members> members = memberRepo.findByGroupId(exercise.getGroupId());
+            String fullName = userRepo.findById(userId).get().getFullName();
+            for (Members member : members) {
+                NotificationsDTO notiDTO = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_CREATE_DEADLINE, fullName), TypeNotifications.NOTI_TYPE_CREATE_DEADLINE, member.getUserId());
+                notiDTO.setUser(member.getUserId());
+                notificationsService.createNoti(notiDTO);
+            }
             return response.getBody();
         } catch (Exception e) {
             e.printStackTrace();

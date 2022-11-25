@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.text.AbstractDocument.Content;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -23,15 +25,24 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import com.polysocial.consts.GroupAPI;
 import com.polysocial.dto.GroupDTO;
 import com.polysocial.dto.PageObject;
 import com.polysocial.dto.StudentDTO;
+import com.polysocial.dto.UserDTO;
 import com.polysocial.dto.MemberDTO;
+import com.polysocial.dto.MemberGroupDTO;
+import com.polysocial.dto.NotificationsDTO;
 import com.polysocial.entity.Groups;
-import com.polysocial.entity.Users;
+import com.polysocial.entity.Members;
+import com.polysocial.notification.ContentNotifications;
+import com.polysocial.repo.GroupRepo;
+import com.polysocial.repo.MemberRepo;
+import com.polysocial.repo.UserRepo;
 import com.polysocial.service.group.GroupService;
-import com.twilio.rest.supersim.v1.UsageRecord.Group;
+import com.polysocial.service.notifications.NotificationsService;
+import com.polysocial.type.TypeNotifications;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -41,6 +52,18 @@ public class GroupServiceImpl implements GroupService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private NotificationsService notificationsService;
+
+    @Autowired
+    private MemberRepo memberRepo;
+
+    @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
+    private GroupRepo groupRepo;
 
     @Override
     public PageObject<GroupDTO> getAll(Integer page, Integer limit) {
@@ -82,14 +105,21 @@ public class GroupServiceImpl implements GroupService {
         try {
             String url = GroupAPI.API_REMOVE_STUDENT;
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
-                    .queryParam("groupId",groupId)
+                    .queryParam("groupId", groupId)
                     .queryParam("userId", userId)
                     .build();
-            ResponseEntity<String> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, null,
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity request = new HttpEntity(headers);
+            ResponseEntity<String> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, request,
                     String.class);
+
+            String nameGroup = groupRepo.findById(groupId).get().getName();
+            String nameAdmin = userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get().getFullName();
+            NotificationsDTO notificationsDTO = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_DELETE_USER_GROUP, nameAdmin, nameGroup), TypeNotifications.NOTI_TYPE_DELETE_MEMBER_GROUP, userId);
+            notificationsService.createNoti(notificationsDTO);
             return "OK";
         } catch (Exception e) {
-           e.printStackTrace();
             return null;
         }
     }
@@ -99,14 +129,14 @@ public class GroupServiceImpl implements GroupService {
         try {
             String url = GroupAPI.API_DELETE_GROUP;
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
-                    .queryParam("groupId",groupId)
+                    .queryParam("groupId", groupId)
                     .build();
-            HttpHeaders header = new HttpHeaders();
-            header.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity request = new HttpEntity(header);
-            ResponseEntity<Groups> responseEntity = restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, request,
-            Groups.class);
-            GroupDTO groupDTO = modelMapper.map(responseEntity.getBody(), GroupDTO.class);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity request = new HttpEntity(headers);
+            ResponseEntity<Groups> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, request,
+                    Groups.class);
+            GroupDTO groupDTO = modelMapper.map(entity.getBody(), GroupDTO.class);
             return groupDTO;
         } catch (Exception e) {
             e.printStackTrace();
@@ -116,14 +146,14 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Object getTeacherFromGroup(Long groupId) {
+    public UserDTO getTeacherFromGroup(Long groupId) {
         try {
             String url = GroupAPI.API_GET_TEACHER;
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
                     .queryParam("groupId", groupId)
                     .build();
-            ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
-                    Object.class);
+            ResponseEntity<UserDTO> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+                    UserDTO.class);
             return entity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
@@ -145,7 +175,7 @@ public class GroupServiceImpl implements GroupService {
             System.out.println(group.getName());
             HttpEntity entity = new HttpEntity(group, header);
             ResponseEntity<GroupDTO> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity,
-            GroupDTO.class);
+                    GroupDTO.class);
             return responseEntity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
@@ -154,15 +184,15 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Users getOneMemberInGroup(String email, Long groupId) {
+    public UserDTO getOneMemberInGroup(String email, Long groupId) {
         try {
             String url = GroupAPI.API_GET_ONE_STUDENT;
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
                     .queryParam("email", email)
                     .queryParam("groupId", groupId)
                     .build();
-            ResponseEntity<Users> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
-                    Users.class);
+            ResponseEntity<UserDTO> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+                    UserDTO.class);
             return entity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
@@ -187,25 +217,27 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Object createExcel(MultipartFile file) throws IOException {
+    public List<MemberDTO> createExcel(MultipartFile file, Long groupId) throws IOException {
         try {
             String url = GroupAPI.API_CREATE_GROUP_EXCEL;
             Path tempFile = Files.createTempFile(null, null);
-
             Files.write(tempFile, file.getBytes());
             File fileToSend = tempFile.toFile();
-
             MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
-
             parameters.add("file", new FileSystemResource(fileToSend));
-
+            parameters.add("groupId", groupId);
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "multipart/form-data");
             HttpEntity httpEntity = new HttpEntity<>(parameters, headers);
+            ResponseEntity<Object> group = restTemplate.exchange(url, HttpMethod.POST,
+                    httpEntity, Object.class);
 
-            ResponseEntity<String> group = restTemplate.exchange(url, HttpMethod.POST,
-                    httpEntity, String.class);
-            return group.getBody();
+            List<Members> member = memberRepo.findByGroupId(groupId);
+            for (Members members : member) {
+                NotificationsDTO notiDTO = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_ADD_MEMBER_GROUP, userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get().getFullName(), groupRepo.findById(groupId).get().getName()), TypeNotifications.NOTI_TYPE_ADD_MEMBER_GROUP, members.getUserId());
+                notificationsService.createNoti(notiDTO);
+            }
+            return (List<MemberDTO>) group.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -240,7 +272,7 @@ public class GroupServiceImpl implements GroupService {
             header.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity entity = new HttpEntity(student, header);
             ResponseEntity<StudentDTO> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity,
-            StudentDTO.class);
+                    StudentDTO.class);
             MemberDTO memberDTO = modelMapper.map(responseEntity.getBody(), MemberDTO.class);
             return memberDTO;
         } catch (Exception e) {
@@ -257,7 +289,15 @@ public class GroupServiceImpl implements GroupService {
             header.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity entity = new HttpEntity(group, header);
             ResponseEntity<GroupDTO> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, entity,
-            GroupDTO.class);
+                    GroupDTO.class);
+
+            List<Members> listMember = memberRepo.findByGroupId(group.getGroupId());
+            String nameAdmin = userRepo.findById(memberRepo.getTeacherByMember(group.getGroupId()).getUserId()).get().getFullName();
+            String nameGroup = groupRepo.findById(group.getGroupId()).get().getName();
+            for (Members member : listMember) {
+                NotificationsDTO noti = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_UPDATE_GROUP, nameAdmin, nameGroup),TypeNotifications.NOTI_TYPE_UPDATE_GROUP,member.getUserId());
+                notificationsService.createNoti(noti);
+            }
             return responseEntity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
@@ -266,15 +306,15 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<MemberDTO> getAllGroupByStudent(Long userId) {
+    public List<MemberGroupDTO> getAllGroupByStudent(Long userId) {
         try {
             String url = GroupAPI.API_GET_ALL_GROUP_BY_STUDENT;
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
                     .queryParam("userId", userId)
                     .build();
-            ResponseEntity<MemberDTO> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
-                    MemberDTO.class);
-            return (List<MemberDTO>) entity.getBody();
+            ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+                    Object.class);
+            return  (List<MemberGroupDTO>) entity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -282,7 +322,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<Object> getAllGroupByTeacher(Long userId) {
+    public List<MemberGroupDTO> getAllGroupByTeacher(Long userId) {
         try {
             String url = GroupAPI.API_GET_ALL_GROUP_BY_TEACHER;
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
@@ -290,7 +330,7 @@ public class GroupServiceImpl implements GroupService {
                     .build();
             ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
                     Object.class);
-            return (List<Object>) entity.getBody();
+            return (List<MemberGroupDTO>) entity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

@@ -2,25 +2,33 @@ package com.polysocial.rest.controller.user;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
+import com.polysocial.config.jwt.JwtTokenProvider;
 import com.polysocial.consts.UserAPI;
 import com.polysocial.dto.FriendDTO;
+import com.polysocial.dto.FriendDetailDTO;
 import com.polysocial.dto.UserDTO;
+import com.polysocial.dto.UserDetailDTO;
 import com.polysocial.entity.Friends;
-import com.polysocial.entity.Users;
 import com.polysocial.repo.FriendRepo;
 import com.polysocial.service.users.UserService;
+import com.twilio.rest.proxy.v1.service.Session;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
+@CrossOrigin("*")
 @RestController
 public class UserController {
 
@@ -33,13 +41,16 @@ public class UserController {
     @Autowired
     ModelMapper modelMapper;
 
+    @Autowired
+    JwtTokenProvider jwt;
+
     @GetMapping(UserAPI.API_GET_ALL_USER)
     public ResponseEntity getAllUser() {
         try {
             List<UserDTO> listDTO = userService.getAllUsers();
             return ResponseEntity.ok(listDTO);
         } catch (Exception e) {
-            return null;
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -51,7 +62,7 @@ public class UserController {
             return ResponseEntity.ok(userDTO);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -61,17 +72,18 @@ public class UserController {
             FriendDTO friend = userService.getUserFriend(userId, friendId);
             return ResponseEntity.ok(friend);
         } catch (Exception e) {
-            return null;
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping(UserAPI.API_GET_ALL_FRIEND)
     public ResponseEntity getAllFriends(@RequestParam Long userId){
         try{
-            List<Friends> list = userService.getAllFriend(userId);
+            List<FriendDetailDTO> list = userService.getAllFriend(userId);
             return ResponseEntity.ok(list);
         }catch(Exception e){
-            return null;
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
     @GetMapping(UserAPI.API_SEARCH_USER_BY_EMAIL)
@@ -81,7 +93,7 @@ public class UserController {
             return ResponseEntity.ok(list);
         }catch(Exception e){
             e.printStackTrace();
-            return null;
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -92,8 +104,61 @@ public class UserController {
             return ResponseEntity.ok(list);
         }catch(Exception e){
             e.printStackTrace();
-            return null;
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
 
+    @PostMapping(UserAPI.API_ADD_FRIEND)
+    public ResponseEntity addFriend(@RequestBody UserDTO user, @RequestHeader("Authorization") String token) {
+        try {
+            FriendDetailDTO friend = userService.addFriend(jwt.getIdFromJWT(token), user.getStudentCode());
+            return ResponseEntity.ok(friend);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(UserAPI.API_ACCEPT_FRIEND)
+    public ResponseEntity acceptFriend(@RequestBody FriendDTO friendDTO, @RequestHeader("Authorization") String token) {
+        try {
+            FriendDetailDTO friend = userService.acceptFriend(jwt.getIdFromJWT(token), friendDTO.getUserInviteId());
+            return ResponseEntity.ok(friend);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping(UserAPI.API_DELETE_REQUEST_ADD_FRIEND)
+    public ResponseEntity rejectFriend(@RequestBody FriendDTO friendDTO, @RequestHeader("Authorization") String token) {
+        try {
+            userService.deleteRequestAddFriend(jwt.getIdFromJWT(token), friendDTO.getUserInviteId());
+            return ResponseEntity.ok("Delete success");
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(UserAPI.API_GET_ALL_REQUEST_ADD_FRIEND)
+    public ResponseEntity getAllFriendRequest(@RequestHeader("Authorization") String token) {
+        try{
+            List<FriendDetailDTO> list = userService.getAllRequestAddFriend(jwt.getIdFromJWT(token));
+            return ResponseEntity.ok(list);
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(UserAPI.API_GET_ALL_FRIEND_REQUEST)
+    public ResponseEntity getAllRequest(@RequestHeader("Authorization") String token) {
+        try{
+            List<FriendDetailDTO> list = userService.getAllRequestAddFriendByUserIntive(jwt.getIdFromJWT(token));
+            return ResponseEntity.ok(list);
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

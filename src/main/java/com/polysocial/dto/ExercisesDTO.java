@@ -1,6 +1,9 @@
 package com.polysocial.dto;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -18,12 +21,18 @@ public class ExercisesDTO {
 
     private String content;
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime createdDate = LocalDateTime.now();
-
     private LocalDateTime endDate;
+    
+    private String deadline;
 
     private Boolean status = true;
 
     private Long groupId;
+
+    public void formatEndDate() {
+    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    	this.endDate = LocalDateTime.parse(deadline, formatter);
+    	
+    }
+
 }
