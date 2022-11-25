@@ -28,6 +28,7 @@ public class StorageCapacityServiceImpl implements StorageCapacityService {
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         StorageCapacity storageCapacity = storageCapacityRepo.findByUserId(userId);
         StorageCapacityDTO storageCapacityDTO = modelMapper.map(storageCapacity, StorageCapacityDTO.class);
+        storageCapacityDTO.setUserId(userId);
         storageCapacityDTO.setFullName(userRepo.findById(userId).get().getFullName());
         return storageCapacityDTO;
     }
@@ -39,7 +40,14 @@ public class StorageCapacityServiceImpl implements StorageCapacityService {
 
     @Override
     public StorageCapacityDTO create(StorageCapacityDTO storageCapacityDTO) {
-        return modelMapper.map(storageCapacityRepo.save(modelMapper.map(storageCapacityDTO, StorageCapacity.class)), StorageCapacityDTO.class);
+        Users user = userRepo.findById(storageCapacityDTO.getUserId()).get();
+        StorageCapacity storageCapacity = modelMapper.map(storageCapacityDTO, StorageCapacity.class);
+        storageCapacity.setUser(user);
+        storageCapacity.setUsed(0L);
+        System.out.println(storageCapacity.getCapacity());
+        System.out.println(storageCapacity.getUsed());
+        storageCapacity = storageCapacityRepo.save(storageCapacity);
+        return modelMapper.map(storageCapacity, StorageCapacityDTO.class);
     }
 
     @Override

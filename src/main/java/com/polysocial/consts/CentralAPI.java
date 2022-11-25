@@ -16,6 +16,7 @@ public class CentralAPI {
 	public static final String API_GET_ALL_EXERCISES_END_DATE = "/exercises/get-all-exercises-end-date";
 
 	public static final String GET_ALL_POST = "/api/posts";
+	public static final String API_UPDATE_POST = "/api/update/post";
 
 	// group
 	public static final String GET_ALL_GROUP = "/group/api/get/all";
