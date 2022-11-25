@@ -16,4 +16,6 @@ public interface NotificationsService {
     List<Members> createMoreNoti(NotificationsDTO notiDTO, Long groupId);
 
     List<NotificationsDTO> getNotiByUserId(Long userId);
+
+    List<NotificationsDTO> getAllNotifications(Long userId);
 }

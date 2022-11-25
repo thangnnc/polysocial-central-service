@@ -20,6 +20,10 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
+import javax.mail.Multipart;
+
+import org.springframework.web.multipart.MultipartFile;
+
 @Data
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -33,6 +37,8 @@ public class PostDTO implements Serializable {
 	private Long createdBy;
 
 	private Long groupId;
-	
-	private Boolean status;
+
+	private List<MultipartFile> files;
+
+
 }

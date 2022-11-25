@@ -9,4 +9,6 @@ public interface PostService {
 
 	PostDTO createPost(PostDTO dto, Long tokenId);
 
+	PostDTO updatePost(PostDTO dto, Long tokenId);
+
 }

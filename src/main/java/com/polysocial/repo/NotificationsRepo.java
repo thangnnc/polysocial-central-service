@@ -14,4 +14,5 @@ public interface NotificationsRepo extends JpaRepository<Notifications, Long> {
     @Query("SELECT n FROM Notifications n WHERE n.user.userId = ?1")
     List<Notifications> findByUserId(Long userId);
 
+
 }
