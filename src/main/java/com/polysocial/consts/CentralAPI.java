@@ -3,7 +3,6 @@ package com.polysocial.consts;
 public class CentralAPI {
 
 	public static final String GET_DEMO = "/api/demo-detail";
-	public static final String GET_MESSAGE = "/api/message-detail";
 	// public static final String GET_POST = "/api/post-detail";
 	public static final String API_CREATE_TASK_FILE = "/task-file/create";
 	public static final String API_UPDATE_TASK_FILE = "/task-file/update";
@@ -42,5 +41,16 @@ public class CentralAPI {
 	public static final String CREATE_COMMENT = "/api/comment";
 
 	public static final String LIKE = "/api/like";
+	
+	//ROOM CHAT
+	public static final String CREATE_ROOM_CHAT = "/api/createRoomChat";
+	
+	//CONTACT
+	public static final String CREATE_CONTACT = "/api/createContact";
+	
+	//MESSAGE
+	public static final String CREATE_MESSAGE = "/api/createMessage";
+	
+	public static final String GET_MESSAGE = "/api/getMessage";
 
 }
