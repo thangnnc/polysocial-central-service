@@ -11,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.polysocial.consts.CommentAPI;
 import com.polysocial.consts.PostAPI;
@@ -45,13 +47,14 @@ public class CommentServiceImpl implements CommentService{
 
 
 	@Override
-	public CommentDTO deleteById(Long id) throws Exception {
+	public CommentDTO deleteById(Long commentId) throws Exception {
 		try {
 			String url = CommentAPI.API_DELETE_COMMENT;
-			HttpHeaders hedear = new HttpHeaders();
-			hedear.setContentType(MediaType.APPLICATION_JSON);
-			HttpEntity<CommentDTO> httpEntity = new HttpEntity(hedear);
-			ResponseEntity<CommentDTO> entity = restTemplate.exchange(url, HttpMethod.DELETE, httpEntity, CommentDTO.class);
+			UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+			.queryParam("commentId", commentId)
+			.build();
+				restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, null,
+			CommentDTO.class);
 			return null;
 		}catch(Exception e){
 			e.printStackTrace();
