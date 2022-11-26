@@ -2,6 +2,7 @@ package com.polysocial.service.impl.comment;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +23,8 @@ public class CommentServiceImpl implements CommentService{
 	@Autowired
 	private RestTemplate restTemplate;
 	
+	@Autowired
+	private ModelMapper modelMapper;
 	
 	@Override
 	public CommentDTO createComment(CommentDTO dto, Long tokenId) {
@@ -32,8 +35,9 @@ public class CommentServiceImpl implements CommentService{
 			hedear.setContentType(MediaType.APPLICATION_JSON);
 			dto.setUserId(tokenId);
 			HttpEntity<CommentDTO> httpEntity = new HttpEntity(dto, hedear);
-			ResponseEntity<CommentDTO> entity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, CommentDTO.class);
-			return entity.getBody();
+			ResponseEntity<Object> entity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, Object.class);
+			CommentDTO commentDTO = modelMapper.map(entity.getBody(), CommentDTO.class);
+			return (CommentDTO) entity.getBody();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -95,7 +99,7 @@ public class CommentServiceImpl implements CommentService{
 			HttpHeaders hedear = new HttpHeaders();
 			hedear.setContentType(MediaType.APPLICATION_JSON);
 			HttpEntity<CommentDTO> httpEntity = new HttpEntity(postId, hedear);
-			ResponseEntity<CommentDTO> entity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, CommentDTO.class);
+			ResponseEntity<CommentDTO> entity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, CommentDTO.class);
 			return (List<CommentDTO>) entity.getBody();
 		} catch (Exception e) {
 			e.printStackTrace();

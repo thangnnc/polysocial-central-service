@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.polysocial.config.jwt.JwtTokenProvider;
 import com.polysocial.consts.CentralAPI;
 import com.polysocial.dto.GroupDTO;
 
@@ -34,6 +35,9 @@ public class GroupController {
 
     @Autowired
     private GroupServiceImpl groupService;
+
+    @Autowired
+    private JwtTokenProvider jwt;
 
     @GetMapping(value = CentralAPI.GET_ALL_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getAllGroup(@RequestParam("page") Optional<Integer> page,
@@ -169,9 +173,9 @@ public class GroupController {
     }
 
     @GetMapping(value = CentralAPI.API_GET_ALL_GROUP_BY_STUDENT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getAllGroupStudent(@RequestParam("userId") Long userId) {
+    public ResponseEntity getAllGroupStudent(@RequestHeader("Authorization") String token) {
         try {
-            List<MemberGroupDTO> response = groupService.getAllGroupByStudent(userId);
+            List<MemberGroupDTO> response = groupService.getAllGroupByStudent(jwt.getIdFromJWT(token));
             return new ResponseEntity(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
@@ -179,9 +183,9 @@ public class GroupController {
     }
 
     @GetMapping(value = CentralAPI.API_GET_ALL_GROUP_BY_TEACHER, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getAllGroupTeacher(@RequestParam("userId") Long userId) {
+    public ResponseEntity getAllGroupTeacher(@RequestHeader("Authorization") String token) {
         try {
-            List<MemberGroupDTO> response = groupService.getAllGroupByTeacher(userId);
+            List<MemberGroupDTO> response = groupService.getAllGroupByTeacher(jwt.getIdFromJWT(token));
             return new ResponseEntity(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
