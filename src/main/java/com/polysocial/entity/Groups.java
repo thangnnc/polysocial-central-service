@@ -30,6 +30,8 @@ public class Groups implements Serializable {
 
     private Boolean status = true;
 
+    private String className;
+
     private Date createdDate = new Date();
 
     @JsonManagedReference

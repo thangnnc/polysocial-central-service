@@ -34,10 +34,5 @@ public class ExercisesDTO {
     	this.endDate = LocalDateTime.parse(deadline, formatter);
     	
     }
-//    public void convertToLocalDateTimeViaInstant() {
-//         deadline.toInstant()
-//          .atZone(ZoneId.systemDefault())
-//          .toLocalDateTime();
-//         System.out.println(deadline);
-//    }
+
 }

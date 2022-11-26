@@ -8,6 +8,7 @@ import com.polysocial.dto.ResponseDTO;
 import com.polysocial.service.post.PostFileService;
 import com.polysocial.service.post.PostService;
 import com.polysocial.utils.ValidateUtils;
+import com.twilio.twiml.fax.Receive.MediaType;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,12 +18,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 @CrossOrigin("*")
 @RestController
@@ -44,8 +45,8 @@ public class PostController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@PostMapping(CentralAPI.GET_ALL_POST)
-	public ResponseEntity createPost(@RequestBody PostDTO request, @RequestHeader("Authorization") String token) {
+	@PostMapping(value = CentralAPI.GET_ALL_POST, consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity createPost(@ModelAttribute PostDTO request, @RequestHeader("Authorization") String token) {
 		if (ValidateUtils.isNullOrEmpty(request.getContent())) {
 			ResponseDTO response = new ResponseDTO();
 			response.setStatus(HttpStatus.BAD_REQUEST);
@@ -57,10 +58,16 @@ public class PostController {
 		}
 	}
 
-	@PostMapping(CentralAPI.UPLOADFILE_POST)
-	public List<String> add(@RequestParam(value = "file", required = false) List<MultipartFile> fi) {
-		return postFileService.saveFile(fi);
-
+	@PutMapping(value = CentralAPI.API_UPDATE_POST, consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity updatePost(@ModelAttribute PostDTO request, @RequestHeader("Authorization") String token) {
+		if (ValidateUtils.isNullOrEmpty(request.getContent())) {
+			ResponseDTO response = new ResponseDTO();
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+		} else {
+			Long tokenId = jwt.getIdFromJWT(token);
+			PostDTO response = postService.updatePost(request, tokenId);
+			return ResponseEntity.ok(response);
+		}
 	}
-
 }

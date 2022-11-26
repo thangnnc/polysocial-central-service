@@ -217,7 +217,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Object createExcel(MultipartFile file) throws IOException {
+    public List<MemberDTO> createExcel(MultipartFile file, Long groupId, Long teacherId) throws IOException {
         try {
             String url = GroupAPI.API_CREATE_GROUP_EXCEL;
             Path tempFile = Files.createTempFile(null, null);
@@ -225,12 +225,20 @@ public class GroupServiceImpl implements GroupService {
             File fileToSend = tempFile.toFile();
             MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
             parameters.add("file", new FileSystemResource(fileToSend));
+            parameters.add("groupId", groupId);
+            parameters.add("teacherId", teacherId);
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "multipart/form-data");
             HttpEntity httpEntity = new HttpEntity<>(parameters, headers);
-            ResponseEntity<String> group = restTemplate.exchange(url, HttpMethod.POST,
-                    httpEntity, String.class);
-            return group.getBody();
+            ResponseEntity<Object> group = restTemplate.exchange(url, HttpMethod.POST,
+                    httpEntity, Object.class);
+
+            List<Members> member = memberRepo.findByGroupId(groupId);
+            for (Members members : member) {
+                NotificationsDTO notiDTO = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_ADD_MEMBER_GROUP, userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get().getFullName(), groupRepo.findById(groupId).get().getName()), TypeNotifications.NOTI_TYPE_ADD_MEMBER_GROUP, members.getUserId());
+                notificationsService.createNoti(notiDTO);
+            }
+            return (List<MemberDTO>) group.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

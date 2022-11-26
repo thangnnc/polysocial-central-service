@@ -15,6 +15,7 @@ public class CentralAPI {
 	public static final String API_GET_ALL_EXERCISES_END_DATE = "/exercises/get-all-exercises-end-date";
 
 	public static final String GET_ALL_POST = "/api/posts";
+	public static final String API_UPDATE_POST = "/api/update/post";
 
 	// group
 	public static final String GET_ALL_GROUP = "/group/api/get/all";
@@ -36,10 +37,15 @@ public class CentralAPI {
 	public static final String API_GET_ALL_GROUP_BY_STUDENT = "/group/api/get-all/student";
 	public static final String API_GET_ALL_GROUP_BY_TEACHER = "/group/api/get-all/teacher";
 
+
+	//post
 	public static final String UPLOADFILE_POST = "/api/posts/upload";
 
 	public static final String CREATE_COMMENT = "/api/comment";
-
+	public static final String DELETE_COMMENT = "/api/comment/delete";
+	public static final String GET_ALL_COMMENT = "/api/comment/get-all";
+	public static final String UPDATE_COMMENT = "/api/comment/update";
+	public static final String GET_COMMENT_BY_POST_ID = "/api/comment/post";
 	public static final String LIKE = "/api/like";
 	
 	//ROOM CHAT

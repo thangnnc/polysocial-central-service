@@ -12,5 +12,6 @@ public class TypeNotifications {
     public static final Integer NOTI_TYPE_UPLOAD_FILE_GROUP = 9;
     public static final Integer NOTI_TYPE_DELETE_MEMBER_GROUP = 10;
     public static final Integer NOTI_TYPE_UPDATE_GROUP = 11;
+    public static final Integer NOTI_TYPE_ADD_MEMBER_GROUP = 12;
 
 }

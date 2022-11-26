@@ -35,7 +35,7 @@ public interface GroupService {
     
     List<Object> getMemberInGroup(Long id);
                 
-    Object createExcel(MultipartFile multipartFile) throws IOException;
+    List<MemberDTO> createExcel(MultipartFile multipartFile, Long groupId, Long teacherId) throws IOException;
     
     List<GroupDTO> findByKeywork(String keywork);
     

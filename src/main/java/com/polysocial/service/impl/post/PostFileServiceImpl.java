@@ -3,8 +3,6 @@ package com.polysocial.service.impl.post;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +10,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.FormHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.ResourceHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -54,11 +47,11 @@ public class PostFileServiceImpl implements PostFileService {
 							String.class);
 					return (List<String>) entity;
 				} catch (Exception e) {
-//					e.printStackTrace();
+					e.printStackTrace();
 				}
 			}
 		} catch (Exception e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 		}
 
 		return null;
