@@ -20,13 +20,11 @@ public class RoomChats implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomId;
 
+    private Boolean status = true;
+
     private String name;
 
-    private Boolean status;
-
-    private Integer type;
-
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDate = LocalDateTime.now();
 
     @JsonManagedReference
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)

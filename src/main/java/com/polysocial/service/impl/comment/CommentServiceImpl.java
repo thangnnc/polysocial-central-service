@@ -29,19 +29,18 @@ public class CommentServiceImpl implements CommentService{
 	@Override
 	public CommentDTO createComment(CommentDTO dto, Long tokenId) {
 		try {
-			
-			String url = CommentAPI.API_CREATE_COMMENT;
-			HttpHeaders hedear = new HttpHeaders();
-			hedear.setContentType(MediaType.APPLICATION_JSON);
+            String url = CommentAPI.API_CREATE_COMMENT;
+            HttpHeaders header = new HttpHeaders();
+            header.setContentType(MediaType.APPLICATION_JSON);
 			dto.setUserId(tokenId);
-			HttpEntity<CommentDTO> httpEntity = new HttpEntity(dto, hedear);
-			ResponseEntity<Object> entity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, Object.class);
-			CommentDTO commentDTO = modelMapper.map(entity.getBody(), CommentDTO.class);
-			return (CommentDTO) entity.getBody();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+            HttpEntity entity = new HttpEntity(dto, header);
+            ResponseEntity<CommentDTO> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity,
+                    CommentDTO.class);
+            return responseEntity.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
 	}
 
 
@@ -78,17 +77,18 @@ public class CommentServiceImpl implements CommentService{
 	@Override
 	public CommentDTO update(CommentDTO dto, Long tokenId) throws Exception {
 		try {
-			String url = CommentAPI.API_PUT_COMMENT;
-			HttpHeaders hedear = new HttpHeaders();
-			hedear.setContentType(MediaType.APPLICATION_JSON);
+            String url = CommentAPI.API_PUT_COMMENT;
+            HttpHeaders header = new HttpHeaders();
+            header.setContentType(MediaType.APPLICATION_JSON);
 			dto.setUserId(tokenId);
-			HttpEntity<CommentDTO> httpEntity = new HttpEntity(dto, hedear);
-			ResponseEntity<CommentDTO> entity = restTemplate.exchange(url, HttpMethod.PUT, httpEntity, CommentDTO.class);
-			return entity.getBody();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+            HttpEntity entity = new HttpEntity(dto, header);
+            ResponseEntity<CommentDTO> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, entity,
+                    CommentDTO.class);
+            return responseEntity.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
 	}
 
 

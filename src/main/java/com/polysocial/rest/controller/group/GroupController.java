@@ -27,14 +27,14 @@ import com.polysocial.dto.MemberGroupDTO;
 import com.polysocial.dto.PageObject;
 import com.polysocial.dto.StudentDTO;
 import com.polysocial.dto.UserDTO;
-import com.polysocial.service.impl.group.GroupServiceImpl;
+import com.polysocial.service.group.GroupService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class GroupController {
 
     @Autowired
-    private GroupServiceImpl groupService;
+    private GroupService groupService;
 
     @Autowired
     private JwtTokenProvider jwt;
