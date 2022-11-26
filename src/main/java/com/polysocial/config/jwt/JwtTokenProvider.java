@@ -22,7 +22,7 @@ public class JwtTokenProvider {
 
         // Tạo chuỗi json web token từ email của user.
         return Jwts.builder()
-                .setSubject(userDetails.getUser().getRoleId().toString())
+                .setSubject(userDetails.getUser().getUserId().toString())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, JWT_SECRET)

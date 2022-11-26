@@ -3,6 +3,9 @@ package com.polysocial.entity;
 import lombok.*;
 import org.hibernate.Hibernate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -28,6 +31,7 @@ public class UserDetail implements Serializable {
 
     private String course;
 
+    @JsonBackReference
     @OneToOne
     @JoinColumn(name = "userId", insertable = false, updatable = false)
     private Users user;

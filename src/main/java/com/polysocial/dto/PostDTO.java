@@ -2,20 +2,29 @@ package com.polysocial.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Data;
 
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.io.Serializable;
+import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PostDTO implements Serializable {
 
-    private String post1;
+	private Long postId;
 
-    private String post2;
+	private String content;
 
-    private String post3;
+	private Long createdBy;
 
-    private String post4;
+	private Long groupId;
+
+	private List<MultipartFile> files;
+
+
 }

@@ -25,11 +25,11 @@ public class Notifications implements Serializable {
 
     private Boolean status;
 
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDate = LocalDateTime.now();
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    @JoinColumn(name = "userId")
     private Users user;
 
     @Override

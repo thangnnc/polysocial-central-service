@@ -25,9 +25,15 @@ public class Comments implements Serializable {
 
     private String content;
 
-    private Boolean status;
+    private Boolean status = true;
 
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDate = LocalDateTime.now();
+    
+    private Long postId;
+    
+    private Long userId;
+
+    private Long idReply;
 
     @JsonBackReference
     @ManyToOne
