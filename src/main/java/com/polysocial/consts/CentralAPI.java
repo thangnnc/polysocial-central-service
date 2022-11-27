@@ -53,10 +53,6 @@ public class CentralAPI {
 	//CONTACT
 	public static final String CREATE_CONTACT = "/api/createContact";
 	
-	//MESSAGE
-	public static final String CREATE_MESSAGE = "/api/createMessage";
-	
-	public static final String GET_MESSAGE = "/api/getMessage";
 
 	// MESSAGE
 	public static final String CREATE_MESSAGE = "/api/createMessage";

@@ -36,23 +36,6 @@ public class MessageController {
 		}
 	}
 	
-//<<<<<<< HEAD
-//	
-//	@PostMapping(CentralAPI.GET_MESSAGE)
-//	public ResponseEntity getMessage(@RequestBody RoomChatRequestDTO request) {
-//=======
-//	@PostMapping(CentralAPI.GET_MESSAGE)
-//	public ResponseEntity getMessage(@RequestBody RoomChatRequestDTO request) {
-//		System.out.println("---"+request.getRoomId());
-//		if (ValidateUtils.isNullOrEmpty(request.getRoomId())) {
-//			ResponseDTO response = new ResponseDTO();
-//			response.setStatus(HttpStatus.BAD_REQUEST);
-//			return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
-//		} else {
-//			List<MessageContentDTO> response = messageService.getMessageContent(request.getRoomId());
-//			return ResponseEntity.ok(response);
-//		}
-//	}
 	
 	@PostMapping(CentralAPI.GET_MESSAGE)
 	public ResponseEntity getMessage(@RequestBody RoomChatRequestDTO request) {
