@@ -217,13 +217,14 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<MemberDTO> createExcel(MultipartFile file, Long groupId, Long teacherId) throws IOException {
+    public List<MemberDTO> createExcel(MultipartFile file, Long groupId) throws IOException {
         try {
             String url = GroupAPI.API_CREATE_GROUP_EXCEL;
             Path tempFile = Files.createTempFile(null, null);
             Files.write(tempFile, file.getBytes());
             File fileToSend = tempFile.toFile();
             MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
+            Long teacherId = memberRepo.getTeacherByMember(groupId).getUserId();
             parameters.add("file", new FileSystemResource(fileToSend));
             parameters.add("groupId", groupId);
             parameters.add("teacherId", teacherId);
@@ -293,13 +294,13 @@ public class GroupServiceImpl implements GroupService {
             ResponseEntity<GroupDTO> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, entity,
                     GroupDTO.class);
 
-            // List<Members> listMember = memberRepo.findByGroupId(group.getGroupId());
-            // String nameAdmin = userRepo.findById(memberRepo.getTeacherByMember(group.getGroupId()).getUserId()).get().getFullName();
-            // String nameGroup = groupRepo.findById(group.getGroupId()).get().getName();
-            // for (Members member : listMember) {
-            //     NotificationsDTO noti = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_UPDATE_GROUP, nameAdmin, nameGroup),TypeNotifications.NOTI_TYPE_UPDATE_GROUP,member.getUserId());
-            //     notificationsService.createNoti(noti);
-            // }
+            List<Members> listMember = memberRepo.findByGroupId(group.getGroupId());
+            String nameAdmin = userRepo.findById(memberRepo.getTeacherByMember(group.getGroupId()).getUserId()).get().getFullName();
+            String nameGroup = groupRepo.findById(group.getGroupId()).get().getName();
+            for (Members member : listMember) {
+                NotificationsDTO noti = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_UPDATE_GROUP, nameAdmin, nameGroup),TypeNotifications.NOTI_TYPE_UPDATE_GROUP,member.getUserId());
+                notificationsService.createNoti(noti);
+            }
             return responseEntity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
