@@ -4,6 +4,7 @@ import com.polysocial.config.jwt.JwtTokenProvider;
 import com.polysocial.consts.CentralAPI;
 import com.polysocial.dto.ListPostDTO;
 import com.polysocial.dto.PostDTO;
+import com.polysocial.dto.PostDTO2;
 import com.polysocial.dto.ResponseDTO;
 import com.polysocial.service.post.PostFileService;
 import com.polysocial.service.post.PostService;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -69,5 +71,21 @@ public class PostController {
 			PostDTO response = postService.updatePost(request, tokenId);
 			return ResponseEntity.ok(response);
 		}
+	}
+
+	@DeleteMapping(CentralAPI.API_DELETE_POST)
+	public ResponseEntity deletePost(@RequestParam("postId") Long postId) {
+		try{
+			postService.delete(postId);
+			return ResponseEntity.ok().build();
+		}catch(Exception e){
+			return ResponseEntity.badRequest().build();
+		}
+	}
+
+	@GetMapping(CentralAPI.API_GET_ONE_POST)
+	public ResponseEntity getOnePost(@RequestParam("postId") Long postId) {
+		PostDTO response = postService.getOne(postId);
+		return ResponseEntity.ok(response);
 	}
 }
