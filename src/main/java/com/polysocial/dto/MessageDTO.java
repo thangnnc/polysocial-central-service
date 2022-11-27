@@ -5,17 +5,20 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MessageDTO implements Serializable {
 
-    private String mess1;
+	private Long messageId;
 
-    private String mess2;
+    private String content;
 
-    private String mess3;
+    private Boolean status;
 
-    private String mess4;
+    private LocalDateTime createdDate;
+    
+    private Long contactId;
 }
