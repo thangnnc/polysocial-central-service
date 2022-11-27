@@ -19,13 +19,15 @@ public class ContactDTO implements Serializable{
     private String fullName;
     private String email;
     private String avatar;
-    private String studenCode;
+    private String studentCode;
+    private Long contactId;
 
-    public ContactDTO(Long userId, String fullName, String email, String avatar, String studentCode) {
+    public ContactDTO(Long userId, String fullName, String email, String avatar, String studentCode ,Long contactId) {
         this.userId = userId;
         this.fullName = fullName;
         this.email = email;
         this.avatar = avatar;
-        this.studenCode = studentCode;
+        this.studentCode = studentCode;
+        this.contactId = contactId;
     }
 }

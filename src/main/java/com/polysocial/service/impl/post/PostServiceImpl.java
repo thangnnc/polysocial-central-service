@@ -108,7 +108,6 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public PostDTO updatePost(PostDTO dto, Long tokenId) {
 		try {
-
 			String url = PostAPI.API_UPDATE_POST;
 			HttpHeaders hedear = new HttpHeaders();
 			hedear.setContentType(MediaType.APPLICATION_JSON);
@@ -119,10 +118,49 @@ public class PostServiceImpl implements PostService {
 			dto2.setListPath(listPath);
 			HttpEntity<PostDTO> httpEntity = new HttpEntity(dto2, hedear);
 			ResponseEntity<PostDTO> entity = restTemplate.exchange(url, HttpMethod.PUT, httpEntity, PostDTO.class);
+			String groupName = groupRepo.findById(dto.getGroupId()).get().getName();
+			String adminName = userRepo.findById(tokenId).get().getFullName();
+			List<Members> listMember = memberRepo.findByGroupId(dto.getGroupId());
+			for (Members members : listMember) {
+				NotificationsDTO noti = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_ADMIN_POST,adminName , groupName), TypeNotifications.NOTI_TYPE_ADMIN_POST, members.getUserId());
+				notificationsService.createNoti(noti);
+			}
 			return entity.getBody();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	@Override
+	public PostDTO getOne(Long postId) {
+		try {
+			String url = PostAPI.API_GET_ONE_POST;
+			UriComponents builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("postId", postId).build();
+			HttpHeaders hedear = new HttpHeaders();
+			hedear.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity entity = new HttpEntity<>(hedear);
+			ResponseEntity<PostDTO> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
+					PostDTO.class);
+			return response.getBody();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public void delete(Long postId) {
+		try {
+			String url = PostAPI.API_DELETE_POST;
+			UriComponents builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("postId", postId).build();
+			HttpHeaders hedear = new HttpHeaders();
+			hedear.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity entity = new HttpEntity<>(hedear);
+			restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, entity,
+					String.class);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

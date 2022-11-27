@@ -14,40 +14,23 @@ import java.util.Objects;
 @Setter
 @RequiredArgsConstructor
 @Entity
-@IdClass(FriendId.class)
 public class Friends implements Serializable {
 
     @Id
-    @Column(name = "userInvite")
-    private Long userInviteId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long friendId;
 
-    @Id
-    @Column(name = "userConfirm")
-    private Long userConfirmId;
+    private Boolean status = false;
 
-    private Boolean status;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "userInvite", insertable = false, updatable = false)
+    @JoinColumn(name = "userInvite")
     private Users userInvite;
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "userConfirm", insertable = false, updatable = false)
+    @JoinColumn(name = "userConfirm")
     private Users userConfirm;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Friends friends = (Friends) o;
-        return userInviteId != null && Objects.equals(userInviteId, friends.userInviteId)
-                && userConfirmId != null && Objects.equals(userConfirmId, friends.userConfirmId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(userInviteId, userConfirmId);
-    }
 }

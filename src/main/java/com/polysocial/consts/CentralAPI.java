@@ -17,6 +17,8 @@ public class CentralAPI {
 
 	public static final String GET_ALL_POST = "/api/posts";
 	public static final String API_UPDATE_POST = "/api/update/post";
+	public static final String API_GET_ONE_POST = "api/get-one/post";
+	public static final String API_DELETE_POST = "api/delete/post";
 
 	// group
 	public static final String GET_ALL_GROUP = "/group/api/get/all";
