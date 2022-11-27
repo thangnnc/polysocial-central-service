@@ -147,6 +147,7 @@ public class GroupController {
             List<MemberDTO> group = groupService.createExcel(file, groupId, teacherId);
             return new ResponseEntity(group, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
