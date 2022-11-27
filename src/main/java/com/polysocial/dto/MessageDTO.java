@@ -19,6 +19,7 @@ public class MessageDTO implements Serializable {
     private Boolean status;
 
     private LocalDateTime createdDate;
-    
+
     private Long contactId;
+
 }

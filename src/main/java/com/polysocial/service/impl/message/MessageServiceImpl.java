@@ -4,6 +4,7 @@ import com.polysocial.consts.MessageAPI;
 import com.polysocial.dto.MessageDTO;
 import com.polysocial.service.message.MessageService;
 import com.polysocial.utils.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,14 +46,13 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	public List<Object> getMessageContent(Long roomId) {
-
 		List<Object> list = new ArrayList<>();
 		try {
 			String url = MessageAPI.API_GET_MESSAGE;
 			HttpHeaders hedear = new HttpHeaders();
 			hedear.setContentType(MediaType.APPLICATION_JSON);
 			HttpEntity<Object[]> httpEntity = new HttpEntity(roomId, hedear);
-
+		
 			try {
 				ResponseEntity<Object[]> response = restTemplate.exchange(url, HttpMethod.POST, httpEntity,
 						Object[].class);
@@ -70,4 +70,4 @@ public class MessageServiceImpl implements MessageService {
 		return list;
 	}
 
-}
+ }

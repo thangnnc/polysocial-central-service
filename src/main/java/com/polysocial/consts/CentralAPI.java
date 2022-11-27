@@ -46,6 +46,17 @@ public class CentralAPI {
 	public static final String UPDATE_COMMENT = "/api/comment/update";
 	public static final String GET_COMMENT_BY_POST_ID = "/api/comment/post";
 	public static final String LIKE = "/api/like";
+	
+	//ROOM CHAT
+	public static final String CREATE_ROOM_CHAT = "/api/createRoomChat";
+	
+	//CONTACT
+	public static final String CREATE_CONTACT = "/api/createContact";
+	
+	//MESSAGE
+	public static final String CREATE_MESSAGE = "/api/createMessage";
+	
+	public static final String GET_MESSAGE = "/api/getMessage";
 
 	// MESSAGE
 	public static final String CREATE_MESSAGE = "/api/createMessage";

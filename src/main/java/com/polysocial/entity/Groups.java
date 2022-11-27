@@ -29,21 +29,22 @@ public class Groups implements Serializable {
     private String description;
 
     private Boolean status = true;
-
+    
     private String className;
 
-    private Date createdDate = new Date();
+    private LocalDateTime createdDate = LocalDateTime.now();
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private List<Posts> posts;
+    private String avatar;
+    
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
-    @ToString.Exclude
+    public Groups(String name, Long totalMember) {
+		this.name = name;
+		this.totalMember = totalMember;
+	}
+
+    @OneToMany(mappedBy = "group")
     private List<Exercises> exercises;
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
