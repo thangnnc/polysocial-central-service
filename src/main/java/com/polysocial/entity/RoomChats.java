@@ -22,14 +22,13 @@ public class RoomChats implements Serializable {
 
     private Boolean status = true;
 
-    private String name;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "groupId")
+    private Groups group;
 
     private LocalDateTime createdDate = LocalDateTime.now();
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private List<Contacts> contacts;
+    
 
     @Override
     public boolean equals(Object o) {

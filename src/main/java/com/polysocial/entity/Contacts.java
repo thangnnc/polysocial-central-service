@@ -20,11 +20,13 @@ public class Contacts implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long contactId;
 
-    private Boolean isAdmin;
+    private Boolean isAdmin = false;
+
+    private Long roomId;
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    @JoinColumn(name = "userId")
     private Users user;
 
     @JsonBackReference
@@ -36,6 +38,14 @@ public class Contacts implements Serializable {
     @OneToMany(mappedBy = "contact", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Messages> message;
+
+
+
+    public Contacts( Users user, RoomChats room) {
+        this.user = user;
+        this.room = room;
+    }
+
 
     @Override
     public boolean equals(Object o) {

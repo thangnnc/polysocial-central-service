@@ -13,6 +13,6 @@ public interface MemberRepo extends JpaRepository<Members, Long> {
 
     List<Members> findByGroupId(Long groupId);
 
-    @Query("SELECT o FROM Members o WHERE isTeacher = True and o.groupId =?1")
+    @Query("SELECT o FROM Members o WHERE isTeacher = 1 and o.groupId =?1")
     Members getTeacherByMember(Long groupId);
 }
