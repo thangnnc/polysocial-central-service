@@ -67,9 +67,9 @@ public class UserServiceImpl implements UserService {
         List<Friends> list = friendRepo.getAllFriends(userId);
         List<FriendDetailDTO> listDTO = new ArrayList<>();
         for (Friends friend : list) {
-            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirmId(), friend.getUserInviteId(),
-                    userRepo.findById(friend.getUserConfirmId()).get().getFullName(),
-                    userRepo.findById(friend.getUserInviteId()).get().getFullName(), userRepo.findById(friend.getUserInviteId()).get().getAvatar() );
+            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirm().getUserId(), friend.getUserInvite().getUserId(),
+                    userRepo.findById(friend.getUserConfirm().getUserId()).get().getFullName(),
+                    userRepo.findById(friend.getUserInvite().getUserId()).get().getFullName(), userRepo.findById(friend.getUserInvite().getUserId()).get().getAvatar() );
             friendDTO.setStatus(friend.getStatus());
             listDTO.add(friendDTO);
         }
@@ -103,7 +103,10 @@ public class UserServiceImpl implements UserService {
                 Users userInvite = userRepo.findByUserId(userConfirmId);
                 FriendDetailDTO friendDetailDTO = new FriendDetailDTO(user.getUserId(), userConfirmId,
                         userInvite.getFullName(), userConfirm.getFullName(), userInvite.getAvatar());
-                Friends friend = modelMapper.map(friendDetailDTO, Friends.class);
+
+                Friends friend = new Friends();
+                friend.setUserInvite(userInvite);
+                friend.setUserConfirm(userConfirm);
                 friendRepo.save(friend);
                 String nameFriend = userInvite.getFullName();
                 NotificationsDTO notificationsDTO = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_ADD_FRIEND, nameFriend), TypeNotifications.NOTI_TYPE_ADD_FRIEND, userConfirm.getUserId());
@@ -117,7 +120,7 @@ public class UserServiceImpl implements UserService {
             Users userInvite = userRepo.findByUserId(userConfirmId);
             FriendDetailDTO friendDetailDTO = new FriendDetailDTO(user.getUserId(), userConfirmId,
                     userInvite.getFullName(), userConfirm.getFullName(), userInvite.getAvatar());
-                    e.printStackTrace();
+            e.printStackTrace();
             return friendDetailDTO;
         }
 
@@ -130,7 +133,10 @@ public class UserServiceImpl implements UserService {
                 userRepo.findById(userConfirmId).get().getFullName(),
                 userRepo.findById(userInviteId).get().getFullName(), userRepo.findById(userInviteId).get().getAvatar());
         friendDetailDTO.setStatus(true);
-        Friends friend = modelMapper.map(friendDetailDTO, Friends.class);
+        Friends friend = new Friends();
+        friend.setUserInvite(userRepo.findByUserId(userInviteId));
+        friend.setUserConfirm(userRepo.findById(userConfirmId).get());
+        friend.setStatus(true);
         friendRepo.save(friend);
         NotificationsDTO notificationsDTO = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_ACCEPT_FRIEND, userRepo.findById(userConfirmId).get().getFullName()), TypeNotifications.NOTI_TYPE_ACCEPT_FRIEND, userInviteId);
         notificationsService.createNoti(notificationsDTO);
@@ -151,9 +157,9 @@ public class UserServiceImpl implements UserService {
         List<Friends> list = friendRepo.getAllRequestAddFriend(userId);
         List<FriendDetailDTO> listDTO = new ArrayList<>();
         for (Friends friend : list) {
-            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirmId(), friend.getUserInviteId(),
-                    userRepo.findById(friend.getUserConfirmId()).get().getFullName(),
-                    userRepo.findById(friend.getUserInviteId()).get().getFullName(),  userRepo.findById(friend.getUserInviteId()).get().getAvatar());
+            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirm().getUserId(), friend.getUserInvite().getUserId(),
+                    userRepo.findById(friend.getUserConfirm().getUserId()).get().getFullName(),
+                    userRepo.findById(friend.getUserInvite().getUserId()).get().getFullName(),  userRepo.findById(friend.getUserInvite().getUserId()).get().getAvatar());
             friendDTO.setStatus(friend.getStatus());
             listDTO.add(friendDTO);
         }
@@ -165,9 +171,9 @@ public class UserServiceImpl implements UserService {
         List<Friends> list = friendRepo.getAllRequestAddFriendByUserInviteId(userId);
         List<FriendDetailDTO> listDTO = new ArrayList<>();
         for (Friends friend : list) {
-            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirmId(), friend.getUserInviteId(),
-                    userRepo.findById(friend.getUserConfirmId()).get().getFullName(),
-                    userRepo.findById(friend.getUserInviteId()).get().getFullName(),userRepo.findById(friend.getUserInviteId()).get().getAvatar() );
+            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirm().getUserId(), friend.getUserInvite().getUserId(),
+                    userRepo.findById(friend.getUserConfirm().getUserId()).get().getFullName(),
+                    userRepo.findById(friend.getUserInvite().getUserId()).get().getFullName(),userRepo.findById(friend.getUserInvite().getUserId()).get().getAvatar() );
             friendDTO.setStatus(friend.getStatus());
             listDTO.add(friendDTO);
         }
