@@ -6,9 +6,9 @@ import com.polysocial.dto.MessageDTO;
 
 public interface MessageService {
 
-	MessageDTO createMessage(MessageDTO dto);
-
 	List<Object> getMessageContent(Long roomId);
+
+	MessageDTO createMessage(MessageDTO dto);
 
 
 }

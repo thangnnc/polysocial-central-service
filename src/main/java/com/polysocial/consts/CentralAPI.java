@@ -39,8 +39,7 @@ public class CentralAPI {
 	public static final String API_GET_ALL_GROUP_BY_STUDENT = "/group/api/get-all/student";
 	public static final String API_GET_ALL_GROUP_BY_TEACHER = "/group/api/get-all/teacher";
 
-
-	//post
+	// post
 	public static final String UPLOADFILE_POST = "/api/posts/upload";
 
 	public static final String CREATE_COMMENT = "/api/comment";
@@ -56,9 +55,10 @@ public class CentralAPI {
 	//CONTACT
 	public static final String CREATE_CONTACT = "/api/createContact";
 	
-	//MESSAGE
+
+	// MESSAGE
 	public static final String CREATE_MESSAGE = "/api/createMessage";
-	
+
 	public static final String GET_MESSAGE = "/api/getMessage";
 
 }
