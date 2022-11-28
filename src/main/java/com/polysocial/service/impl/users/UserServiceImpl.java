@@ -9,35 +9,49 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.polysocial.dto.ContactDTO;
 import com.polysocial.dto.FriendDTO;
 import com.polysocial.dto.FriendDetailDTO;
 import com.polysocial.dto.NotificationsDTO;
 import com.polysocial.dto.UserDTO;
+import com.polysocial.entity.Contacts;
 import com.polysocial.entity.Friends;
+import com.polysocial.entity.Groups;
+import com.polysocial.entity.RoomChats;
 import com.polysocial.entity.Users;
 import com.polysocial.notification.ContentNotifications;
+import com.polysocial.repo.ContactRepo;
 import com.polysocial.repo.FriendRepo;
+import com.polysocial.repo.GroupRepo;
+import com.polysocial.repo.RoomChatRepo;
 import com.polysocial.repo.UserRepo;
 import com.polysocial.service.notifications.NotificationsService;
 import com.polysocial.service.users.UserService;
 import com.polysocial.type.TypeNotifications;
-import com.polysocial.utils.QrCode;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    UserRepo userRepo;
+    private UserRepo userRepo;
 
     @Autowired
-    FriendRepo friendRepo;
+    private FriendRepo friendRepo;
 
     @Autowired
-    ModelMapper modelMapper;
+    private ModelMapper modelMapper;
 
     @Autowired
     private NotificationsService notificationsService;
 
+    @Autowired
+    private GroupRepo groupRepo;
+
+    @Autowired
+    private RoomChatRepo roomChatRepo;
+
+    @Autowired
+    private ContactRepo contactRepo;
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -67,10 +81,31 @@ public class UserServiceImpl implements UserService {
         List<Friends> list = friendRepo.getAllFriends(userId);
         List<FriendDetailDTO> listDTO = new ArrayList<>();
         for (Friends friend : list) {
-            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirmId(), friend.getUserInviteId(),
-                    userRepo.findById(friend.getUserConfirmId()).get().getFullName(),
-                    userRepo.findById(friend.getUserInviteId()).get().getFullName(), userRepo.findById(friend.getUserInviteId()).get().getAvatar() );
+            Users userInvite = userRepo.findById(friend.getUserInviteId()).get();
+            Users userConfirm = userRepo.findById(friend.getUserConfirmId()).get();
+            FriendDetailDTO friendDTO = new FriendDetailDTO(userConfirm.getUserId(), userInvite.getUserId(),
+                    userConfirm.getFullName(),userInvite.getFullName(), userInvite.getAvatar(), userConfirm.getAvatar());
+            if(userId == userConfirm.getUserId()) {
+                friendDTO.setFriendName(userInvite.getFullName());
+                friendDTO.setFriendAvatar(userInvite.getAvatar());
+            }
+            else{
+                friendDTO.setFriendName(userConfirm.getFullName());
+                friendDTO.setFriendAvatar(userConfirm.getAvatar());
+            }
+
             friendDTO.setStatus(friend.getStatus());
+            Long groupId = friendRepo.getFriendByUserInviteIdAndUserConfirm(userInvite.getUserId(), userConfirm.getUserId()).get(0).getGroup().getGroupId();
+            Long roomId = roomChatRepo.getRoomChatByGroupId(groupId).getRoomId();
+            List<Contacts> contacts = contactRepo.getContactByRoomId(roomId);
+            List<ContactDTO> listContactDTO = new ArrayList<>();
+            for (Contacts contact : contacts) {
+                Users user = userRepo.findById(contact.getUserId()).get();
+                ContactDTO contactDTO = new ContactDTO(user.getUserId(), user.getFullName(), user.getEmail(), user.getAvatar(), user.getStudentCode(), contact.getContactId());
+                listContactDTO.add(contactDTO);
+                friendDTO.setContact(listContactDTO);
+            }
+
             listDTO.add(friendDTO);
         }
         return listDTO;
@@ -102,12 +137,31 @@ public class UserServiceImpl implements UserService {
                 Users userConfirm = userRepo.findByUserId(user.getUserId());
                 Users userInvite = userRepo.findByUserId(userConfirmId);
                 FriendDetailDTO friendDetailDTO = new FriendDetailDTO(user.getUserId(), userConfirmId,
-                        userInvite.getFullName(), userConfirm.getFullName(), userInvite.getAvatar());
-                Friends friend = modelMapper.map(friendDetailDTO, Friends.class);
+                        userInvite.getFullName(), userConfirm.getFullName(), userInvite.getAvatar(), userConfirm.getAvatar());
+
+
+                Groups group = new Groups("Friends chat", 2L, "Friend with chat rooms", "Friends chat");
+                Groups groupCreated = groupRepo.save(group);
+                
+                RoomChats roomChat = new RoomChats(groupCreated);
+                Long roomId = roomChatRepo.save(roomChat).getRoomId();
+
+                Contacts contact = new Contacts(userConfirm.getUserId(), roomId);
+                contactRepo.save(contact);
+                Contacts contact2 = new Contacts(userInvite.getUserId(), roomId);
+                contactRepo.save(contact2);
+
+                Friends friend = new Friends();
+                friend.setUserInviteId(userInvite.getUserId());
+                friend.setUserConfirmId(userConfirm.getUserId());
+                friend.setGroup(groupCreated);
                 friendRepo.save(friend);
+
                 String nameFriend = userInvite.getFullName();
                 NotificationsDTO notificationsDTO = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_ADD_FRIEND, nameFriend), TypeNotifications.NOTI_TYPE_ADD_FRIEND, userConfirm.getUserId());
                 notificationsService.createNoti(notificationsDTO);
+
+
                 return friendDetailDTO;
             }
            return null;
@@ -116,8 +170,8 @@ public class UserServiceImpl implements UserService {
             Users userConfirm = userRepo.findByUserId(user.getUserId());
             Users userInvite = userRepo.findByUserId(userConfirmId);
             FriendDetailDTO friendDetailDTO = new FriendDetailDTO(user.getUserId(), userConfirmId,
-                    userInvite.getFullName(), userConfirm.getFullName(), userInvite.getAvatar());
-                    e.printStackTrace();
+                    userInvite.getFullName(), userConfirm.getFullName(), userInvite.getAvatar(), userConfirm.getAvatar());
+            e.printStackTrace();
             return friendDetailDTO;
         }
 
@@ -128,10 +182,17 @@ public class UserServiceImpl implements UserService {
         friendRepo.acceptFriend(userConfirmId, userInviteId);
         FriendDetailDTO friendDetailDTO = new FriendDetailDTO(userConfirmId, userInviteId,
                 userRepo.findById(userConfirmId).get().getFullName(),
-                userRepo.findById(userInviteId).get().getFullName(), userRepo.findById(userInviteId).get().getAvatar());
+                userRepo.findById(userInviteId).get().getFullName(), userRepo.findById(userInviteId).get().getAvatar(),  userRepo.findById(userConfirmId).get().getAvatar());
         friendDetailDTO.setStatus(true);
-        Friends friend = modelMapper.map(friendDetailDTO, Friends.class);
+
+        Long groupId = friendRepo.getFriendByUserInviteIdAndUserConfirm(userInviteId ,userConfirmId).get(0).getGroup().getGroupId();
+        Friends friend = new Friends();
+        friend.setUserInviteId(userRepo.findByUserId(userInviteId).getUserId());
+        friend.setUserConfirmId(userRepo.findById(userConfirmId).get().getUserId());
+        friend.setStatus(true);
+        friend.setGroup(groupRepo.findById(groupId).get());
         friendRepo.save(friend);
+
         NotificationsDTO notificationsDTO = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_ACCEPT_FRIEND, userRepo.findById(userConfirmId).get().getFullName()), TypeNotifications.NOTI_TYPE_ACCEPT_FRIEND, userInviteId);
         notificationsService.createNoti(notificationsDTO);
         return friendDetailDTO;
@@ -151,9 +212,10 @@ public class UserServiceImpl implements UserService {
         List<Friends> list = friendRepo.getAllRequestAddFriend(userId);
         List<FriendDetailDTO> listDTO = new ArrayList<>();
         for (Friends friend : list) {
-            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirmId(), friend.getUserInviteId(),
-                    userRepo.findById(friend.getUserConfirmId()).get().getFullName(),
-                    userRepo.findById(friend.getUserInviteId()).get().getFullName(),  userRepo.findById(friend.getUserInviteId()).get().getAvatar());
+            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirm().getUserId(), friend.getUserInvite().getUserId(),
+                    userRepo.findById(friend.getUserConfirm().getUserId()).get().getFullName(),
+                    userRepo.findById(friend.getUserInvite().getUserId()).get().getFullName(),  userRepo.findById(friend.getUserInvite().getUserId()).get().getAvatar(),
+                    userRepo.findById(friend.getUserConfirm().getUserId()).get().getAvatar());
             friendDTO.setStatus(friend.getStatus());
             listDTO.add(friendDTO);
         }
@@ -165,9 +227,10 @@ public class UserServiceImpl implements UserService {
         List<Friends> list = friendRepo.getAllRequestAddFriendByUserInviteId(userId);
         List<FriendDetailDTO> listDTO = new ArrayList<>();
         for (Friends friend : list) {
-            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirmId(), friend.getUserInviteId(),
-                    userRepo.findById(friend.getUserConfirmId()).get().getFullName(),
-                    userRepo.findById(friend.getUserInviteId()).get().getFullName(),userRepo.findById(friend.getUserInviteId()).get().getAvatar() );
+            FriendDetailDTO friendDTO = new FriendDetailDTO(friend.getUserConfirm().getUserId(), friend.getUserInvite().getUserId(),
+                    userRepo.findById(friend.getUserConfirm().getUserId()).get().getFullName(),
+                    userRepo.findById(friend.getUserInvite().getUserId()).get().getFullName(),userRepo.findById(friend.getUserInvite().getUserId()).get().getAvatar(),
+                    userRepo.findById(friend.getUserConfirm().getUserId()).get().getAvatar() );
             friendDTO.setStatus(friend.getStatus());
             listDTO.add(friendDTO);
         }

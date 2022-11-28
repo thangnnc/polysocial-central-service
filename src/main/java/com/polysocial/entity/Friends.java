@@ -18,14 +18,17 @@ import java.util.Objects;
 public class Friends implements Serializable {
 
     @Id
-    @Column(name = "userInvite")
     private Long userInviteId;
 
     @Id
-    @Column(name = "userConfirm")
     private Long userConfirmId;
 
-    private Boolean status;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "groupId")
+    private Groups group;
+
+    private Boolean status = false;
+
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
@@ -37,17 +40,4 @@ public class Friends implements Serializable {
     @JoinColumn(name = "userConfirm", insertable = false, updatable = false)
     private Users userConfirm;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Friends friends = (Friends) o;
-        return userInviteId != null && Objects.equals(userInviteId, friends.userInviteId)
-                && userConfirmId != null && Objects.equals(userConfirmId, friends.userConfirmId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(userInviteId, userConfirmId);
-    }
 }

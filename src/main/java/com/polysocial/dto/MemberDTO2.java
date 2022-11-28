@@ -17,6 +17,7 @@ public class MemberDTO2 implements Serializable{
 
     private String avatar;
 
+    
 
     public MemberDTO2(Long userId, String fullname, String email, String avatar) {
         this.userId = userId;

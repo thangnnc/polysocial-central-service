@@ -20,18 +20,18 @@ public class RoomChats implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomId;
 
-    private String name;
+    private Boolean status = true;
 
-    private Boolean status;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "groupId")
+    private Groups group;
+    
 
-    private Integer type;
 
-    private LocalDateTime createdDate;
+    public RoomChats(Groups group) {
+        this.group = group;
+    }
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private List<Contacts> contacts;
 
     @Override
     public boolean equals(Object o) {

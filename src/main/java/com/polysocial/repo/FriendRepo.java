@@ -13,26 +13,28 @@ import com.polysocial.entity.Friends;
 @Repository
 public interface FriendRepo extends JpaRepository<Friends, Long> {
 
-    @Query("SELECT o FROM Friends o WHERE o.userInviteId =?1 and o.userConfirmId =?2 or o.userConfirmId =?1 or o.userInviteId =?2")
+    @Query("SELECT o FROM Friends o WHERE (o.userInvite.userId =?1 and o.userConfirm.userId =?2) or (o.userConfirm.userId =?1 and o.userInvite.userId =?2)")
     List<Friends> getFriendByUserInviteIdAndUserConfirm(Long userInviteId, Long userInviteId2);
 
-    @Query("SELECT o FROM Friends o WHERE o.status = true and (o.userInviteId =?1 or o.userConfirmId =?1)")
+    @Query("SELECT o FROM Friends o WHERE o.status = true and (o.userInvite.userId =?1 or o.userConfirm.userId =?1)")
     List<Friends> getAllFriends(Long userId);
 
     @Modifying
     @Transactional
-    @Query("UPDATE Friends o SET o.status = 1 WHERE o.userInviteId =?1 and o.userConfirmId =?2")
+    @Query("UPDATE Friends o SET o.status = 1 WHERE o.userInvite.userId =?1 and o.userConfirm.userId =?2")
     void acceptFriend(Long userInviteId, Long userConfirmId);
 
     @Modifying
     @Transactional
-    @Query("DELETE Friends o WHERE o.userInviteId =?1 and o.userConfirmId =?2")
+    @Query("DELETE Friends o WHERE o.userInvite.userId =?1 and o.userConfirm.userId =?2")
     void deleteRequestAddFriend(Long userInviteId, Long userConfirmId);
 
-    @Query("SELECT o FROM Friends o WHERE o.status = false and o.userConfirmId =?1")
+    @Query("SELECT o FROM Friends o WHERE o.status = false and o.userConfirm.userId =?1")
     List<Friends> getAllRequestAddFriend(Long userId);
 
-    @Query("SELECT o FROM Friends o WHERE o.status = false and o.userInviteId =?1")
+    @Query("SELECT o FROM Friends o WHERE o.status = false and o.userInvite.userId =?1")
     List<Friends> getAllRequestAddFriendByUserInviteId(Long userId);
+
+
 
 }
