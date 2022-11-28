@@ -1,6 +1,7 @@
 package com.polysocial.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -18,14 +19,17 @@ public class FriendDetailDTO implements Serializable {
     private String fullNameUserInvite;
     private Boolean status = false;
     private String avatarUserInvite;
+    private String avatarUserConfirm;
+    private List<ContactDTO> contact;
 
 
     public FriendDetailDTO(Long userConfirmId, Long userInviteId, String fullNameUserConfirm,
-            String fullNameUserInvite, String avatarUserInvite) {
+            String fullNameUserInvite, String avatarUserInvite, String avatarUserConfirm) {
         this.userConfirmId = userConfirmId;
         this.userInviteId = userInviteId;
         this.fullNameUserConfirm = fullNameUserConfirm;
         this.fullNameUserInvite = fullNameUserInvite;
         this.avatarUserInvite = avatarUserInvite;
+        this.avatarUserConfirm = avatarUserConfirm;
     }
 }

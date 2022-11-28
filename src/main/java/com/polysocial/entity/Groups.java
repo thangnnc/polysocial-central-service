@@ -42,6 +42,15 @@ public class Groups implements Serializable {
 		this.totalMember = totalMember;
 	}
 
+
+    public Groups(String name, Long totalMember, String description, String className) {
+        this.name = name;
+        this.totalMember = totalMember;
+        this.description = description;
+        this.className = className;
+    }
+    
+
     @OneToMany(mappedBy = "group")
     private List<Exercises> exercises;
     

@@ -25,10 +25,13 @@ public class RoomChats implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "groupId")
     private Groups group;
-
-    private LocalDateTime createdDate = LocalDateTime.now();
-
     
+
+
+    public RoomChats(Groups group) {
+        this.group = group;
+    }
+
 
     @Override
     public boolean equals(Object o) {

@@ -22,11 +22,20 @@ public class Contacts implements Serializable {
 
     private Boolean isAdmin = false;
 
+    private Long userId;
+
     private Long roomId;
+
+
+    public Contacts(Long userId, Long roomId) {
+        this.userId = userId;
+        this.roomId = roomId;
+    }
+
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "userId", insertable = false, updatable = false)
     private Users user;
 
     @JsonBackReference
