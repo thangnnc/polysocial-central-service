@@ -20,6 +20,8 @@ public class FriendDetailDTO implements Serializable {
     private Boolean status = false;
     private String avatarUserInvite;
     private String avatarUserConfirm;
+    private String friendName;
+    private String friendAvatar;
     private List<ContactDTO> contact;
 
 
