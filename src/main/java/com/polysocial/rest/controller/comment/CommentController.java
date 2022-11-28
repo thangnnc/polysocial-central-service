@@ -1,6 +1,7 @@
 package com.polysocial.rest.controller.comment;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -71,9 +72,9 @@ public class CommentController {
 	}
 
 	@GetMapping(CentralAPI.GET_COMMENT_BY_POST_ID)
-	public ResponseEntity getCommentByPost(@RequestParam Long postId) {
+	public ResponseEntity getCommentByPost(@RequestParam Long postId, @RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
 		try{
-			List<CommentDTO> response = commentService.getCommentByPostId(postId);
+			List<CommentDTO> response = commentService.getCommentByPostId(postId, page, size);
 			return ResponseEntity.ok(response);
 		}catch(Exception e){
 			e.printStackTrace();

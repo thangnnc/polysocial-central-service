@@ -1,9 +1,11 @@
 package com.polysocial.service.impl.comment;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -96,13 +98,16 @@ public class CommentServiceImpl implements CommentService{
 
 
 	@Override
-	public List<CommentDTO> getCommentByPostId(Long postId) {
+	public List<CommentDTO> getCommentByPostId(Long postId, Optional<Integer> page, Optional<Integer> size) {
 		try {
 			String url = CommentAPI.API_GET_COMMENT_BY_POST;
-			HttpHeaders hedear = new HttpHeaders();
-			hedear.setContentType(MediaType.APPLICATION_JSON);
-			HttpEntity<CommentDTO> httpEntity = new HttpEntity(postId, hedear);
-			ResponseEntity<CommentDTO> entity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, CommentDTO.class);
+			UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+			.queryParam("postId", postId)
+			.queryParam("page", page)
+			.queryParam("size", size)
+			.build();
+			ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+			Object.class);
 			return (List<CommentDTO>) entity.getBody();
 		} catch (Exception e) {
 			e.printStackTrace();
