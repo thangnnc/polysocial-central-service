@@ -17,4 +17,7 @@ public class PostAPI {
 
     public static final String API_GET_ONE_POST =  HostURL.POST_HOST + "/api/get-post";
 
+    public static final String API_GET_POST_BY_GROUP =  HostURL.POST_HOST +"/api/get-post-by-group";
+
+
 }

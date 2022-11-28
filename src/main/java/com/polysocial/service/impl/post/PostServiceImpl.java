@@ -163,4 +163,22 @@ public class PostServiceImpl implements PostService {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public ListPostDTO findAllPageByGroup(Long groupId, Integer page, Integer limit) {
+		try {
+			String url = PostAPI.API_GET_POST_BY_GROUP;
+			UriComponents builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("groupId", groupId)
+					.queryParam("page", page).queryParam("limit", limit).build();
+			HttpHeaders hedear = new HttpHeaders();
+			hedear.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity entity = new HttpEntity<>(hedear);
+			ResponseEntity<ListPostDTO> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
+					ListPostDTO.class);
+			return response.getBody();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

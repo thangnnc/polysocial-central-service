@@ -88,4 +88,11 @@ public class PostController {
 		PostDTO response = postService.getOne(postId);
 		return ResponseEntity.ok(response);
 	}
+
+	@GetMapping(CentralAPI.API_GET_POST_BY_GROUP)
+	public ResponseEntity getAllPostByGroup(@RequestParam("groupId") Long groupId,
+			@RequestParam("page") Optional<Integer> page, @RequestParam("limit") Optional<Integer> limit) {
+		ListPostDTO response = postService.findAllPageByGroup(groupId, page.orElse(0), limit.orElse(10));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 }

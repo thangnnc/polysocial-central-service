@@ -41,6 +41,7 @@ public class CentralAPI {
 
 	// post
 	public static final String UPLOADFILE_POST = "/api/posts/upload";
+	public static final String API_GET_POST_BY_GROUP = "/api/get-post-by-group";
 
 	public static final String CREATE_COMMENT = "/api/comment";
 	public static final String DELETE_COMMENT = "/api/comment/delete";
