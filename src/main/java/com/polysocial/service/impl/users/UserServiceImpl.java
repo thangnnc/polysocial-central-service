@@ -85,15 +85,6 @@ public class UserServiceImpl implements UserService {
             Users userConfirm = userRepo.findById(friend.getUserConfirmId()).get();
             FriendDetailDTO friendDTO = new FriendDetailDTO(userConfirm.getUserId(), userInvite.getUserId(),
                     userConfirm.getFullName(),userInvite.getFullName(), userInvite.getAvatar(), userConfirm.getAvatar());
-            if(userId == userConfirm.getUserId()) {
-                friendDTO.setFriendName(userInvite.getFullName());
-                friendDTO.setFriendAvatar(userInvite.getAvatar());
-            }
-            else{
-                friendDTO.setFriendName(userConfirm.getFullName());
-                friendDTO.setFriendAvatar(userConfirm.getAvatar());
-            }
-
             friendDTO.setStatus(friend.getStatus());
             Long groupId = friendRepo.getFriendByUserInviteIdAndUserConfirm(userInvite.getUserId(), userConfirm.getUserId()).get(0).getGroup().getGroupId();
             Long roomId = roomChatRepo.getRoomChatByGroupId(groupId).getRoomId();
