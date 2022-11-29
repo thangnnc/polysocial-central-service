@@ -358,4 +358,20 @@ public class GroupServiceImpl implements GroupService {
         }
     }
 
+    @Override
+    public List<MemberGroupDTO> getAllGroupByUser(Long userId) {
+        try {
+            String url = GroupAPI.API_GET_ALL_GROUP_BY_USER;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("userId", userId)
+                    .build();
+            ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+                    Object.class);
+            return (List<MemberGroupDTO>) entity.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

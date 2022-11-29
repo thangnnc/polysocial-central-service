@@ -192,4 +192,14 @@ public class GroupController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(value = CentralAPI.API_GET_ALL_GROUP_BY_USER, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getAllGroupByUser(@RequestHeader("Authorization") String token) {
+        try {
+            List<MemberGroupDTO> response = groupService.getAllGroupByUser(jwt.getIdFromJWT(token));
+            return new ResponseEntity(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

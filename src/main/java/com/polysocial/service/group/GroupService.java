@@ -47,6 +47,8 @@ public interface GroupService {
 
     PageObject<GroupDTO> getAllGroupFalse(Integer page, Integer limit);
 
+    List<MemberGroupDTO> getAllGroupByUser(Long userId);
+
     
     
 
