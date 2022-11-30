@@ -83,8 +83,10 @@ public class UserServiceImpl implements UserService {
         for (Friends friend : list) {
             Users userInvite = userRepo.findById(friend.getUserInviteId()).get();
             Users userConfirm = userRepo.findById(friend.getUserConfirmId()).get();
+            Long roomChatId = roomChatRepo.getRoomChatByGroupId(friend.getGroup().getGroupId()).getRoomId();
             FriendDetailDTO friendDTO = new FriendDetailDTO(userConfirm.getUserId(), userInvite.getUserId(),
                     userConfirm.getFullName(),userInvite.getFullName(), userInvite.getAvatar(), userConfirm.getAvatar());
+            friendDTO.setRoomId(roomChatId);
             Long group_Id = friendRepo.getGroupByUser(userConfirm.getUserId(), userInvite.getUserId()).get(0).getGroup().getGroupId();
             friendDTO.setGroupId(group_Id);
             if(userId == userConfirm.getUserId()) {
@@ -139,14 +141,12 @@ public class UserServiceImpl implements UserService {
                 Users userInvite = userRepo.findByUserId(userConfirmId);
                 FriendDetailDTO friendDetailDTO = new FriendDetailDTO(user.getUserId(), userConfirmId,
                         userInvite.getFullName(), userConfirm.getFullName(), userInvite.getAvatar(), userConfirm.getAvatar());
-
-
                 Groups group = new Groups("Friends chat", 2L, "Friend with chat rooms", "Friends chat");
                 Groups groupCreated = groupRepo.save(group);
                 
                 RoomChats roomChat = new RoomChats(groupCreated);
                 Long roomId = roomChatRepo.save(roomChat).getRoomId();
-
+                friendDetailDTO.setRoomId(roomId);
                 Contacts contact = new Contacts(userConfirm.getUserId(), roomId);
                 contactRepo.save(contact);
                 Contacts contact2 = new Contacts(userInvite.getUserId(), roomId);
@@ -193,7 +193,8 @@ public class UserServiceImpl implements UserService {
         friend.setStatus(true);
         friend.setGroup(groupRepo.findById(groupId).get());
         friendRepo.save(friend);
-
+        Long roomId = roomChatRepo.getRoomChatByGroupId(groupId).getRoomId();
+        friendDetailDTO.setRoomId(roomId);
         NotificationsDTO notificationsDTO = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_ACCEPT_FRIEND, userRepo.findById(userConfirmId).get().getFullName()), TypeNotifications.NOTI_TYPE_ACCEPT_FRIEND, userInviteId);
         notificationsService.createNoti(notificationsDTO);
         return friendDetailDTO;

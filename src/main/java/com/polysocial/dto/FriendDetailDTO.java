@@ -24,6 +24,7 @@ public class FriendDetailDTO implements Serializable {
     private String avatarUserConfirm;
     private List<ContactDTO> listContact;
     private long groupId;
+    private Long roomId;
 
 
     public FriendDetailDTO(Long userConfirmId, Long userInviteId, String fullNameUserConfirm,
