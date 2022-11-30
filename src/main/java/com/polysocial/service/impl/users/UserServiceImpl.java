@@ -85,6 +85,8 @@ public class UserServiceImpl implements UserService {
             Users userConfirm = userRepo.findById(friend.getUserConfirmId()).get();
             FriendDetailDTO friendDTO = new FriendDetailDTO(userConfirm.getUserId(), userInvite.getUserId(),
                     userConfirm.getFullName(),userInvite.getFullName(), userInvite.getAvatar(), userConfirm.getAvatar());
+            Long group_Id = friendRepo.getGroupByUser(userConfirm.getUserId(), userInvite.getUserId()).get(0).getGroup().getGroupId();
+            friendDTO.setGroupId(group_Id);
             if(userId == userConfirm.getUserId()) {
                 friendDTO.setFriendName(userInvite.getFullName());
                 friendDTO.setFriendAvatar(userInvite.getAvatar());
@@ -102,7 +104,7 @@ public class UserServiceImpl implements UserService {
                 Users user = userRepo.findById(contact.getUserId()).get();
                 ContactDTO contactDTO = new ContactDTO(user.getUserId(), user.getFullName(), user.getEmail(), user.getAvatar(), user.getStudentCode(), contact.getContactId());
                 listContactDTO.add(contactDTO);
-                friendDTO.setContact(listContactDTO);
+                friendDTO.setListContact(listContactDTO);
             }
 
             listDTO.add(friendDTO);
