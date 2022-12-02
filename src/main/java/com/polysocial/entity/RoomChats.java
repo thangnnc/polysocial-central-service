@@ -25,6 +25,10 @@ public class RoomChats implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "groupId")
     private Groups group;
+
+    private LocalDateTime lastUpdateDate = LocalDateTime.now();
+
+    private String lastMessage;
     
 
 

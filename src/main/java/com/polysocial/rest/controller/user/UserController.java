@@ -20,12 +20,8 @@ import com.polysocial.consts.UserAPI;
 import com.polysocial.dto.FriendDTO;
 import com.polysocial.dto.FriendDetailDTO;
 import com.polysocial.dto.UserDTO;
-import com.polysocial.dto.UserDetailDTO;
-import com.polysocial.entity.Friends;
 import com.polysocial.repo.FriendRepo;
 import com.polysocial.service.users.UserService;
-import com.twilio.rest.proxy.v1.service.Session;
-
 import org.springframework.web.bind.annotation.RequestParam;
 
 @CrossOrigin("*")
