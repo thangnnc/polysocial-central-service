@@ -134,8 +134,10 @@ public class UserServiceImpl implements UserService {
     public FriendDetailDTO addFriend(Long userConfirmId, String studentCode) {
         try {
             Users user = userRepo.findByStudentCode(studentCode);
+            if(user.getUserId() == userConfirmId) {
+                return null;
+            }
             List<Friends> list = friendRepo.getFriendByUserInviteIdAndUserConfirm(userConfirmId, user.getUserId());
-            System.out.println(list.size());
             if(list.size() == 0) {
                 Users userConfirm = userRepo.findByUserId(user.getUserId());
                 Users userInvite = userRepo.findByUserId(userConfirmId);
@@ -162,8 +164,6 @@ public class UserServiceImpl implements UserService {
                 String nameFriend = userInvite.getFullName();
                 NotificationsDTO notificationsDTO = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_ADD_FRIEND, nameFriend), TypeNotifications.NOTI_TYPE_ADD_FRIEND, userConfirm.getUserId());
                 notificationsService.createNoti(notificationsDTO);
-
-
                 return friendDetailDTO;
             }
            return null;
