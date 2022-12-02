@@ -142,6 +142,7 @@ public class UserServiceImpl implements UserService {
                 FriendDetailDTO friendDetailDTO = new FriendDetailDTO(user.getUserId(), userConfirmId,
                         userInvite.getFullName(), userConfirm.getFullName(), userInvite.getAvatar(), userConfirm.getAvatar());
                 Groups group = new Groups(friendDetailDTO.getFullNameUserConfirm()+","+friendDetailDTO.getFullNameUserInvite(), 0L, "Friend with chat rooms", "Friends chat");
+                group.setAvatar(friendDetailDTO.getAvatarUserConfirm()+","+friendDetailDTO.getAvatarUserInvite());
                 Groups groupCreated = groupRepo.save(group);
                 
                 RoomChats roomChat = new RoomChats(groupCreated);
