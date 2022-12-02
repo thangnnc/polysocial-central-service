@@ -53,6 +53,8 @@ public class CentralAPI {
 	//ROOM CHAT
 	public static final String CREATE_ROOM_CHAT = "/api/createRoomChat";
 	
+	public static final String GET_ROOM_NAME = "/api/getName";
+	
 	//CONTACT
 	public static final String CREATE_CONTACT = "/api/createContact";
 	

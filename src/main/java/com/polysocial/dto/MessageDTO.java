@@ -12,14 +12,17 @@ import java.time.LocalDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MessageDTO implements Serializable {
 
-	private Long messageId;
+
+    private Long messageId;
 
     private String content;
 
     private Boolean status;
 
     private LocalDateTime createdDate;
-
+    
     private Long contactId;
+    
+    private Long roomId;
 
 }
