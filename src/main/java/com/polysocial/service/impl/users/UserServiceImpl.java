@@ -189,6 +189,7 @@ public class UserServiceImpl implements UserService {
         Contacts contact2 = new Contacts(userInviteId, roomChatId);
         contactRepo.save(contact2);
         Friends friends = friendRepo.getFriendByUserInviteIdAndUserConfirm(userInviteId, userConfirmId).get(0);
+        friends.setStatus(true);
         friends.setGroup(groupCreated);
         friendRepo.save(friends);
         
