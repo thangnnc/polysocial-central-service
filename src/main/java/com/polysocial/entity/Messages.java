@@ -25,6 +25,8 @@ public class Messages implements Serializable {
 
     private Boolean status;
 
+    private Boolean statusCreated;
+
     private LocalDateTime createdDate;
 
     @JsonBackReference
