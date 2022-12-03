@@ -14,7 +14,7 @@ import com.polysocial.entity.Friends;
 public interface FriendRepo extends JpaRepository<Friends, Long> {
 
     @Query("SELECT o FROM Friends o WHERE (o.userInvite.userId =?1 and o.userConfirm.userId =?2) or (o.userConfirm.userId =?1 and o.userInvite.userId =?2)")
-    List<Friends> getFriendByUserInviteIdAndUserConfirm(Long userInviteId, Long userInviteId2);
+    List<Friends> getFriendByUserInviteIdAndUserConfirm(Long userInviteId, Long userConfirm);
 
     @Query("SELECT o FROM Friends o WHERE o.status = true and (o.userInvite.userId =?1 or o.userConfirm.userId =?1)")
     List<Friends> getAllFriends(Long userId);
