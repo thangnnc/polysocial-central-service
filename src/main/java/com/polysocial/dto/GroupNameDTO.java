@@ -19,5 +19,9 @@ public class GroupNameDTO {
 	
 	private Long totalMember;
 	
+	private String lastUpDateDate;
+	
+	private Boolean status;
+	
 	private List<Object[]> listContacts;
 }

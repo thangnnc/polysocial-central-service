@@ -64,4 +64,6 @@ public class CentralAPI {
 
 	public static final String GET_MESSAGE = "/api/getMessage";
 
+	//ViewedStatus
+	public static final String UPDATE_VIEW_STATUS = "/api/updateViewedStatus";
 }
