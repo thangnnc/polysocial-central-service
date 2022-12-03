@@ -192,6 +192,8 @@ public class UserServiceImpl implements UserService {
         friends.setStatus(true);
         friends.setGroup(groupCreated);
         friendRepo.save(friends);
+
+        
         
         NotificationsDTO notificationsDTO = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_ACCEPT_FRIEND, userRepo.findById(userConfirmId).get().getFullName()), TypeNotifications.NOTI_TYPE_ACCEPT_FRIEND, userInviteId);
         notificationsService.createNoti(notificationsDTO);
