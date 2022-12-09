@@ -34,12 +34,20 @@ import com.polysocial.dto.UserDTO;
 import com.polysocial.dto.MemberDTO;
 import com.polysocial.dto.MemberGroupDTO;
 import com.polysocial.dto.NotificationsDTO;
+import com.polysocial.entity.Contacts;
 import com.polysocial.entity.Groups;
 import com.polysocial.entity.Members;
+import com.polysocial.entity.Messages;
+import com.polysocial.entity.RoomChats;
+import com.polysocial.entity.ViewedStatus;
 import com.polysocial.notification.ContentNotifications;
+import com.polysocial.repo.ContactRepo;
 import com.polysocial.repo.GroupRepo;
 import com.polysocial.repo.MemberRepo;
+import com.polysocial.repo.MessageRepo;
+import com.polysocial.repo.RoomChatRepo;
 import com.polysocial.repo.UserRepo;
+import com.polysocial.repo.ViewedStatusRepo;
 import com.polysocial.service.group.GroupService;
 import com.polysocial.service.notifications.NotificationsService;
 import com.polysocial.type.TypeNotifications;
@@ -64,6 +72,18 @@ public class GroupServiceImpl implements GroupService {
 
     @Autowired
     private GroupRepo groupRepo;
+
+    @Autowired
+    private MessageRepo messageRepo;
+
+    @Autowired
+    private ViewedStatusRepo viewedStatusRepo;
+
+    @Autowired
+    private ContactRepo contactRepo;
+
+    @Autowired
+    private RoomChatRepo roomChatRepo;
 
     @Override
     public PageObject<GroupDTO> getAll(Integer page, Integer limit) {
@@ -234,12 +254,33 @@ public class GroupServiceImpl implements GroupService {
             ResponseEntity<Object> group = restTemplate.exchange(url, HttpMethod.POST,
                     httpEntity, Object.class);
             List<Members> member = memberRepo.findByGroupId(groupId);
+            RoomChats roomChat = new RoomChats(groupRepo.findById(groupId).get());
+            Long roomChatId = roomChatRepo.save(roomChat).getRoomId();
+            
             for (Members members : member) {
                 String nameTeacher = userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get().getFullName();
                 String nameGroup = groupRepo.findById(groupId).get().getName();
                 NotificationsDTO notiDTO = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_ADD_MEMBER_GROUP, nameTeacher, nameGroup), TypeNotifications.NOTI_TYPE_ADD_MEMBER_GROUP, members.getUserId());
                 notificationsService.createNoti(notiDTO);
+
+              
+                Contacts contact = new Contacts(members.getUserId(), roomChatId);
+                contactRepo.save(contact);
+
+                Messages message = new Messages(userRepo.findById(members.getUserId()).get().getFullName()+" đã tham gia nhóm",false);
+                message.setContact(contact);
+                messageRepo.save(message);
+
+                ViewedStatus viewedStatus = new ViewedStatus();
+                viewedStatus.setContactId(contact.getContactId());
+                viewedStatusRepo.save(viewedStatus);
+
             }
+
+          
+
+         
+
             return (List<MemberDTO>) group.getBody();
         } catch (Exception e) {
             e.printStackTrace();
