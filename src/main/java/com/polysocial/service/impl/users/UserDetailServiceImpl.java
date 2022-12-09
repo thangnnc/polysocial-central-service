@@ -1,9 +1,13 @@
 package com.polysocial.service.impl.users;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.polysocial.dto.UserDTO;
 import com.polysocial.dto.UserDetailDTO;
 import com.polysocial.entity.UserDetail;
 import com.polysocial.repo.UserDetailRepo;
@@ -20,10 +24,19 @@ public class UserDetailServiceImpl implements UserDetailService{
 
     @Override
     public UserDetailDTO updateUserDetail(UserDetailDTO userDetailDTO) {
+        Long userDetailId = userDetailRepo.findByUserId(userDetailDTO.getUserId()).getUserDetailId();
+        userDetailDTO.setUserDetailId(userDetailId);
         UserDetail userDetail = modelMapper.map(userDetailDTO, UserDetail.class);
         userDetailRepo.save(userDetail);
-  
         return userDetailDTO;
+    }
+
+    @Override
+    public List<UserDetailDTO> getAllUserDetail() {
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        List<UserDetailDTO> listDTO = userDetailRepo.findAll().stream().map(element -> modelMapper.map(element, UserDetailDTO.class))
+                .collect(Collectors.toList());
+        return listDTO;
     }
 
     
