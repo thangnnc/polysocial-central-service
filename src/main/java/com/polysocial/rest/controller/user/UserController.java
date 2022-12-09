@@ -157,4 +157,15 @@ public class UserController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(UserAPI.API_SEARCH_USER_BY_KEYWORD)
+    public ResponseEntity searchUserByKeywordResponseEntity(@RequestParam String keyword){
+        try{
+            List<UserDTO> list = userService.searchByKeyWord(keyword);
+            return ResponseEntity.ok(list);
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

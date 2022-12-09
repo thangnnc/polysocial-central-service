@@ -254,22 +254,28 @@ public class GroupServiceImpl implements GroupService {
             ResponseEntity<Object> group = restTemplate.exchange(url, HttpMethod.POST,
                     httpEntity, Object.class);
             List<Members> member = memberRepo.findByGroupId(groupId);
-            RoomChats roomChat = new RoomChats(groupRepo.findById(groupId).get());
-            Long roomChatId = roomChatRepo.save(roomChat).getRoomId();
-            
+
+            Long roomChatId = roomChatRepo.getRoomChatByGroupId(groupId).getRoomId();
             for (Members members : member) {
                 String nameTeacher = userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get().getFullName();
                 String nameGroup = groupRepo.findById(groupId).get().getName();
                 NotificationsDTO notiDTO = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_ADD_MEMBER_GROUP, nameTeacher, nameGroup), TypeNotifications.NOTI_TYPE_ADD_MEMBER_GROUP, members.getUserId());
                 notificationsService.createNoti(notiDTO);
 
-              
-                Contacts contact = new Contacts(members.getUserId(), roomChatId);
-                contactRepo.save(contact);
+                List<Contacts> getContact = contactRepo.getContactByUserIdAndRoomIdContacts(members.getUserId(), roomChatId);
+                Contacts contact = new Contacts(members.getUserId(), roomChatId);             
 
+                if(getContact == null){
+                    contact = new Contacts();
+                    contactRepo.save(contact);
+                    Messages message = new Messages(userRepo.findById(members.getUserId()).get().getFullName()+" đã tham gia nhóm",false);
+                    message.setContact(contact);
+                    messageRepo.save(message);
+                }
                 Messages message = new Messages(userRepo.findById(members.getUserId()).get().getFullName()+" đã tham gia nhóm",false);
-                message.setContact(contact);
+                message.setContact(getContact.get(0));
                 messageRepo.save(message);
+            
 
                 ViewedStatus viewedStatus = new ViewedStatus();
                 viewedStatus.setContactId(contact.getContactId());

@@ -30,4 +30,6 @@ public interface UserService {
 
     List<FriendDetailDTO> getAllRequestAddFriendByUserIntive(Long userId);
 
+    List<UserDTO> searchByKeyWord(String keyword);
+
 }

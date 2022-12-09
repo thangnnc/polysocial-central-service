@@ -141,6 +141,17 @@ public class UserServiceImpl implements UserService {
         return listDTO;
     }
 
+
+
+    @Override
+    public List<UserDTO> searchByKeyWord(String keyword) {
+        List<Users> list = userRepo.searchByKeyWord(keyword);
+        List<UserDTO> listDTO = list.stream().map(element -> modelMapper.map(element, UserDTO.class))
+                .collect(Collectors.toList());
+        return listDTO;
+    }
+
+
     @Override
     public FriendDetailDTO addFriend(Long userConfirmId, String studentCode) {
         try {
