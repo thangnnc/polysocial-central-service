@@ -26,4 +26,6 @@ public class UserDetailDTO {
 
     private LocalDateTime createdDate;
 
+    private Long userId;
+
 }

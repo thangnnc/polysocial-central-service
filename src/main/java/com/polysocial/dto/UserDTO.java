@@ -21,6 +21,5 @@ public class UserDTO {
 
     private String avatar;
 
-    private boolean isActive;
 
 }

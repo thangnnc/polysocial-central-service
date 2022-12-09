@@ -11,6 +11,7 @@ import com.polysocial.repo.RoleRepo;
 import com.polysocial.repo.UserRepo;
 import com.polysocial.service.LoginService;
 import com.polysocial.utils.Logger;
+import com.polysocial.utils.UploadToCloud;
 import com.polysocial.utils.ValidateUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +38,14 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private BCryptPasswordEncoder bCrypt;
 
+    @Autowired
+    private UploadToCloud uploadToCloud;
+
     @Override
     public UserDTO loginWithEmailAddress(String email) {
         UserDTO responseDTO = null;
         Users user = userRepo.findByEmailAndIsActive(email, true);
-        if (ValidateUtils.isNotNullOrEmpty(user)){
+        if (ValidateUtils.isNotNullOrEmpty(user)) {
             responseDTO = modelMapper.map(user, UserDTO.class);
             responseDTO.setPassword(null);
             responseDTO.setToken(tokenProvider.generateToken(new CustomUserDetails(user)));
@@ -53,7 +57,7 @@ public class LoginServiceImpl implements LoginService {
     public UserDTO loginWithAccount(String email, String password) {
         UserDTO responseDTO = null;
         Users user = userRepo.findByEmailAndIsActive(email, true);
-        if (ValidateUtils.isNotNullOrEmpty(user) && bCrypt.matches(password, user.getPassword())){
+        if (ValidateUtils.isNotNullOrEmpty(user) && bCrypt.matches(password, user.getPassword())) {
             responseDTO = modelMapper.map(user, UserDTO.class);
             responseDTO.setPassword(null);
             responseDTO.setToken(tokenProvider.generateToken(new CustomUserDetails(user)));
@@ -64,30 +68,36 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public UserDTO registerNewUser(RegisterRequestDTO requestDTO) {
         try {
-            if (ValidateUtils.isNotNullOrEmpty(userRepo.findByEmailAndIsActive(requestDTO.getEmail(),true))) {
+            if (ValidateUtils.isNotNullOrEmpty(userRepo.findByEmailAndIsActive(requestDTO.getEmail(), true))) {
                 return null;
             }
-            BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
-            Users user = modelMapper.map(requestDTO, Users.class);
-            user.setPassword(bCrypt.encode(user.getPassword()));
-            user.setActive(true);
-            UserDetail userDetail = modelMapper.map(requestDTO, UserDetail.class);
 
-            Roles role = roleRepo.findByName(requestDTO.getRole());
-            if(ValidateUtils.isNullOrEmpty(role)){
+            if (requestDTO.getAvatar() == null && requestDTO.getAvatarFile() != null) {
+                 String url = uploadToCloud.saveFile(requestDTO.getAvatarFile());    
+                 requestDTO.setAvatar(url);     
+            }
+               BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
+               Users user = modelMapper.map(requestDTO, Users.class);
+               user.setPassword(bCrypt.encode(user.getPassword()));
+               user.setActive(true);
+               UserDetail userDetail = modelMapper.map(requestDTO, UserDetail.class);
+               Roles role = roleRepo.findByName(requestDTO.getRole());
+
+            if (ValidateUtils.isNullOrEmpty(role)) {
                 return null;
             }
-            user.setRoleId(role.getRoleId());
-            user.setUserDetail(userDetail);
-            user.setCreatedDate(LocalDateTime.now());
-            userDetail.setUser(user);
+               user.setRoleId(role.getRoleId());
+               user.setUserDetail(userDetail);
+               user.setCreatedDate(LocalDateTime.now());
+               userDetail.setUser(user);
 
-            user = userRepo.save(user);
-            UserDTO response = modelMapper.map(user, UserDTO.class);
-            response.setPassword(null);
-            response.setToken(tokenProvider.generateToken(new CustomUserDetails(user)));
-            return response;
-        } catch (Exception e){
+               user = userRepo.save(user);
+               UserDTO response = modelMapper.map(user, UserDTO.class);
+               response.setPassword(null);
+               response.setToken(tokenProvider.generateToken(new CustomUserDetails(user)));
+               return response;
+
+        } catch (Exception e) {
             Logger.error("Error register new user: " + e.getMessage());
             return null;
         }
