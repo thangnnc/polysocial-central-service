@@ -112,4 +112,23 @@ public class ExerciseServiceImpl implements ExerciseService {
         }
     }
 
+    @Override
+    public List<ExercisesDTO> getAllExercises(Long groupId) {
+        try {
+            String url = ExerciseAPI.API_GET_ALL_EXERCISES;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+            .queryParam("groupId", groupId)
+            .build();
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Type", "application/json");
+            HttpEntity entity = new HttpEntity(groupId, headers);
+            ResponseEntity<Object> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
+                    Object.class);
+            return (List<ExercisesDTO>) response.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
