@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.polysocial.config.jwt.JwtTokenProvider;
 import com.polysocial.consts.CentralAPI;
 import com.polysocial.dto.TaskExDTO;
 import com.polysocial.dto.TaskFileCreateDTO;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
@@ -30,13 +32,16 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private JwtTokenProvider jwt;
+
     @PostMapping(value = CentralAPI.API_CREATE_TASK_FILE, consumes = { "multipart/form-data" })
-    public ResponseEntity createTask(@RequestParam(value = "file", required = false) MultipartFile file,
+    public ResponseEntity createTask(@RequestParam(value = "file", required = false) MultipartFile file, @RequestHeader("Authorization") String token,
             @ModelAttribute TaskFileCreateDTO taskFile) {
         try {
+            taskFile.setUserId(jwt.getIdFromJWT(token));
             return ResponseEntity.ok(taskService.saveFile(file, taskFile));
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
