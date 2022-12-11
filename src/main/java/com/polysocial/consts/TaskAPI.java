@@ -15,5 +15,6 @@ public class TaskAPI {
 
     public static final String API_CREATE_MARK_TASK =  HostURL.GROUP_HOST +"/api/task/create-mark";
 
+    public static final String API_GET_ALL_TASK_FILE = HostURL.GROUP_HOST + "/api/task/get-all-task-file";
 
 }

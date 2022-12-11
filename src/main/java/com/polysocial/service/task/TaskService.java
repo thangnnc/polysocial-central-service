@@ -1,7 +1,10 @@
 package com.polysocial.service.task;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
+import com.polysocial.dto.TaskDetailDTO;
 import com.polysocial.dto.TaskExDTO;
 import com.polysocial.dto.TaskFileCreateDTO;
 import com.polysocial.dto.TaskFileDTO;
@@ -14,7 +17,7 @@ public interface TaskService {
 
     void deleteTaskFile(TaskFileDTO taskFile);
 
-    TaskFile saveFile(MultipartFile file, TaskFileCreateDTO taskFile);
+    Object saveFile(MultipartFile file, TaskFileCreateDTO taskFile);
 
     TaskFile updateFile(MultipartFile file, TaskFileCreateDTO taskFile);
 
@@ -27,5 +30,7 @@ public interface TaskService {
     void deleteTaskEx(Long taskId);
 
     TaskExDTO createMark(TaskExDTO taskEx);
+
+    List<TaskDetailDTO> getAllTaskFile(Long exId, Long groupId);
 
 }

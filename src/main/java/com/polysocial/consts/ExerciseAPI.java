@@ -14,4 +14,6 @@ public class ExerciseAPI {
     public static final String API_GET_ALL_EXERCISES_END_DATE = HostURL.GROUP_HOST+"/api/exercises/get-all-exercises-end-date";
 
     public static final String API_GET_ALL_EXERCISES = HostURL.GROUP_HOST+"/api/exercises/get-all-exercises";
+
+    public static final String API_GET_EXERCISES_BY_ID = HostURL.GROUP_HOST+"/api/exercises/get-one";
 }

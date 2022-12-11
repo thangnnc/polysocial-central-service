@@ -1,5 +1,7 @@
 package com.polysocial.service.impl.task;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.cloudinary.Cloudinary;
 import com.polysocial.consts.TaskAPI;
 import com.polysocial.dto.NotificationsDTO;
+import com.polysocial.dto.TaskDetailDTO;
 import com.polysocial.dto.TaskExDTO;
 import com.polysocial.dto.TaskFileCreateDTO;
 import com.polysocial.dto.TaskFileDTO;
@@ -54,16 +57,20 @@ public class TaskServiceImpl implements TaskService {
     private GroupRepo groupRepo;
 
     @Override
-    public TaskFile saveFile(MultipartFile file, TaskFileCreateDTO taskFile) {
+    public Object saveFile(MultipartFile file, TaskFileCreateDTO taskFile) {
         try {
             String url = TaskAPI.API_TASK_FILE_CREATE;
             String urlPath = uploadToCloud.saveFile(file);
             taskFile.setPath(urlPath);
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "application/json");
-            HttpEntity entity = new HttpEntity(taskFile, headers);
-            ResponseEntity<Object> responseEntity = restTemplate.exchange(url, HttpMethod.POST,
-                    entity, Object.class);
+            HttpEntity header = new HttpEntity(taskFile, headers);
+			UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+			.queryParam("TaskFileCreateDTO", taskFile)
+			.build();
+            ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, header,
+			Object.class);
+
             Members member = memberRepo.getTeacherByMember(taskFile.getGroupId());
             String fullName = userRepo.findById(taskFile.getUserId()).get().getFullName();
             String groupName = groupRepo.findById(taskFile.getGroupId()).get().getName();
@@ -71,7 +78,8 @@ public class TaskServiceImpl implements TaskService {
                     String.format(ContentNotifications.NOTI_CONTENT_UPLOAD_FILE_GROUP, fullName, groupName),
                     TypeNotifications.NOTI_TYPE_UPLOAD_FILE_GROUP, member.getUserId());
             notificationsService.createNoti(noti);
-            return (TaskFile) responseEntity.getBody();
+
+            return entity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -175,6 +183,24 @@ public class TaskServiceImpl implements TaskService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<TaskDetailDTO> getAllTaskFile(Long exId, Long groupId) {
+        try {
+            String url = TaskAPI.API_GET_ALL_TASK_FILE;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("exId", exId)
+                    .queryParam("groupId", groupId)
+                    .build();
+
+            ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+                    Object.class);
+            return (List<TaskDetailDTO>) entity.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

@@ -89,4 +89,13 @@ public class TaskController {
         }
     }
 
+    @GetMapping(value = CentralAPI.API_GET_ALL_TASK_FILE)
+    public ResponseEntity getAllTaskFile(@RequestParam Long exId, @RequestParam Long groupId) {
+        try {
+            return ResponseEntity.ok(taskService.getAllTaskFile(exId, groupId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

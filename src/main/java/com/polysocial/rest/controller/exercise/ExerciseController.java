@@ -77,4 +77,14 @@ public class ExerciseController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
+    @GetMapping(value = CentralAPI.API_GET_ONE_EXERCIES, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getExercisesById(@RequestParam Long exId) {
+        try {
+            return ResponseEntity.ok().body(exerciseService.getExercisesById(exId));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 }
