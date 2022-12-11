@@ -23,7 +23,10 @@ public class UserDetailServiceImpl implements UserDetailService{
     private ModelMapper modelMapper;
 
     @Override
-    public UserDetailDTO updateUserDetail(UserDetailDTO userDetailDTO) {
+    public UserDetailDTO updateUserDetail(UserDetailDTO userDetailDTO, Long userId) {
+        if(userId != userDetailDTO.getUserId()){
+            return null;
+        }
         Long userDetailId = userDetailRepo.findByUserId(userDetailDTO.getUserId()).getUserDetailId();
         userDetailDTO.setUserDetailId(userDetailId);
         UserDetail userDetail = modelMapper.map(userDetailDTO, UserDetail.class);

@@ -6,7 +6,7 @@ import com.polysocial.dto.UserDetailDTO;
 
 public interface UserDetailService {
     
-    UserDetailDTO updateUserDetail(UserDetailDTO userDetailDTO);
+    UserDetailDTO updateUserDetail(UserDetailDTO userDetailDTO, Long userId);
 
     List<UserDetailDTO> getAllUserDetail();
 }

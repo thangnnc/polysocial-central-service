@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.polysocial.config.jwt.JwtTokenProvider;
 import com.polysocial.consts.UserAPI;
 import com.polysocial.dto.ResponseDTO;
 import com.polysocial.dto.UserDetailDTO;
@@ -21,10 +23,13 @@ public class UserDetaiilController {
     @Autowired
     private UserDetailService userDetailService;
 
+        @Autowired
+        private JwtTokenProvider jwt;
+
     @PutMapping(UserAPI.API_UPDATE_USER_DETAILS)
-    public ResponseEntity updateUserDetail(@RequestBody UserDetailDTO userDetailDTO){
+    public ResponseEntity updateUserDetail(@RequestBody UserDetailDTO userDetailDTO, @RequestHeader("Authorization") String token){
         try{
-            return ResponseEntity.ok(userDetailService.updateUserDetail(userDetailDTO));
+            return ResponseEntity.ok(userDetailService.updateUserDetail(userDetailDTO, jwt.getIdFromJWT(token)));
         }catch(Exception e){
             e.printStackTrace();
             ResponseDTO response = new ResponseDTO();
