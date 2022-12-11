@@ -13,5 +13,7 @@ public class TaskAPI {
 
     public static final String API_DELETE_FILE_UPLOAD = HostURL.GROUP_HOST + "/api/task/file/delete-file";
 
+    public static final String API_CREATE_MARK_TASK =  HostURL.GROUP_HOST +"/api/task/create-mark";
+
 
 }

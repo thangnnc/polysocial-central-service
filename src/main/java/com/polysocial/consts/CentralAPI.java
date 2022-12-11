@@ -8,6 +8,7 @@ public class CentralAPI {
 	public static final String API_UPDATE_TASK_FILE = "/task-file/update";
 	public static final String API_GET_TASK_FILE_UPLOAD = "/task-file/get-file";
 	public static final String API_DELETE_TASK_FILE = "/task-file/delete-file";
+	public static final String API_CREATE_MARK_TASK = "/task/create-mark";
 
 	public static final String API_CREATE_EXERCISES = "/exercises/create";
 	public static final String API_UPDATE_EXERCISES = "/exercises/update";

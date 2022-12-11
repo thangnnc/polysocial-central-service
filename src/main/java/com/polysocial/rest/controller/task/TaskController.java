@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.polysocial.consts.CentralAPI;
+import com.polysocial.dto.TaskExDTO;
 import com.polysocial.dto.TaskFileCreateDTO;
 import com.polysocial.dto.TaskFileDTO;
+import com.polysocial.entity.TaskEx;
 import com.polysocial.service.task.TaskService;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -49,9 +51,10 @@ public class TaskController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
-    
-    @GetMapping(value = CentralAPI.API_GET_TASK_FILE_UPLOAD+"/{groupId}/{userId}/{exId}")
-    public ResponseEntity getFileUpload(@PathVariable Long groupId, @PathVariable Long userId, @PathVariable Long exId) {
+
+    @GetMapping(value = CentralAPI.API_GET_TASK_FILE_UPLOAD + "/{groupId}/{userId}/{exId}")
+    public ResponseEntity getFileUpload(@PathVariable Long groupId, @PathVariable Long userId,
+            @PathVariable Long exId) {
         try {
             return ResponseEntity.ok().body(taskService.getFileUploadGroup(exId, userId, groupId));
         } catch (Exception e) {
@@ -65,6 +68,16 @@ public class TaskController {
         try {
             taskService.deleteTaskFile(taskFile);
             return (ResponseEntity) ResponseEntity.ok();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @PostMapping(value = CentralAPI.API_CREATE_MARK_TASK)
+    public ResponseEntity createMark(@RequestBody TaskExDTO task) {
+        try {
+            return ResponseEntity.ok(taskService.createMark(task));
         } catch (Exception e) {
             e.printStackTrace();
             return null;

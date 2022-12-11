@@ -1,7 +1,5 @@
 package com.polysocial.service.impl.task;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -31,14 +29,13 @@ import com.polysocial.service.task.TaskService;
 import com.polysocial.type.TypeNotifications;
 import com.polysocial.utils.UploadToCloud;
 
-
 @Service
 public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private RestTemplate restTemplate;
 
-    @Autowired 
+    @Autowired
     private Cloudinary cloudinary;
 
     @Autowired
@@ -70,7 +67,9 @@ public class TaskServiceImpl implements TaskService {
             Members member = memberRepo.getTeacherByMember(taskFile.getGroupId());
             String fullName = userRepo.findById(taskFile.getUserId()).get().getFullName();
             String groupName = groupRepo.findById(taskFile.getGroupId()).get().getName();
-            NotificationsDTO noti = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_UPLOAD_FILE_GROUP, fullName, groupName) ,TypeNotifications.NOTI_TYPE_UPLOAD_FILE_GROUP, member.getUserId());
+            NotificationsDTO noti = new NotificationsDTO(
+                    String.format(ContentNotifications.NOTI_CONTENT_UPLOAD_FILE_GROUP, fullName, groupName),
+                    TypeNotifications.NOTI_TYPE_UPLOAD_FILE_GROUP, member.getUserId());
             notificationsService.createNoti(noti);
             return (TaskFile) responseEntity.getBody();
         } catch (Exception e) {
@@ -94,7 +93,9 @@ public class TaskServiceImpl implements TaskService {
             Members member = memberRepo.getTeacherByMember(taskFile.getGroupId());
             String fullName = userRepo.findById(taskFile.getUserId()).get().getFullName();
             String groupName = groupRepo.findById(taskFile.getGroupId()).get().getName();
-            NotificationsDTO noti = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_UPLOAD_FILE_GROUP_UPDATE, fullName, groupName) ,TypeNotifications.NOTI_TYPE_UPLOAD_FILE_GROUP, member.getUserId());
+            NotificationsDTO noti = new NotificationsDTO(
+                    String.format(ContentNotifications.NOTI_CONTENT_UPLOAD_FILE_GROUP_UPDATE, fullName, groupName),
+                    TypeNotifications.NOTI_TYPE_UPLOAD_FILE_GROUP, member.getUserId());
             notificationsService.updateNoti(noti);
 
             return responseEntity.getBody();
@@ -114,7 +115,7 @@ public class TaskServiceImpl implements TaskService {
                     .queryParam("groupId", groupId)
                     .build();
             ResponseEntity<TaskFile> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.PUT, null,
-            TaskFile.class);
+                    TaskFile.class);
             return entity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,13 +125,15 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void deleteTaskFile(TaskFileDTO taskFile) {
-        try{
+        try {
             String url = TaskAPI.API_TASK_FILE_CREATE;
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "multipart/form-data");
             HttpEntity httpEntity = new HttpEntity<>(taskFile, headers);
-            ResponseEntity<TaskFileDTO> entity = restTemplate.exchange(url, HttpMethod.DELETE, httpEntity, TaskFileDTO.class);
-        }catch(Exception e){
+            ResponseEntity<TaskFileDTO> entity = restTemplate.exchange(url, HttpMethod.DELETE, httpEntity,
+                    TaskFileDTO.class);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -149,7 +152,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteTaskEx(Long taskId) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -158,9 +161,20 @@ public class TaskServiceImpl implements TaskService {
         return null;
     }
 
+    @Override
+    public TaskExDTO createMark(TaskExDTO taskEx) {
+        try {
+            String url = TaskAPI.API_CREATE_MARK_TASK;
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Content-Type", "application/json");
+            HttpEntity httpEntity = new HttpEntity<>(taskEx, headers);
+            ResponseEntity<TaskExDTO> entity = restTemplate.exchange(url, HttpMethod.POST, httpEntity,
+                    TaskExDTO.class);
+            return entity.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-
-    
-
-    
 }

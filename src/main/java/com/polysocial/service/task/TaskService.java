@@ -25,4 +25,7 @@ public interface TaskService {
     TaskExDTO updateTaskEx(Long taskId,TaskEx taskExDTO);
 
     void deleteTaskEx(Long taskId);
+
+    TaskExDTO createMark(TaskExDTO taskEx);
+
 }
