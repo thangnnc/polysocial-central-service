@@ -13,6 +13,7 @@ public class CentralAPI {
 	public static final String API_UPDATE_EXERCISES = "/exercises/update";
 	public static final String API_DELETE_EXERCISES = "/exercises/delete";
 	public static final String API_GET_ALL_EXERCISES_END_DATE = "/exercises/get-all-exercises-end-date";
+	public static final String API_GET_ALL_EXERCISES = "/exercises/get-all-exercises";
 
 	public static final String GET_ALL_POST = "/api/posts";
 	public static final String API_UPDATE_POST = "/api/update/post";
