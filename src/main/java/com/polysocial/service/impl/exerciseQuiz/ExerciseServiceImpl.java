@@ -2,6 +2,7 @@ package com.polysocial.service.impl.exerciseQuiz;
 
 import com.polysocial.consts.ExerciseAPI;
 import com.polysocial.dto.ExercisesDTO;
+import com.polysocial.dto.ExercisesDetailDTO;
 import com.polysocial.dto.NotificationsDTO;
 import com.polysocial.entity.Members;
 import com.polysocial.notification.ContentNotifications;
@@ -132,17 +133,18 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public ExercisesDTO getExercisesById(Long exerciseId) {
+    public Object getExercisesById(Long exerciseId, Long userId) {
         try {
             String url = ExerciseAPI.API_GET_EXERCISES_BY_ID;
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
             .queryParam("exId", exerciseId)
+            .queryParam("userId", userId)
             .build();
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Type", "application/json");
             HttpEntity entity = new HttpEntity(exerciseId, headers);
-            ResponseEntity<ExercisesDTO> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
-                    ExercisesDTO.class);
+            ResponseEntity<Object> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
+            Object.class);
             return response.getBody();
         } catch (Exception e) {
             e.printStackTrace();

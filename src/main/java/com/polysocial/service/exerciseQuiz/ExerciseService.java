@@ -2,6 +2,7 @@ package com.polysocial.service.exerciseQuiz;
 
 import java.util.List;
 import com.polysocial.dto.ExercisesDTO;
+import com.polysocial.dto.ExercisesDetailDTO;
 
 public interface ExerciseService {
 
@@ -15,5 +16,5 @@ public interface ExerciseService {
 
     List<ExercisesDTO> getAllExercises(Long groupId);
 
-    ExercisesDTO getExercisesById(Long exerciseId);
+    Object getExercisesById(Long exerciseId, Long userId);
 }

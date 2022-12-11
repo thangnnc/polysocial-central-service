@@ -79,9 +79,9 @@ public class ExerciseController {
     }
 
     @GetMapping(value = CentralAPI.API_GET_ONE_EXERCIES, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getExercisesById(@RequestParam Long exId) {
+    public ResponseEntity getExercisesById(@RequestParam Long exId, @RequestHeader("Authorization") String token) {
         try {
-            return ResponseEntity.ok().body(exerciseService.getExercisesById(exId));
+            return ResponseEntity.ok().body(exerciseService.getExercisesById(exId, jwt.getIdFromJWT(token)));
         } catch (Exception ex) {
             ex.printStackTrace();
             return ResponseEntity.badRequest().body(null);
