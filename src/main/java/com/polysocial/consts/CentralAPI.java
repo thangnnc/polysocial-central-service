@@ -53,6 +53,10 @@ public class CentralAPI {
 	public static final String UPDATE_COMMENT = "/api/comment/update";
 	public static final String GET_COMMENT_BY_POST_ID = "/api/comment/post";
 	public static final String LIKE = "/api/like";
+
+	public static final String SAVE_POST = "/api/save-post";
+	public static final String GET_ALL_SAVE_POST = "/api/get-all-save-post";
+	public static final String DELETE_SAVE_POST = "/api/delete-save-post";
 	
 	//ROOM CHAT
 	public static final String CREATE_ROOM_CHAT = "/api/createRoomChat";

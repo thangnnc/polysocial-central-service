@@ -1,7 +1,11 @@
 package com.polysocial.service.post;
 
+import java.util.List;
+
 import com.polysocial.dto.ListPostDTO;
 import com.polysocial.dto.PostDTO;
+import com.polysocial.dto.SavePostDTO;
+import com.polysocial.dto.SavePostDetailDTO;
 
 public interface PostService {
 
@@ -16,6 +20,12 @@ public interface PostService {
 	PostDTO getOne(Long postId);
 
 	void delete(Long postId);
+
+	SavePostDTO savePost(SavePostDTO savePostDTO);
+
+    SavePostDTO[] getAllSavePost(Long userId);
+
+    void deleteSavePost(Long savePostId);
 
 
 }

@@ -204,7 +204,7 @@ public class UserServiceImpl implements UserService {
                 userRepo.findById(userConfirmId).get().getFullName(),
                 userRepo.findById(userInviteId).get().getFullName(), userRepo.findById(userInviteId).get().getAvatar(),  userRepo.findById(userConfirmId).get().getAvatar());
         friendDetailDTO.setStatus(true);
-
+        friendDetailDTO.setEmailInvite( userRepo.findById(userInviteId).get().getEmail());
         Groups group = new Groups(friendDetailDTO.getFullNameUserConfirm()+","+friendDetailDTO.getFullNameUserInvite(), 0L, "Friend with chat rooms", "Friends chat");
         group.setAvatar(friendDetailDTO.getAvatarUserConfirm()+","+friendDetailDTO.getAvatarUserInvite());
         Groups groupCreated = groupRepo.save(group);
