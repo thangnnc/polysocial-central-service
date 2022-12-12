@@ -15,7 +15,7 @@ public interface TaskService {
     
     TaskFileDTO createTaskFile(TaskFile taskFile);
 
-    void deleteTaskFile(TaskFileDTO taskFile);
+    void deleteTaskFile(Long taskFileId);
 
     Object saveFile(MultipartFile file, TaskFileCreateDTO taskFile);
 

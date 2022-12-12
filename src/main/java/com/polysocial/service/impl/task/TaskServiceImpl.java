@@ -132,14 +132,14 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void deleteTaskFile(TaskFileDTO taskFile) {
+    public void deleteTaskFile(Long taskFileId) {
         try {
-            String url = TaskAPI.API_TASK_FILE_CREATE;
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Content-Type", "multipart/form-data");
-            HttpEntity httpEntity = new HttpEntity<>(taskFile, headers);
-            ResponseEntity<TaskFileDTO> entity = restTemplate.exchange(url, HttpMethod.DELETE, httpEntity,
-                    TaskFileDTO.class);
+            String url = TaskAPI.API_DELETE_FILE_UPLOAD;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("taskFileId", taskFileId)
+                    .build();
+            ResponseEntity entity = restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, null,
+                    String.class);
         } catch (Exception e) {
             e.printStackTrace();
         }

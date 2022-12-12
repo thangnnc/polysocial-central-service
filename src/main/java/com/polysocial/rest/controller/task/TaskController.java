@@ -70,9 +70,9 @@ public class TaskController {
     }
 
     @DeleteMapping(value = CentralAPI.API_DELETE_TASK_FILE)
-    public ResponseEntity deleteTaskFile(@RequestBody TaskFileDTO taskFile) {
+    public ResponseEntity deleteTaskFile(@RequestParam Long taskFileId) {
         try {
-            taskService.deleteTaskFile(taskFile);
+            taskService.deleteTaskFile(taskFileId);
             return (ResponseEntity) ResponseEntity.ok();
         } catch (Exception e) {
             e.printStackTrace();
