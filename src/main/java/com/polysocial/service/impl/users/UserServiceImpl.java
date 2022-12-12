@@ -260,6 +260,7 @@ public class UserServiceImpl implements UserService {
                     userRepo.findById(friend.getUserInvite().getUserId()).get().getFullName(),  userRepo.findById(friend.getUserInvite().getUserId()).get().getAvatar(),
                     userRepo.findById(friend.getUserConfirm().getUserId()).get().getAvatar());
             friendDTO.setStatus(friend.getStatus());
+            friendDTO.setEmailInvite(userRepo.findById(friend.getUserInvite().getUserId()).get().getEmail());
             listDTO.add(friendDTO);
         }
         return listDTO;
