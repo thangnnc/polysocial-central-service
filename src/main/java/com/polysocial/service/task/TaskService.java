@@ -19,7 +19,7 @@ public interface TaskService {
 
     Object saveFile(MultipartFile file, TaskFileCreateDTO taskFile);
 
-    TaskFile updateFile(MultipartFile file, TaskFileCreateDTO taskFile);
+    Object updateFile(MultipartFile file, TaskFileCreateDTO taskFile);
 
     TaskFile getFileUploadGroup(Long exId, Long userId, Long groupId);
 

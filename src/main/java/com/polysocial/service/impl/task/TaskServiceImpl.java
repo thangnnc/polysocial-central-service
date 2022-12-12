@@ -87,7 +87,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskFile updateFile(MultipartFile file, TaskFileCreateDTO taskFile) {
+    public Object updateFile(MultipartFile file, TaskFileCreateDTO taskFile) {
         try {
             String url = TaskAPI.API_TASK_FILE_UPDATE;
             String urlPath = uploadToCloud.saveFile(file);
@@ -95,8 +95,8 @@ public class TaskServiceImpl implements TaskService {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "application/json");
             HttpEntity entity = new HttpEntity(taskFile, headers);
-            ResponseEntity<TaskFile> responseEntity = restTemplate.exchange(url, HttpMethod.PUT,
-                    entity, TaskFile.class);
+            ResponseEntity<Object> responseEntity = restTemplate.exchange(url, HttpMethod.PUT,
+                    entity, Object.class);
 
             Members member = memberRepo.getTeacherByMember(taskFile.getGroupId());
             String fullName = userRepo.findById(taskFile.getUserId()).get().getFullName();
@@ -106,7 +106,7 @@ public class TaskServiceImpl implements TaskService {
                     TypeNotifications.NOTI_TYPE_UPLOAD_FILE_GROUP, member.getUserId());
             notificationsService.updateNoti(noti);
 
-            return responseEntity.getBody();
+            return  responseEntity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

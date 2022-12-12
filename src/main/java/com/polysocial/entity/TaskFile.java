@@ -10,8 +10,9 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class TaskFile implements Serializable {
 
     @Id

@@ -48,8 +48,9 @@ public class TaskController {
 
     @PutMapping(value = CentralAPI.API_UPDATE_TASK_FILE, consumes = { "multipart/form-data;" })
     public ResponseEntity updatetaskFile(@RequestParam(value = "file", required = false) MultipartFile file,
-            @ModelAttribute TaskFileCreateDTO taskFile) {
+            @ModelAttribute TaskFileCreateDTO taskFile, @RequestHeader("Authorization") String token) {
         try {
+            taskFile.setUserId(jwt.getIdFromJWT(token));
             return ResponseEntity.ok(taskService.updateFile(file, taskFile));
         } catch (Exception e) {
             e.printStackTrace();
