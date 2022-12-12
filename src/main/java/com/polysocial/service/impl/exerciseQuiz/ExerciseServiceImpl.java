@@ -79,18 +79,17 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public ExercisesDTO deleteOne(ExercisesDTO exercise) {
+    public void deleteOne(Long exId) {
         try {
             String url = ExerciseAPI.API_DELETE_EXERCISES;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+            .queryParam("exId", exId).build();
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Type", "application/json");
-            HttpEntity entity = new HttpEntity(exercise, headers);
-            ResponseEntity<ExercisesDTO> response = restTemplate.exchange(url, HttpMethod.DELETE,
-                    entity, ExercisesDTO.class);
-            return response.getBody();
+            ResponseEntity<Object> response = restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, null,
+            Object.class);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
     }
 

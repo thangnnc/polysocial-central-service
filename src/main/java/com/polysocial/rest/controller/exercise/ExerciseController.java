@@ -49,9 +49,10 @@ public class ExerciseController {
     }
 
     @DeleteMapping(value = CentralAPI.API_DELETE_EXERCISES, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity deleteExercise(@RequestBody ExercisesDTO exercises) {
+    public ResponseEntity deleteExercise(@RequestParam Long exId) {
         try {
-            return ResponseEntity.ok().body(exerciseService.deleteOne(exercises));
+            exerciseService.deleteOne(exId);
+            return ResponseEntity.ok().build();
         } catch (Exception ex) {
             ex.printStackTrace();
             return ResponseEntity.badRequest().body(null);
