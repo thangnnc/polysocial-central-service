@@ -25,4 +25,5 @@ public class TaskDetailDTO implements Serializable{
     private String avatar;
     private String content;
     private LocalDateTime endDate;;
+    private LocalDateTime createdDate;
 }
