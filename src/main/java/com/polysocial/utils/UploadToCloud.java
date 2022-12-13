@@ -111,6 +111,7 @@ public class UploadToCloud {
                 if (type.equals("jpg") || type.equals("png") || type.equals("jpeg")) {
                     String json = "" + this.cloudinary.uploader().upload("./Files/" + fileName,
                             ObjectUtils.asMap("moderation", "aws_rek"));
+                        System.out.println(json);
                     firtsIndex = json.indexOf("url=");
                     lastIndex = json.indexOf("created_at");
                     url = json.substring(firtsIndex + 4, lastIndex - 2);
@@ -126,6 +127,7 @@ public class UploadToCloud {
                 } else {
                     String json = "" + this.cloudinary.uploader().upload("./Files/" + fileName,
                             ObjectUtils.asMap("resource_type", "auto"));
+                            System.out.println(json);
                     if (type.equals("video")) {
                         firtsIndex = json.lastIndexOf("url=");
                         lastIndex = json.indexOf("tags=");

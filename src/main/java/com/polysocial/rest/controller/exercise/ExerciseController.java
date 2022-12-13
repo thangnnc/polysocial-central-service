@@ -48,7 +48,7 @@ public class ExerciseController {
         }
     }
 
-    @DeleteMapping(value = CentralAPI.API_DELETE_EXERCISES, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = CentralAPI.API_DELETE_EXERCISES)
     public ResponseEntity deleteExercise(@RequestParam Long exId) {
         try {
             exerciseService.deleteOne(exId);

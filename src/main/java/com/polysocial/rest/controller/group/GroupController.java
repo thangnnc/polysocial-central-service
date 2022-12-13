@@ -71,7 +71,7 @@ public class GroupController {
         }
     }
 
-    @DeleteMapping(value = CentralAPI.DELETE_MEMBER_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = CentralAPI.DELETE_MEMBER_GROUP)
     public ResponseEntity removeStudentGroup(@RequestParam("groupId") Long groupId,
             @RequestParam("userId") Long userId) {
         try {
