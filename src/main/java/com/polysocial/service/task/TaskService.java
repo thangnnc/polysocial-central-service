@@ -33,4 +33,6 @@ public interface TaskService {
 
     List<TaskDetailDTO> getAllTaskFile(Long exId, Long groupId);
 
+    List<TaskDetailDTO> getAllTaskExByEx(Long exId);
+
 }

@@ -99,4 +99,16 @@ public class TaskController {
             return null;
         }
     }
+
+    @GetMapping(value = CentralAPI.API_GET_ALL_TASK_EX)
+    public ResponseEntity getAllTaskEx(@RequestParam Long exId) {
+        try {
+            return ResponseEntity.ok(taskService.getAllTaskExByEx(exId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    
 }

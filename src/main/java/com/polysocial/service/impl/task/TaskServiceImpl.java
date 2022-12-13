@@ -65,11 +65,11 @@ public class TaskServiceImpl implements TaskService {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "application/json");
             HttpEntity header = new HttpEntity(taskFile, headers);
-			UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
-			.queryParam("TaskFileCreateDTO", taskFile)
-			.build();
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("TaskFileCreateDTO", taskFile)
+                    .build();
             ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, header,
-			Object.class);
+                    Object.class);
 
             Members member = memberRepo.getTeacherByMember(taskFile.getGroupId());
             String fullName = userRepo.findById(taskFile.getUserId()).get().getFullName();
@@ -106,7 +106,7 @@ public class TaskServiceImpl implements TaskService {
                     TypeNotifications.NOTI_TYPE_UPLOAD_FILE_GROUP, member.getUserId());
             notificationsService.updateNoti(noti);
 
-            return  responseEntity.getBody();
+            return responseEntity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -201,6 +201,23 @@ public class TaskServiceImpl implements TaskService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public List<TaskDetailDTO> getAllTaskExByEx(Long exId) {
+        try {
+            String url = TaskAPI.API_GET_ALL_TASK_EX;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("exId", exId)
+                    .build();
+
+            ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+                    Object.class);
+            return (List<TaskDetailDTO>) entity.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+    }
     }
 
 }
