@@ -16,4 +16,6 @@ import lombok.NoArgsConstructor;
 public class PostFileResponseDTO {
 
     private String urlFile;
+
+    private String type;
 }
