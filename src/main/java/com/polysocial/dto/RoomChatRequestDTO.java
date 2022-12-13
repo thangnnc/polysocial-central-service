@@ -10,5 +10,9 @@ import lombok.NoArgsConstructor;
 public class RoomChatRequestDTO {
 
 	private Long roomId;
-	
+
+	private Long page;
+
+	private Long limit;
+
 }
