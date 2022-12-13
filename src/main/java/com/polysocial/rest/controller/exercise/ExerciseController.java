@@ -33,6 +33,7 @@ public class ExerciseController {
         try {
             return ResponseEntity.ok().body(exerciseService.createOne(e, jwt.getIdFromJWT(token)));
         } catch (Exception ex) {
+            System.out.println("weqwe");
             ex.printStackTrace();
             return ResponseEntity.badRequest().body(null);
         }

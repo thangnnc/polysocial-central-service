@@ -196,10 +196,10 @@ public class GroupServiceImpl implements GroupService {
             String url = GroupAPI.API_CREATE_GROUP;
             HttpHeaders header = new HttpHeaders();
             header.setContentType(MediaType.APPLICATION_JSON);
-            System.out.println(group.getName());
             HttpEntity entity = new HttpEntity(group, header);
             ResponseEntity<GroupDTO> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity,
                     GroupDTO.class);
+            
             return responseEntity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
@@ -260,6 +260,9 @@ public class GroupServiceImpl implements GroupService {
             List<Members> member = memberRepo.findByGroupId(groupId);
 
             Long roomChatId = roomChatRepo.getRoomChatByGroupId(groupId).getRoomId();
+            RoomChats room = roomChatRepo.findById(roomChatId).get();
+            room.setLastMessage("Có thành viên vừa tham gia nhóm");
+            roomChatRepo.save(room);
             for (Members members : member) {
                 String nameTeacher = userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get()
                         .getFullName();
@@ -294,7 +297,6 @@ public class GroupServiceImpl implements GroupService {
                     message.setContact(getContact.get(0));
                     messageRepo.save(message);
 
-                    System.out.println(contactId);
                     ViewedStatus viewedStatus = new ViewedStatus();
                     viewedStatus.setContactId(contactId);
                     viewedStatusRepo.save(viewedStatus);
