@@ -110,5 +110,14 @@ public class TaskController {
         }
     }
 
+    @GetMapping(value = CentralAPI.API_GET_ALL_TASK_EX_NOTi)
+    public ResponseEntity getAllTaskExByGroup(@RequestParam Long userId) {
+        try {
+            return ResponseEntity.ok(taskService.getAllTaskExByUserId(userId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     
 }

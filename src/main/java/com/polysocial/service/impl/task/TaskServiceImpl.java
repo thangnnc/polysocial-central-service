@@ -18,6 +18,7 @@ import com.polysocial.consts.TaskAPI;
 import com.polysocial.dto.NotificationsDTO;
 import com.polysocial.dto.TaskDetailDTO;
 import com.polysocial.dto.TaskExDTO;
+import com.polysocial.dto.TaskExDetailDTO;
 import com.polysocial.dto.TaskFileCreateDTO;
 import com.polysocial.dto.TaskFileDTO;
 import com.polysocial.entity.Members;
@@ -218,6 +219,23 @@ public class TaskServiceImpl implements TaskService {
             e.printStackTrace();
             return null;
     }
+    }
+
+    @Override
+    public List<TaskExDetailDTO> getAllTaskExByUserId(Long userId) {
+        try {
+            String url = TaskAPI.API_GET_ALL_TASK_EX_NOTi;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("userId", userId)
+                    .build();
+
+            ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+                    Object.class);
+            return (List<TaskExDetailDTO>) entity.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

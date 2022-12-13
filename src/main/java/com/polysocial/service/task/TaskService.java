@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.polysocial.dto.TaskDetailDTO;
 import com.polysocial.dto.TaskExDTO;
+import com.polysocial.dto.TaskExDetailDTO;
 import com.polysocial.dto.TaskFileCreateDTO;
 import com.polysocial.dto.TaskFileDTO;
 import com.polysocial.entity.TaskEx;
@@ -34,5 +35,7 @@ public interface TaskService {
     List<TaskDetailDTO> getAllTaskFile(Long exId, Long groupId);
 
     List<TaskDetailDTO> getAllTaskExByEx(Long exId);
+
+    List<TaskExDetailDTO> getAllTaskExByUserId(Long userId);
 
 }

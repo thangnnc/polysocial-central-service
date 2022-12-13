@@ -10,6 +10,7 @@ public class CentralAPI {
 	public static final String API_DELETE_TASK_FILE = "/task-file/delete-file";
 	public static final String API_CREATE_MARK_TASK = "/task/create-mark";
 	public static final String API_GET_ALL_TASK_EX = "/task/get-task-by-ex";
+	public static final String API_GET_ALL_TASK_EX_NOTi =  "/task/get-all-task-ex";
 
 	public static final String API_CREATE_EXERCISES = "/exercises/create";
 	public static final String API_UPDATE_EXERCISES = "/exercises/update";
