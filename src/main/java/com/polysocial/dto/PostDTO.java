@@ -26,5 +26,7 @@ public class PostDTO implements Serializable {
 
 	private List<MultipartFile> files;
 
+	private String type;
+
 
 }
