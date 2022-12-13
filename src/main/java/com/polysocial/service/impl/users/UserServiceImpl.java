@@ -211,6 +211,7 @@ public class UserServiceImpl implements UserService {
         Groups groupCreated = groupRepo.save(group);
         
         RoomChats roomChat = new RoomChats(groupCreated);
+        roomChat.setLastMessage("Hai bạn đã trở thành bạn bè của nhau");
         Long roomChatId = roomChatRepo.save(roomChat).getRoomId();
         friendDetailDTO.setRoomId(roomChatId);
         Contacts contact = new Contacts(userConfirmId, roomChatId);
