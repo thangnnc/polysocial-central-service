@@ -136,8 +136,11 @@ public class GroupServiceImpl implements GroupService {
                     String.class);
 
             String nameGroup = groupRepo.findById(groupId).get().getName();
-            String nameAdmin = userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get().getFullName();
-            NotificationsDTO notificationsDTO = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_DELETE_USER_GROUP, nameAdmin, nameGroup), TypeNotifications.NOTI_TYPE_DELETE_MEMBER_GROUP, userId);
+            String nameAdmin = userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get()
+                    .getFullName();
+            NotificationsDTO notificationsDTO = new NotificationsDTO(
+                    String.format(ContentNotifications.NOTI_CONTENT_DELETE_USER_GROUP, nameAdmin, nameGroup),
+                    TypeNotifications.NOTI_TYPE_DELETE_MEMBER_GROUP, userId);
             notificationsService.createNoti(notificationsDTO);
             return "OK";
         } catch (Exception e) {
@@ -258,40 +261,46 @@ public class GroupServiceImpl implements GroupService {
 
             Long roomChatId = roomChatRepo.getRoomChatByGroupId(groupId).getRoomId();
             for (Members members : member) {
-                String nameTeacher = userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get().getFullName();
+                String nameTeacher = userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get()
+                        .getFullName();
                 String nameGroup = groupRepo.findById(groupId).get().getName();
-                NotificationsDTO notiDTO = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_ADD_MEMBER_GROUP, nameTeacher, nameGroup), TypeNotifications.NOTI_TYPE_ADD_MEMBER_GROUP, members.getUserId());
+                NotificationsDTO notiDTO = new NotificationsDTO(
+                        String.format(ContentNotifications.NOTI_CONTENT_ADD_MEMBER_GROUP, nameTeacher, nameGroup),
+                        TypeNotifications.NOTI_TYPE_ADD_MEMBER_GROUP, members.getUserId());
                 notificationsService.createNoti(notiDTO);
 
-                List<Contacts> getContact = contactRepo.getContactByUserIdAndRoomIdContacts(members.getUserId(), roomChatId);
-                Contacts contact = new Contacts(members.getUserId(), roomChatId);             
-
-                if(getContact == null){
-                    contact = new Contacts();
-                    contactRepo.save(contact);
-                    Messages message = new Messages(userRepo.findById(members.getUserId()).get().getFullName()+" đã tham gia nhóm",false);
+                List<Contacts> getContact = contactRepo.getContactByUserIdAndRoomIdContacts(members.getUserId(),
+                        roomChatId);
+                Contacts contact = new Contacts(members.getUserId(), roomChatId);
+                for (Contacts contacts : getContact) {
+                    Long contactId = contacts.getContactId();
+                    if(contactId == null) continue;
+                    if (getContact == null) {
+                        contact = new Contacts();
+                        contactRepo.save(contact);
+                        contactId = contact.getContactId();
+                        Messages message = new Messages(
+                                userRepo.findById(members.getUserId()).get().getFullName() + " đã tham gia nhóm",
+                                false);
+                        String encodedString = Base64.getEncoder().encodeToString(message.getContent().getBytes());
+                        message.setContent(encodedString);
+                        message.setContact(contact);
+                        messageRepo.save(message);
+                    }
+                    Messages message = new Messages(
+                            userRepo.findById(members.getUserId()).get().getFullName() + " đã tham gia nhóm", false);
                     String encodedString = Base64.getEncoder().encodeToString(message.getContent().getBytes());
                     message.setContent(encodedString);
-                    message.setContact(contact);
+                    message.setContact(getContact.get(0));
                     messageRepo.save(message);
-                }
-                Messages message = new Messages(userRepo.findById(members.getUserId()).get().getFullName()+" đã tham gia nhóm",false);
-                String encodedString = Base64.getEncoder().encodeToString(message.getContent().getBytes());
-                message.setContent(encodedString);
-                message.setContact(getContact.get(0));
-                messageRepo.save(message);
-            
 
-                ViewedStatus viewedStatus = new ViewedStatus();
-                viewedStatus.setContactId(contact.getContactId());
-                viewedStatusRepo.save(viewedStatus);
+                    System.out.println(contactId);
+                    ViewedStatus viewedStatus = new ViewedStatus();
+                    viewedStatus.setContactId(contactId);
+                    viewedStatusRepo.save(viewedStatus);
+                }
 
             }
-
-          
-
-         
-
             return (List<MemberDTO>) group.getBody();
         } catch (Exception e) {
             e.printStackTrace();
@@ -347,10 +356,13 @@ public class GroupServiceImpl implements GroupService {
                     GroupDTO.class);
 
             List<Members> listMember = memberRepo.findByGroupId(group.getGroupId());
-            String nameAdmin = userRepo.findById(memberRepo.getTeacherByMember(group.getGroupId()).getUserId()).get().getFullName();
+            String nameAdmin = userRepo.findById(memberRepo.getTeacherByMember(group.getGroupId()).getUserId()).get()
+                    .getFullName();
             String nameGroup = groupRepo.findById(group.getGroupId()).get().getName();
             for (Members member : listMember) {
-                NotificationsDTO noti = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_UPDATE_GROUP, nameAdmin, nameGroup),TypeNotifications.NOTI_TYPE_UPDATE_GROUP,member.getUserId());
+                NotificationsDTO noti = new NotificationsDTO(
+                        String.format(ContentNotifications.NOTI_CONTENT_UPDATE_GROUP, nameAdmin, nameGroup),
+                        TypeNotifications.NOTI_TYPE_UPDATE_GROUP, member.getUserId());
                 notificationsService.createNoti(noti);
             }
             return responseEntity.getBody();
@@ -369,7 +381,7 @@ public class GroupServiceImpl implements GroupService {
                     .build();
             ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
                     Object.class);
-            return  (List<MemberGroupDTO>) entity.getBody();
+            return (List<MemberGroupDTO>) entity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
