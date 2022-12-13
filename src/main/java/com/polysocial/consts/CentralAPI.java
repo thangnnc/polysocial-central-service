@@ -8,11 +8,15 @@ public class CentralAPI {
 	public static final String API_UPDATE_TASK_FILE = "/task-file/update";
 	public static final String API_GET_TASK_FILE_UPLOAD = "/task-file/get-file";
 	public static final String API_DELETE_TASK_FILE = "/task-file/delete-file";
+	public static final String API_CREATE_MARK_TASK = "/task/create-mark";
 
 	public static final String API_CREATE_EXERCISES = "/exercises/create";
 	public static final String API_UPDATE_EXERCISES = "/exercises/update";
 	public static final String API_DELETE_EXERCISES = "/exercises/delete";
 	public static final String API_GET_ALL_EXERCISES_END_DATE = "/exercises/get-all-exercises-end-date";
+	public static final String API_GET_ALL_EXERCISES = "/exercises/get-all-exercises";
+	public static final String API_GET_ONE_EXERCIES = "/exercises/get-one";
+	public static final String API_GET_ALL_TASK_FILE = "/task/get-all-task-file";
 
 	public static final String GET_ALL_POST = "/api/posts";
 	public static final String API_UPDATE_POST = "/api/update/post";
@@ -49,6 +53,10 @@ public class CentralAPI {
 	public static final String UPDATE_COMMENT = "/api/comment/update";
 	public static final String GET_COMMENT_BY_POST_ID = "/api/comment/post";
 	public static final String LIKE = "/api/like";
+
+	public static final String SAVE_POST = "/api/save-post";
+	public static final String GET_ALL_SAVE_POST = "/api/get-all-save-post";
+	public static final String DELETE_SAVE_POST = "/api/delete-save-post";
 	
 	//ROOM CHAT
 	public static final String CREATE_ROOM_CHAT = "/api/createRoomChat";

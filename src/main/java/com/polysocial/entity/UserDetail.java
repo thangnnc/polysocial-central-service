@@ -33,7 +33,7 @@ public class UserDetail implements Serializable {
 
     @JsonBackReference
     @OneToOne
-    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    @JoinColumn(name = "userId")
     private Users user;
 
     @Override

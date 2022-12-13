@@ -17,14 +17,19 @@ import com.polysocial.dto.UserDTO;
 import com.polysocial.entity.Contacts;
 import com.polysocial.entity.Friends;
 import com.polysocial.entity.Groups;
+import com.polysocial.entity.Messages;
 import com.polysocial.entity.RoomChats;
 import com.polysocial.entity.Users;
+import com.polysocial.entity.ViewedStatus;
 import com.polysocial.notification.ContentNotifications;
 import com.polysocial.repo.ContactRepo;
 import com.polysocial.repo.FriendRepo;
 import com.polysocial.repo.GroupRepo;
+import com.polysocial.repo.MessageRepo;
 import com.polysocial.repo.RoomChatRepo;
 import com.polysocial.repo.UserRepo;
+import com.polysocial.repo.ViewedStatusRepo;
+import com.polysocial.service.group.GroupService;
 import com.polysocial.service.notifications.NotificationsService;
 import com.polysocial.service.users.UserService;
 import com.polysocial.type.TypeNotifications;
@@ -52,6 +57,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ContactRepo contactRepo;
+
+    @Autowired
+    private MessageRepo messageRepo;
+
+    @Autowired
+    private ViewedStatusRepo viewedStatusRepo;
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -130,6 +141,17 @@ public class UserServiceImpl implements UserService {
         return listDTO;
     }
 
+
+
+    @Override
+    public List<UserDTO> searchByKeyWord(String keyword) {
+        List<Users> list = userRepo.searchByKeyWord(keyword);
+        List<UserDTO> listDTO = list.stream().map(element -> modelMapper.map(element, UserDTO.class))
+                .collect(Collectors.toList());
+        return listDTO;
+    }
+
+
     @Override
     public FriendDetailDTO addFriend(Long userConfirmId, String studentCode) {
         try {
@@ -144,11 +166,17 @@ public class UserServiceImpl implements UserService {
                 FriendDetailDTO friendDetailDTO = new FriendDetailDTO(user.getUserId(), userConfirmId,
                         userInvite.getFullName(), userConfirm.getFullName(), userInvite.getAvatar(), userConfirm.getAvatar());
               
+                Groups group = new Groups();
+                group.setName(userConfirm.getFullName() + "," + userInvite.getFullName());
+                group.setTotalMember(2L);
+                group.setDescription("Friend with chat rooms");
+                group.setClassName("Friend Chat");
 
+                Groups groupCreate = groupRepo.save(group);
                 Friends friend = new Friends();
                 friend.setUserInviteId(userInvite.getUserId());
                 friend.setUserConfirmId(userConfirm.getUserId());
-                // friend.setGroup(groupCreated);
+                friend.setGroup(groupCreate);
                 friendRepo.save(friend);
 
                 String nameFriend = userInvite.getFullName();
@@ -176,7 +204,7 @@ public class UserServiceImpl implements UserService {
                 userRepo.findById(userConfirmId).get().getFullName(),
                 userRepo.findById(userInviteId).get().getFullName(), userRepo.findById(userInviteId).get().getAvatar(),  userRepo.findById(userConfirmId).get().getAvatar());
         friendDetailDTO.setStatus(true);
-
+        friendDetailDTO.setEmailInvite( userRepo.findById(userInviteId).get().getEmail());
         Groups group = new Groups(friendDetailDTO.getFullNameUserConfirm()+","+friendDetailDTO.getFullNameUserInvite(), 0L, "Friend with chat rooms", "Friends chat");
         group.setAvatar(friendDetailDTO.getAvatarUserConfirm()+","+friendDetailDTO.getAvatarUserInvite());
         Groups groupCreated = groupRepo.save(group);
@@ -193,8 +221,21 @@ public class UserServiceImpl implements UserService {
         friends.setGroup(groupCreated);
         friendRepo.save(friends);
 
-        
-        
+        Messages messageConfirm = new Messages(friendDetailDTO.getFullNameUserConfirm()+" và "+friendDetailDTO.getFullNameUserInvite()+" đã trở thành bạn bè của nhau",false);
+        messageConfirm.setContact(contact);
+        Messages messageInvite = new Messages(friendDetailDTO.getFullNameUserInvite()+" và "+friendDetailDTO.getFullNameUserConfirm()+" đã trở thành bạn bè của nhau",false);
+        messageInvite.setContact(contact2);
+        messageRepo.save(messageConfirm);
+        messageRepo.save(messageInvite);
+
+        ViewedStatus viewedStatusConfirm = new ViewedStatus();
+        viewedStatusConfirm.setContactId(contact.getContactId());
+        viewedStatusRepo.save(viewedStatusConfirm);
+
+        ViewedStatus viewedStatusInvite = new ViewedStatus();
+        viewedStatusInvite.setContactId(contact2.getContactId());
+        viewedStatusRepo.save(viewedStatusInvite);
+
         NotificationsDTO notificationsDTO = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_ACCEPT_FRIEND, userRepo.findById(userConfirmId).get().getFullName()), TypeNotifications.NOTI_TYPE_ACCEPT_FRIEND, userInviteId);
         notificationsService.createNoti(notificationsDTO);
         return friendDetailDTO;
@@ -219,6 +260,7 @@ public class UserServiceImpl implements UserService {
                     userRepo.findById(friend.getUserInvite().getUserId()).get().getFullName(),  userRepo.findById(friend.getUserInvite().getUserId()).get().getAvatar(),
                     userRepo.findById(friend.getUserConfirm().getUserId()).get().getAvatar());
             friendDTO.setStatus(friend.getStatus());
+            friendDTO.setEmailInvite(userRepo.findById(friend.getUserInvite().getUserId()).get().getEmail());
             listDTO.add(friendDTO);
         }
         return listDTO;

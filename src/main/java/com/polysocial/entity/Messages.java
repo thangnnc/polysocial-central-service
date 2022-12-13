@@ -23,15 +23,22 @@ public class Messages implements Serializable {
 
     private String content;
 
-    private Boolean status;
+    private Boolean status = true;
 
     private Boolean statusCreated;
 
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDate = LocalDateTime.now();
+
+
+    public Messages( String content, Boolean statusCreated) {
+        this.content = content;
+        this.statusCreated = statusCreated;
+    }
+
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "contactId", insertable = false, updatable = false)
+    @JoinColumn(name = "contactId")
     private Contacts contact;
 
     @JsonManagedReference

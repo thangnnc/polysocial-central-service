@@ -11,4 +11,5 @@ public interface RoomChatRepo extends JpaRepository<RoomChats, Long> {
 
     @Query("SELECT o FROM RoomChats o WHERE o.group.groupId =?1")
     RoomChats getRoomChatByGroupId(Long groupId);
+
 }

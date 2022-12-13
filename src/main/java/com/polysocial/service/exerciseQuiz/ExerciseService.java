@@ -2,6 +2,7 @@ package com.polysocial.service.exerciseQuiz;
 
 import java.util.List;
 import com.polysocial.dto.ExercisesDTO;
+import com.polysocial.dto.ExercisesDetailDTO;
 
 public interface ExerciseService {
 
@@ -9,7 +10,11 @@ public interface ExerciseService {
 
     ExercisesDTO updateOne(ExercisesDTO exercise);
 
-    ExercisesDTO deleteOne(ExercisesDTO exercise);
+    void deleteOne(Long exId);
 
     List<Object> getAllExercisesEndDate(Long groupId);
+
+    List<ExercisesDTO> getAllExercises(Long groupId);
+
+    Object getExercisesById(Long exerciseId, Long userId);
 }

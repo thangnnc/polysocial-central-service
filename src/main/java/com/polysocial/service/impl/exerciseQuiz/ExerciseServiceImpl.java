@@ -2,6 +2,7 @@ package com.polysocial.service.impl.exerciseQuiz;
 
 import com.polysocial.consts.ExerciseAPI;
 import com.polysocial.dto.ExercisesDTO;
+import com.polysocial.dto.ExercisesDetailDTO;
 import com.polysocial.dto.NotificationsDTO;
 import com.polysocial.entity.Members;
 import com.polysocial.notification.ContentNotifications;
@@ -78,18 +79,17 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public ExercisesDTO deleteOne(ExercisesDTO exercise) {
+    public void deleteOne(Long exId) {
         try {
             String url = ExerciseAPI.API_DELETE_EXERCISES;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+            .queryParam("exId", exId).build();
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Type", "application/json");
-            HttpEntity entity = new HttpEntity(exercise, headers);
-            ResponseEntity<ExercisesDTO> response = restTemplate.exchange(url, HttpMethod.DELETE,
-                    entity, ExercisesDTO.class);
-            return response.getBody();
+            ResponseEntity<Object> response = restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, null,
+            Object.class);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
     }
 
@@ -106,6 +106,45 @@ public class ExerciseServiceImpl implements ExerciseService {
             ResponseEntity<Object> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
                     Object.class);
             return (List<Object>) response.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<ExercisesDTO> getAllExercises(Long groupId) {
+        try {
+            String url = ExerciseAPI.API_GET_ALL_EXERCISES;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+            .queryParam("groupId", groupId)
+            .build();
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Type", "application/json");
+            HttpEntity entity = new HttpEntity(groupId, headers);
+            ResponseEntity<Object> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
+                    Object.class);
+            return (List<ExercisesDTO>) response.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Object getExercisesById(Long exerciseId, Long userId) {
+        try {
+            String url = ExerciseAPI.API_GET_EXERCISES_BY_ID;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+            .queryParam("exId", exerciseId)
+            .queryParam("userId", userId)
+            .build();
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Type", "application/json");
+            HttpEntity entity = new HttpEntity(exerciseId, headers);
+            ResponseEntity<Object> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
+            Object.class);
+            return response.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

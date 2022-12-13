@@ -23,7 +23,7 @@ public class ViewedStatus {
 	
 	private Long contactId;
 	
-	private LocalDateTime lastUpdateDate;
+	private LocalDateTime lastUpdateDate = LocalDateTime.now();
 	
-	private Boolean status;
+	private Boolean status = false;
 }

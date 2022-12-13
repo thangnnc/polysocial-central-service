@@ -14,6 +14,8 @@ public class UserAPI {
 
     public static final String  API_SEARCH_USER_BY_NAME = "/user/search-by-name";
 
+    public static final String  API_SEARCH_USER_BY_KEYWORD = "/user/search-keyword";
+
     public static final String  API_FIND_USER_BY_QR_CODE = "/user/find-by-qr-code";
 
     public static final String  API_ADD_FRIEND = "/user/add-friend";
@@ -25,5 +27,11 @@ public class UserAPI {
     public static final String  API_GET_ALL_REQUEST_ADD_FRIEND = "/user/get-all-request-add-friend";
 
     public static final String  API_GET_ALL_FRIEND_REQUEST = "/user/get-all-friend-request";
+
+    // public static final String API_CREATE_USER_DETAILS = "user/create-user-details";
+
+    public static final String API_UPDATE_USER_DETAILS = "/user/update-user-detail";
+
+    public static final String API_GET_ALL_USER_DETAILS = "user/get-all-user-details";
 
 }

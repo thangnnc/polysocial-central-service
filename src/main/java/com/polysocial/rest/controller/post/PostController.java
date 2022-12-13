@@ -6,6 +6,8 @@ import com.polysocial.dto.ListPostDTO;
 import com.polysocial.dto.PostDTO;
 import com.polysocial.dto.PostDTO2;
 import com.polysocial.dto.ResponseDTO;
+import com.polysocial.dto.SavePostDTO;
+import com.polysocial.dto.SavePostDetailDTO;
 import com.polysocial.service.post.PostFileService;
 import com.polysocial.service.post.PostService;
 import com.polysocial.utils.ValidateUtils;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -94,5 +97,24 @@ public class PostController {
 			@RequestParam("page") Optional<Integer> page, @RequestParam("limit") Optional<Integer> limit) {
 		ListPostDTO response = postService.findAllPageByGroup(groupId, page.orElse(0), limit.orElse(10));
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@GetMapping(CentralAPI.GET_ALL_SAVE_POST)
+	public ResponseEntity getAllSavePost(@RequestHeader("Authorization") String token) {
+		Long tokenId = jwt.getIdFromJWT(token);
+		SavePostDTO[] response = postService.getAllSavePost(tokenId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@PostMapping(CentralAPI.SAVE_POST)
+	public ResponseEntity savePost(@RequestBody SavePostDTO savePostDTO) {
+	    SavePostDTO savePost = 	postService.savePost(savePostDTO);
+		return ResponseEntity.ok(savePost);
+	}
+
+	@DeleteMapping(CentralAPI.DELETE_SAVE_POST)
+	public ResponseEntity deleteSavePost(@RequestParam("savePostId") Long savePostId) {
+		postService.deleteSavePost(savePostId);
+		return ResponseEntity.ok().build();
 	}
 }

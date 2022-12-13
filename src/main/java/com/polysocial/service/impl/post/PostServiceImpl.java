@@ -1,10 +1,13 @@
 package com.polysocial.service.impl.post;
 
 import com.polysocial.consts.PostAPI;
+import com.polysocial.consts.SavePostAPI;
 import com.polysocial.dto.ListPostDTO;
 import com.polysocial.dto.NotificationsDTO;
 import com.polysocial.dto.PostDTO;
 import com.polysocial.dto.PostDTO2;
+import com.polysocial.dto.SavePostDTO;
+import com.polysocial.dto.SavePostDetailDTO;
 import com.polysocial.entity.Members;
 import com.polysocial.notification.ContentNotifications;
 import com.polysocial.repo.GroupRepo;
@@ -38,13 +41,13 @@ public class PostServiceImpl implements PostService {
 	private RestTemplate restTemplate;
 
 	@Autowired
-    private UploadToCloud uploadToCloud;
+	private UploadToCloud uploadToCloud;
 
 	@Autowired
 	private ModelMapper modelMapper;
 
 	@Autowired
-	private NotificationsService notificationsService;	
+	private NotificationsService notificationsService;
 
 	@Autowired
 	private GroupRepo groupRepo;
@@ -53,7 +56,7 @@ public class PostServiceImpl implements PostService {
 	private UserRepo userRepo;
 
 	@Autowired
-	private MemberRepo	memberRepo;
+	private MemberRepo memberRepo;
 
 	@Override
 	public ListPostDTO getAllPosts(Integer page, Integer limit) {
@@ -81,7 +84,7 @@ public class PostServiceImpl implements PostService {
 			HttpHeaders hedear = new HttpHeaders();
 			hedear.setContentType(MediaType.APPLICATION_JSON);
 			dto.setCreatedBy(tokenId);
-			//API GROUP			
+			// API GROUP
 			List<String> listPath = saveFileUrl(dto.getFiles());
 			PostDTO2 dto2 = modelMapper.map(dto, PostDTO2.class);
 			dto2.setListPath(listPath);
@@ -91,7 +94,9 @@ public class PostServiceImpl implements PostService {
 			String adminName = userRepo.findById(tokenId).get().getFullName();
 			List<Members> listMember = memberRepo.findByGroupId(dto.getGroupId());
 			for (Members members : listMember) {
-				NotificationsDTO noti = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_ADMIN_POST,adminName , groupName), TypeNotifications.NOTI_TYPE_ADMIN_POST, members.getUserId());
+				NotificationsDTO noti = new NotificationsDTO(
+						String.format(ContentNotifications.NOTI_CONTENT_ADMIN_POST, adminName, groupName),
+						TypeNotifications.NOTI_TYPE_ADMIN_POST, members.getUserId());
 				notificationsService.createNoti(noti);
 			}
 			return entity.getBody();
@@ -112,7 +117,7 @@ public class PostServiceImpl implements PostService {
 			HttpHeaders hedear = new HttpHeaders();
 			hedear.setContentType(MediaType.APPLICATION_JSON);
 			dto.setCreatedBy(tokenId);
-			//API GROUP			
+			// API GROUP
 			List<String> listPath = saveFileUrl(dto.getFiles());
 			PostDTO2 dto2 = modelMapper.map(dto, PostDTO2.class);
 			dto2.setListPath(listPath);
@@ -122,7 +127,9 @@ public class PostServiceImpl implements PostService {
 			String adminName = userRepo.findById(tokenId).get().getFullName();
 			List<Members> listMember = memberRepo.findByGroupId(dto.getGroupId());
 			for (Members members : listMember) {
-				NotificationsDTO noti = new NotificationsDTO(String.format(ContentNotifications.NOTI_CONTENT_ADMIN_POST,adminName , groupName), TypeNotifications.NOTI_TYPE_ADMIN_POST, members.getUserId());
+				NotificationsDTO noti = new NotificationsDTO(
+						String.format(ContentNotifications.NOTI_CONTENT_ADMIN_POST, adminName, groupName),
+						TypeNotifications.NOTI_TYPE_ADMIN_POST, members.getUserId());
 				notificationsService.createNoti(noti);
 			}
 			return entity.getBody();
@@ -180,5 +187,55 @@ public class PostServiceImpl implements PostService {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+		public SavePostDTO savePost(SavePostDTO savePostDTO) {
+			try {
+				String url = SavePostAPI.API_SAVE_POST;
+				HttpHeaders hedear = new HttpHeaders();
+				hedear.setContentType(MediaType.APPLICATION_JSON);
+				HttpEntity<PostDTO> httpEntity = new HttpEntity(savePostDTO, hedear);
+				ResponseEntity<SavePostDTO> entity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, SavePostDTO.class);
+				return entity.getBody();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+	}
+
+	@Override
+	public SavePostDTO[] getAllSavePost(Long userId) {
+	 		try{
+				String url = SavePostAPI.API_GET_ALL_SAVE_POST;
+				UriComponents builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("userId", userId)
+						.build();
+				HttpHeaders hedear = new HttpHeaders();
+				hedear.setContentType(MediaType.APPLICATION_JSON);
+				HttpEntity entity = new HttpEntity<>(hedear);
+				ResponseEntity<SavePostDTO[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
+						SavePostDTO[].class);
+				return  response.getBody();
+			}catch(Exception e){
+				e.printStackTrace();
+				return null;
+
+			}
+	}
+
+	@Override
+	public void deleteSavePost(Long savePostId) {
+		try{
+				String url = SavePostAPI.API_DELETE_SAVE_POST;
+			UriComponents builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("savePostId", savePostId)
+					.build();
+			HttpHeaders hedear = new HttpHeaders();
+			hedear.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity entity = new HttpEntity<>(hedear);
+			ResponseEntity response = restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, entity,
+					String.class);
+		}catch(Exception e){
+				e.printStackTrace();
+			}
 	}
 }

@@ -10,29 +10,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@AllArgsConstructor
-@NoArgsConstructor
-public class TaskExDTO implements Serializable{
+public class TaskDetailDTO implements Serializable{ 
     private Long taskId;
-
     private Long exId;
-
     private Long userId;
-
     private Long groupId;
-
-    private LocalDateTime createdDate = LocalDateTime.now();
-
-    private LocalDateTime updatedDate;
-
-    private Float mark;
-
-    public TaskExDTO(Long exId, Long userId, Long groupId) {
-        this.exId = exId;
-        this.userId = userId;
-        this.groupId = groupId;
-    }
+    private String fullName;
+    private String url;
+    private String avatar;
+    private String content;
+    private LocalDateTime endDate;;
+    private LocalDateTime createdDate;
 }

@@ -28,4 +28,9 @@ public interface UserRepo extends JpaRepository<Users, Long> {
 
     @Query("SELECT o FROM Users o WHERE o.studentCode = ?1")
     Users findByStudentCode(String studentCode);
+
+    @Query("SELECT o FROM Users o WHERE o.fullName Like %?1% OR o.email Like %?1% or o.studentCode Like %?1%")
+    List<Users> searchByKeyWord(String keyword);
+
+
 }
