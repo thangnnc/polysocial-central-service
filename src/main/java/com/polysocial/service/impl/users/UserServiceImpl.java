@@ -227,13 +227,13 @@ public class UserServiceImpl implements UserService {
         friendRepo.save(friends);
 
 		
-        Messages messageConfirm = new Messages("Bạn và "+friendDetailDTO.getFullNameUserInvite()+" đã trở thành bạn bè của nhau",false);
+        Messages messageConfirm = new Messages("Bạn và "+friendDetailDTO.getFullNameUserConfirm()+" đã trở thành bạn bè của nhau",false);
         //encodedString
 		String encodedStringConfirm = Base64.getEncoder().encodeToString(messageConfirm.getContent().getBytes());
         messageConfirm.setContent(encodedStringConfirm);
         messageConfirm.setContact(contact);
 
-        Messages messageInvite = new Messages("Bạn và "+friendDetailDTO.getFullNameUserConfirm()+" đã trở thành bạn bè của nhau",false);
+        Messages messageInvite = new Messages("Bạn và "+friendDetailDTO.getFullNameUserInvite()+" đã trở thành bạn bè của nhau",false);
         String encodedStringInvite = Base64.getEncoder().encodeToString(messageInvite.getContent().getBytes());
         messageInvite.setContent(encodedStringInvite);
 
