@@ -212,6 +212,9 @@ public class UserServiceImpl implements UserService {
         
         RoomChats roomChat = new RoomChats(groupCreated);
         roomChat.setLastMessage("Hai bạn đã trở thành bạn bè của nhau");
+        //encodedString
+		String encodedStringRoom = Base64.getEncoder().encodeToString(roomChat.getLastMessage().getBytes());
+		roomChat.setLastMessage(encodedStringRoom);
         Long roomChatId = roomChatRepo.save(roomChat).getRoomId();
         friendDetailDTO.setRoomId(roomChatId);
         Contacts contact = new Contacts(userConfirmId, roomChatId);
