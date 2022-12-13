@@ -2,6 +2,7 @@ package com.polysocial.service.impl.users;
 
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -221,9 +222,17 @@ public class UserServiceImpl implements UserService {
         friends.setGroup(groupCreated);
         friendRepo.save(friends);
 
+		
         Messages messageConfirm = new Messages(friendDetailDTO.getFullNameUserConfirm()+" và "+friendDetailDTO.getFullNameUserInvite()+" đã trở thành bạn bè của nhau",false);
+        //encodedString
+		String encodedStringConfirm = Base64.getEncoder().encodeToString(messageConfirm.getContent().getBytes());
+        messageConfirm.setContent(encodedStringConfirm);
         messageConfirm.setContact(contact);
+
         Messages messageInvite = new Messages(friendDetailDTO.getFullNameUserInvite()+" và "+friendDetailDTO.getFullNameUserConfirm()+" đã trở thành bạn bè của nhau",false);
+        String encodedStringInvite = Base64.getEncoder().encodeToString(messageInvite.getContent().getBytes());
+        messageInvite.setContent(encodedStringInvite);
+
         messageInvite.setContact(contact2);
         messageRepo.save(messageConfirm);
         messageRepo.save(messageInvite);

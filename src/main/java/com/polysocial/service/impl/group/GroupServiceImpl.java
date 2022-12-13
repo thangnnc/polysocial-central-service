@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -269,10 +270,14 @@ public class GroupServiceImpl implements GroupService {
                     contact = new Contacts();
                     contactRepo.save(contact);
                     Messages message = new Messages(userRepo.findById(members.getUserId()).get().getFullName()+" đã tham gia nhóm",false);
+                    String encodedString = Base64.getEncoder().encodeToString(message.getContent().getBytes());
+                    message.setContent(encodedString);
                     message.setContact(contact);
                     messageRepo.save(message);
                 }
                 Messages message = new Messages(userRepo.findById(members.getUserId()).get().getFullName()+" đã tham gia nhóm",false);
+                String encodedString = Base64.getEncoder().encodeToString(message.getContent().getBytes());
+                message.setContent(encodedString);
                 message.setContact(getContact.get(0));
                 messageRepo.save(message);
             

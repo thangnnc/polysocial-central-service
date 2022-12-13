@@ -29,6 +29,7 @@ public class Messages implements Serializable {
 
     private LocalDateTime createdDate = LocalDateTime.now();
 
+    private Boolean messageRecall = true;
 
     public Messages( String content, Boolean statusCreated) {
         this.content = content;
