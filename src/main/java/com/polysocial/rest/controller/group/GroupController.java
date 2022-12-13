@@ -153,9 +153,9 @@ public class GroupController {
     }
 
     @GetMapping(value = CentralAPI.API_FIND_GROUP_BY_KEYWORK, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity findGroup(@RequestParam("keywork") String keywork) {
+    public ResponseEntity findGroup(@RequestParam("keywork") String keywork, @RequestHeader("Authorization") String token) {
         try {
-            List<GroupDTO> response = groupService.findByKeywork(keywork);
+            List<GroupDTO> response = groupService.findByKeywork(keywork, jwt.getIdFromJWT(token));
             return new ResponseEntity(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);

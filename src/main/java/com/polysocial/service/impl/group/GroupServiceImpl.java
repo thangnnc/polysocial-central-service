@@ -312,11 +312,12 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<GroupDTO> findByKeywork(String keywork) {
+    public List<GroupDTO> findByKeywork(String keywork, Long userId) {
         try {
             String url = GroupAPI.API_FIND_GROUP_BY_KEYWORK;
             UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
                     .queryParam("keywork", keywork)
+                    .queryParam("userId", userId)
                     .build();
             ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
                     Object.class);
