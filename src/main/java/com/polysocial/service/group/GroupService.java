@@ -57,7 +57,7 @@ public interface GroupService {
 
     UserDTO confirmOneMemberGroup(Long groupId, Long userId);
 
-    List<Members> confirmAllMemberGroup(Long groupId);
+    Members[] confirmAllMemberGroup(Long groupId);
 
     void memberLeaveGroup(Long groupId, Long userId);
 

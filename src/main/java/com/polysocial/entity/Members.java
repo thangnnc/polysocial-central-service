@@ -1,5 +1,6 @@
 package com.polysocial.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.polysocial.entity.id.MemberId;
 import lombok.*;
@@ -28,9 +29,10 @@ public class Members implements Serializable {
 
     private Boolean isTeacher;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "member")
-    private List<TaskEx> taskExes;
+    
+    // @JsonManagedReference()
+    // @OneToMany(mappedBy = "member")
+    // private List<TaskEx> taskExes;
 
     @Override
     public boolean equals(Object o) {

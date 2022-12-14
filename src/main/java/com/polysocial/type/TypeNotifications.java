@@ -13,5 +13,7 @@ public class TypeNotifications {
     public static final Integer NOTI_TYPE_DELETE_MEMBER_GROUP = 10;
     public static final Integer NOTI_TYPE_UPDATE_GROUP = 11;
     public static final Integer NOTI_TYPE_ADD_MEMBER_GROUP = 12;
+    public static final Integer NOTI_TYPE_JOIN_GROUP = 13;
+    public static final Integer NOTI_TYPE_CONFIRM_MEMBER = 14;
 
 }

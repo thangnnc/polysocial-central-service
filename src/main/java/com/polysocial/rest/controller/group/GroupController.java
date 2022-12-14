@@ -206,7 +206,7 @@ public class GroupController {
         }
     }
 
-    @PostMapping(value = CentralAPI.API_JOIN_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = CentralAPI.API_JOIN_GROUP)
     public ResponseEntity joinGroup(@RequestParam("groupId") Long groupId, @RequestHeader("Authorization") String token) {
         try {
             MemberDTO response = groupService.memberJoinGroup(groupId, jwt.getIdFromJWT(token));
@@ -226,7 +226,7 @@ public class GroupController {
         }
     }
     
-    @PostMapping(value = CentralAPI.API_CONFIRM_MEMBER_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = CentralAPI.API_CONFIRM_MEMBER_GROUP)
     public ResponseEntity confirmMemberGroup(@RequestParam("groupId") Long groupId, @RequestParam("userId") Long userId) {
         try {
             UserDTO response = groupService.confirmOneMemberGroup(groupId, userId);
@@ -236,10 +236,10 @@ public class GroupController {
         }
     }
 
-    @PostMapping(value = CentralAPI.API_CONFIRM_ALL_MEMBER_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = CentralAPI.API_CONFIRM_ALL_MEMBER_GROUP)
     public ResponseEntity confirmAllMemberGroup(@RequestParam("groupId") Long groupId) {
         try {
-            List<Members> response = groupService.confirmAllMemberGroup(groupId);
+            Members[] response = groupService.confirmAllMemberGroup(groupId);
             return new ResponseEntity(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
@@ -256,6 +256,6 @@ public class GroupController {
         }
     }
 
-    
+
 
 }
