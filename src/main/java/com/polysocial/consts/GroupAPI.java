@@ -34,4 +34,13 @@ public class GroupAPI {
 
     public static final String API_GET_ALL_GROUP_BY_USER =  HostURL.GROUP_HOST+"/api/get-all/group/user";
 
+    public static final String API_JOIN_GROUP = HostURL.GROUP_HOST+"/api/member-join-group";
+
+    public static final String API_JOIN_GROUP_FALSE = HostURL.GROUP_HOST+"/api/member-join-group-false";
+
+    public static final String API_CONFIRM_MEMBER_GROUP = HostURL.GROUP_HOST+"/api/confirm-member-group";
+
+    public static final String API_CONFIRM_ALL_MEMBER_GROUP = HostURL.GROUP_HOST+"/api/confirm-all-member-group";
+
+    public static final String API_LEAVE_GROUP = HostURL.GROUP_HOST+"/api/leave-group";
 }

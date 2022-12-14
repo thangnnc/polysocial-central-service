@@ -33,6 +33,7 @@ import com.polysocial.dto.PageObject;
 import com.polysocial.dto.StudentDTO;
 import com.polysocial.dto.UserDTO;
 import com.polysocial.dto.MemberDTO;
+import com.polysocial.dto.MemberDTO2;
 import com.polysocial.dto.MemberGroupDTO;
 import com.polysocial.dto.NotificationsDTO;
 import com.polysocial.entity.Contacts;
@@ -441,6 +442,87 @@ public class GroupServiceImpl implements GroupService {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @Override
+    public MemberDTO memberJoinGroup(Long groupId, Long userId) {
+         try{
+                String url = GroupAPI.API_JOIN_GROUP;
+                UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                        .queryParam("groupId", groupId)
+                        .queryParam("userId", userId)
+                        .build();
+                ResponseEntity<MemberDTO> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, null,
+                        MemberDTO.class);
+                return entity.getBody();
+         }catch(Exception e){
+             e.printStackTrace();
+             return null;
+         }
+    }
+
+    @Override
+    public List<MemberDTO2> getAllMemberJoinGroupFalse(Long groupId) {
+        try{
+            String url = GroupAPI.API_JOIN_GROUP_FALSE;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("groupId", groupId)
+                    .build();
+            ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+                    Object.class);
+            return (List<MemberDTO2>) entity.getBody();
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public UserDTO confirmOneMemberGroup(Long groupId, Long userId) {
+        try{
+            String url = GroupAPI.API_CONFIRM_MEMBER_GROUP;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("groupId", groupId)
+                    .queryParam("userId", userId)
+                    .build();
+            ResponseEntity<UserDTO> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, null,
+                    UserDTO.class);
+            return entity.getBody();
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<Members> confirmAllMemberGroup(Long groupId) {
+        try{
+            String url = GroupAPI.API_CONFIRM_ALL_MEMBER_GROUP;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("groupId", groupId)
+                    .build();
+            ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, null,
+                    Object.class);
+            return (List<Members>) entity.getBody();
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public void memberLeaveGroup(Long groupId, Long userId) {
+        try{
+            String url = GroupAPI.API_LEAVE_GROUP;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("groupId", groupId)
+                    .queryParam("userId", userId)
+                    .build();
+            restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, null,
+                    Object.class);
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 
