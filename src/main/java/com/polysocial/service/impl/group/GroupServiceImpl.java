@@ -262,6 +262,9 @@ public class GroupServiceImpl implements GroupService {
             Long roomChatId = roomChatRepo.getRoomChatByGroupId(groupId).getRoomId();
             RoomChats room = roomChatRepo.findById(roomChatId).get();
             room.setLastMessage("Có thành viên vừa tham gia nhóm");
+            //encodedString
+			String encodedStringRoom = Base64.getEncoder().encodeToString(room.getLastMessage().getBytes());
+			room.setLastMessage(encodedStringRoom);
             roomChatRepo.save(room);
             for (Members members : member) {
                 String nameTeacher = userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get()
