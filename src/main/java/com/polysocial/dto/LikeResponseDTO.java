@@ -10,11 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class LikeDTO {
-    
- private Long postId;
+public class LikeResponseDTO {
+	
+	private Long postId;
 
- private Long userId;
- 
- private Boolean status;
+	private String studentCode;
+
+	private Boolean status;
+
 }
