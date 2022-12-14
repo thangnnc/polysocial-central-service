@@ -8,10 +8,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.polysocial.dto.GroupDTO;
 import com.polysocial.dto.MemberDTO;
+import com.polysocial.dto.MemberDTO2;
 import com.polysocial.dto.MemberGroupDTO;
 import com.polysocial.dto.PageObject;
 import com.polysocial.dto.StudentDTO;
 import com.polysocial.dto.UserDTO;
+import com.polysocial.entity.Members;
 
 public interface GroupService {
 
@@ -48,6 +50,16 @@ public interface GroupService {
     PageObject<GroupDTO> getAllGroupFalse(Integer page, Integer limit);
 
     List<MemberGroupDTO> getAllGroupByUser(Long userId);
+
+    MemberDTO memberJoinGroup(Long groupId, Long userId);
+
+    List<MemberDTO2> getAllMemberJoinGroupFalse(Long groupId);
+
+    UserDTO confirmOneMemberGroup(Long groupId, Long userId);
+
+    Members[] confirmAllMemberGroup(Long groupId);
+
+    void memberLeaveGroup(Long groupId, Long userId);
 
     
     

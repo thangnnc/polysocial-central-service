@@ -45,6 +45,16 @@ public class CentralAPI {
 	public static final String API_GET_ALL_GROUP_BY_STUDENT = "/group/api/get-all/student";
 	public static final String API_GET_ALL_GROUP_BY_TEACHER = "/group/api/get-all/teacher";
 	public static final String API_GET_ALL_GROUP_BY_USER = "/group/api/get-all/user";
+
+	public static final String API_JOIN_GROUP = "/group/member-join-group";
+
+    public static final String API_JOIN_GROUP_FALSE = "/group/member-join-group-false";
+
+    public static final String API_CONFIRM_MEMBER_GROUP = "/group/confirm-member-group";
+
+    public static final String API_CONFIRM_ALL_MEMBER_GROUP = "/group/confirm-all-member-group";
+	public static final String API_LEAVE_GROUP = "/group/leave-group";
+
 	// post
 	public static final String UPLOADFILE_POST = "/api/posts/upload";
 	public static final String API_GET_POST_BY_GROUP = "/api/get-post-by-group";

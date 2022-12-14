@@ -23,11 +23,14 @@ import com.polysocial.consts.CentralAPI;
 import com.polysocial.dto.GroupDTO;
 
 import com.polysocial.dto.MemberDTO;
+import com.polysocial.dto.MemberDTO2;
 import com.polysocial.dto.MemberGroupDTO;
 import com.polysocial.dto.PageObject;
 import com.polysocial.dto.StudentDTO;
 import com.polysocial.dto.UserDTO;
+import com.polysocial.entity.Members;
 import com.polysocial.service.group.GroupService;
+import com.twilio.rest.api.v2010.account.queue.Member;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -202,5 +205,57 @@ public class GroupController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping(value = CentralAPI.API_JOIN_GROUP)
+    public ResponseEntity joinGroup(@RequestParam("groupId") Long groupId, @RequestHeader("Authorization") String token) {
+        try {
+            MemberDTO response = groupService.memberJoinGroup(groupId, jwt.getIdFromJWT(token));
+            return new ResponseEntity(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = CentralAPI.API_JOIN_GROUP_FALSE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getAllGroup(@RequestParam("groupId") Long groupId) {
+        try {
+            List<MemberDTO2> response = groupService.getAllMemberJoinGroupFalse(groupId);
+            return new ResponseEntity(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
     
+    @PostMapping(value = CentralAPI.API_CONFIRM_MEMBER_GROUP)
+    public ResponseEntity confirmMemberGroup(@RequestParam("groupId") Long groupId, @RequestParam("userId") Long userId) {
+        try {
+            UserDTO response = groupService.confirmOneMemberGroup(groupId, userId);
+            return new ResponseEntity(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value = CentralAPI.API_CONFIRM_ALL_MEMBER_GROUP)
+    public ResponseEntity confirmAllMemberGroup(@RequestParam("groupId") Long groupId) {
+        try {
+            Members[] response = groupService.confirmAllMemberGroup(groupId);
+            return new ResponseEntity(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping(value = CentralAPI.API_LEAVE_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity leaveGroup(@RequestParam("groupId") Long groupId, @RequestHeader("Authorization") String token) {
+        try {
+            groupService.memberLeaveGroup(groupId, jwt.getIdFromJWT(token));
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+
 }

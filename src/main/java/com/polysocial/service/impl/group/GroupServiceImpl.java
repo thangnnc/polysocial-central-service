@@ -33,6 +33,7 @@ import com.polysocial.dto.PageObject;
 import com.polysocial.dto.StudentDTO;
 import com.polysocial.dto.UserDTO;
 import com.polysocial.dto.MemberDTO;
+import com.polysocial.dto.MemberDTO2;
 import com.polysocial.dto.MemberGroupDTO;
 import com.polysocial.dto.NotificationsDTO;
 import com.polysocial.entity.Contacts;
@@ -199,7 +200,7 @@ public class GroupServiceImpl implements GroupService {
             HttpEntity entity = new HttpEntity(group, header);
             ResponseEntity<GroupDTO> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity,
                     GroupDTO.class);
-            
+
             return responseEntity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
@@ -262,9 +263,9 @@ public class GroupServiceImpl implements GroupService {
             Long roomChatId = roomChatRepo.getRoomChatByGroupId(groupId).getRoomId();
             RoomChats room = roomChatRepo.findById(roomChatId).get();
             room.setLastMessage("Có thành viên vừa tham gia nhóm");
-            //encodedString
-			String encodedStringRoom = Base64.getEncoder().encodeToString(room.getLastMessage().getBytes());
-			room.setLastMessage(encodedStringRoom);
+            // encodedString
+            String encodedStringRoom = Base64.getEncoder().encodeToString(room.getLastMessage().getBytes());
+            room.setLastMessage(encodedStringRoom);
             roomChatRepo.save(room);
             for (Members members : member) {
                 String nameTeacher = userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get()
@@ -280,7 +281,8 @@ public class GroupServiceImpl implements GroupService {
                 Contacts contact = new Contacts(members.getUserId(), roomChatId);
                 for (Contacts contacts : getContact) {
                     Long contactId = contacts.getContactId();
-                    if(contactId == null) continue;
+                    if (contactId == null)
+                        continue;
                     if (getContact == null) {
                         contact = new Contacts();
                         contactRepo.save(contact);
@@ -441,6 +443,111 @@ public class GroupServiceImpl implements GroupService {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @Override
+    public MemberDTO memberJoinGroup(Long groupId, Long userId) {
+        try {
+            String url = GroupAPI.API_JOIN_GROUP;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("groupId", groupId)
+                    .queryParam("userId", userId)
+                    .build();
+            ResponseEntity<MemberDTO> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, null,
+                    MemberDTO.class);
+
+            NotificationsDTO notiDTO = new NotificationsDTO(
+                    String.format(ContentNotifications.NOTI_CONTENT_JOIN_GROUP,
+                            userRepo.findById(userId).get().getFullName(), groupRepo.findById(groupId).get().getName()),
+                    TypeNotifications.NOTI_TYPE_JOIN_GROUP, memberRepo.getTeacherByMember(groupId).getUserId());
+            notificationsService.createNoti(notiDTO);
+
+            return entity.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<MemberDTO2> getAllMemberJoinGroupFalse(Long groupId) {
+        try {
+            String url = GroupAPI.API_JOIN_GROUP_FALSE;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("groupId", groupId)
+                    .build();
+            ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+                    Object.class);
+            return (List<MemberDTO2>) entity.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public UserDTO confirmOneMemberGroup(Long groupId, Long userId) {
+        try {
+            String url = GroupAPI.API_CONFIRM_MEMBER_GROUP;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("groupId", groupId)
+                    .queryParam("userId", userId)
+                    .build();
+            ResponseEntity<UserDTO> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, null,
+                    UserDTO.class);
+
+            NotificationsDTO notiDTO = new NotificationsDTO(
+                    String.format(ContentNotifications.NOTI_CONTENT_CONFIRM_MEMBER,
+                            userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get().getFullName(),
+                            groupRepo.findById(groupId).get().getName()),
+                    TypeNotifications.NOTI_TYPE_CONFIRM_MEMBER, userRepo.findById(userId).get().getUserId());
+            notificationsService.createNoti(notiDTO);
+            return entity.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Members[] confirmAllMemberGroup(Long groupId) {
+        try {
+            String url = GroupAPI.API_CONFIRM_ALL_MEMBER_GROUP;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("groupId", groupId)
+                    .build();
+            ResponseEntity<Members[]> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, null,
+                    Members[].class);
+            Members[] list = entity.getBody();
+            for (int i = 0; i < list.length; i++) {
+                NotificationsDTO notiDTO = new NotificationsDTO(
+                    String.format(ContentNotifications.NOTI_CONTENT_CONFIRM_MEMBER,
+                            userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get().getFullName(),
+                            groupRepo.findById(groupId).get().getName()),
+                    TypeNotifications.NOTI_TYPE_CONFIRM_MEMBER, list[i].getUserId());
+            notificationsService.createNoti(notiDTO);
+            }
+
+            return entity.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public void memberLeaveGroup(Long groupId, Long userId) {
+        try {
+            String url = GroupAPI.API_LEAVE_GROUP;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("groupId", groupId)
+                    .queryParam("userId", userId)
+                    .build();
+            restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, null,
+                    Object.class);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
