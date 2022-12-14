@@ -1,5 +1,6 @@
 package com.polysocial.dto;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
-public class PageObject<T> {
+public class PageObject<T> implements Serializable{
    private List<T> content;
    private Object pageable;
    private Integer totalPages;

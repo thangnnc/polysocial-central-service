@@ -9,7 +9,7 @@ import com.polysocial.dto.SavePostDetailDTO;
 
 public interface PostService {
 
-	ListPostDTO getAllPosts(Integer page, Integer limit);
+	Object getAllPosts(Integer page, Integer limit);
 
 	ListPostDTO findAllPageByGroup(Long groupId, Integer page, Integer limit);
 
