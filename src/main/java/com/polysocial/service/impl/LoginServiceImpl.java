@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -49,6 +50,7 @@ public class LoginServiceImpl implements LoginService {
             responseDTO = modelMapper.map(user, UserDTO.class);
             responseDTO.setPassword(null);
             responseDTO.setToken(tokenProvider.generateToken(new CustomUserDetails(user)));
+            responseDTO.setRole(user.getRole().getName());
         }
         return responseDTO;
     }
@@ -61,6 +63,7 @@ public class LoginServiceImpl implements LoginService {
             responseDTO = modelMapper.map(user, UserDTO.class);
             responseDTO.setPassword(null);
             responseDTO.setToken(tokenProvider.generateToken(new CustomUserDetails(user)));
+            responseDTO.setRole(user.getRole().getName());
         }
         return responseDTO;
     }
@@ -71,7 +74,7 @@ public class LoginServiceImpl implements LoginService {
             if (ValidateUtils.isNotNullOrEmpty(userRepo.findByEmailAndIsActive(requestDTO.getEmail(), true))) {
                 return null;
             }
-
+            requestDTO.setBirthday(LocalDate.parse(requestDTO.getBirthdayStr()));
             if (requestDTO.getAvatar() == null && requestDTO.getAvatarFile() != null) {
                  String url = uploadToCloud.saveFile(requestDTO.getAvatarFile());    
                  requestDTO.setAvatar(url);     
@@ -95,6 +98,7 @@ public class LoginServiceImpl implements LoginService {
                UserDTO response = modelMapper.map(user, UserDTO.class);
                response.setPassword(null);
                response.setToken(tokenProvider.generateToken(new CustomUserDetails(user)));
+               response.setRole(role.getName());
                return response;
 
         } catch (Exception e) {

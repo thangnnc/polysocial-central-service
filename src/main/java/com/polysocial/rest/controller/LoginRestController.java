@@ -10,10 +10,7 @@ import com.polysocial.utils.ValidateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
@@ -69,7 +66,7 @@ public class LoginRestController {
     }
 
     @PostMapping(path = "/api/register")
-    public ResponseEntity doPostRegister(@RequestBody RegisterRequestDTO request ){
+    public ResponseEntity doPostRegister(@ModelAttribute RegisterRequestDTO request ){
         Logger.info("Start register new user!");
         UserDTO userDTO = loginService.registerNewUser(request);
         if(ValidateUtils.isNullOrEmpty(userDTO)){

@@ -23,6 +23,8 @@ public class RegisterRequestDTO {
 
     private String avatar;
 
+    private String birthdayStr;
+
     private LocalDate birthday;
 
     private boolean gender;
