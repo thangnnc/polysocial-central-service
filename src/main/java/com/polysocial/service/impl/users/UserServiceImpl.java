@@ -104,10 +104,12 @@ public class UserServiceImpl implements UserService {
             if(userId == userConfirm.getUserId()) {
                 friendDTO.setFriendName(userInvite.getFullName());
                 friendDTO.setFriendAvatar(userInvite.getAvatar());
+                friendDTO.setFriendEmail(userInvite.getEmail());
             }
             else{
                 friendDTO.setFriendName(userConfirm.getFullName());
                 friendDTO.setFriendAvatar(userConfirm.getAvatar());
+                friendDTO.setFriendEmail(userConfirm.getEmail());
             }
             friendDTO.setStatus(friend.getStatus());
             Long groupId = friendRepo.getFriendByUserInviteIdAndUserConfirm(userInvite.getUserId(), userConfirm.getUserId()).get(0).getGroup().getGroupId();
