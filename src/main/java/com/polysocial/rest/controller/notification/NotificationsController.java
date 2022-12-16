@@ -2,6 +2,7 @@ package com.polysocial.rest.controller.notification;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,6 +12,7 @@ import com.polysocial.service.notifications.NotificationsService;
 import com.polysocial.config.jwt.JwtTokenProvider;
 import com.polysocial.consts.*;
 
+@CrossOrigin("*")
 @RestController
 public class NotificationsController {
     

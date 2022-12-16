@@ -9,11 +9,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScans;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.RestTemplate;
 
 import com.cloudinary.Cloudinary;
 import com.polysocial.utils.UploadToCloud;
 
+@CrossOrigin("*")
 @SpringBootApplication
 public class PolysocialCentralServiceApplication {
 

@@ -23,7 +23,7 @@ public class ViewedStatus implements Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long ViewedStatusId;
+	private Long viewedStatusId;
 	
 	private Long contactId;
 	
