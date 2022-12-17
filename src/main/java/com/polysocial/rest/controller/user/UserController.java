@@ -20,6 +20,7 @@ import com.polysocial.consts.UserAPI;
 import com.polysocial.dto.FriendDTO;
 import com.polysocial.dto.FriendDetailDTO;
 import com.polysocial.dto.UserDTO;
+import com.polysocial.dto.UserFriendDTO;
 import com.polysocial.repo.FriendRepo;
 import com.polysocial.service.users.UserService;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,9 +52,9 @@ public class UserController {
     }
 
     @GetMapping(UserAPI.API_GET_ONE_USER)
-    public ResponseEntity getOneUser(@RequestParam Long userId) {
+    public ResponseEntity getOneUser(@RequestParam Long userId, @RequestHeader("Authorization") String token) {
         try {
-            UserDTO userDTO = userService.getOneUser(userId);
+            UserFriendDTO userDTO = userService.getOneUser(userId, jwt.getIdFromJWT(token));
           
             return ResponseEntity.ok(userDTO);
         } catch (Exception e) {

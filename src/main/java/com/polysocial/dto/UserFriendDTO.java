@@ -11,6 +11,8 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserFriendDTO implements Serializable{
+    private String token;
+
     private String fullName;
 
     private String studentCode;
@@ -24,4 +26,5 @@ public class UserFriendDTO implements Serializable{
     private String role;
 
     private Long userId;
+
 }

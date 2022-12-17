@@ -11,7 +11,7 @@ import com.polysocial.entity.Friends;
 public interface UserService {
     List<UserDTO> getAllUsers();
 
-    UserDTO getOneUser(Long userId);
+    UserFriendDTO getOneUser(Long userId, Long userByToken);
 
     FriendDTO getUserFriend(Long userId, Long friendId);
     
