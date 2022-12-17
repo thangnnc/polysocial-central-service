@@ -503,6 +503,26 @@ public class GroupServiceImpl implements GroupService {
                             groupRepo.findById(groupId).get().getName()),
                     TypeNotifications.NOTI_TYPE_CONFIRM_MEMBER, userRepo.findById(userId).get().getUserId());
             notificationsService.createNoti(notiDTO);
+            Long roomChatId = roomChatRepo.getRoomChatByGroupId(groupId).getRoomId();
+            RoomChats room = roomChatRepo.findById(roomChatId).get();
+            room.setLastMessage("Có thành viên vừa tham gia nhóm");
+            // encodedString
+            String encodedStringRoom = Base64.getEncoder().encodeToString(room.getLastMessage().getBytes());
+            room.setLastMessage(encodedStringRoom);
+            roomChatRepo.save(room);
+            Contacts contact = new Contacts(userId, roomChatId);
+            Long contactId = contactRepo.save(contact).getContactId();
+            ViewedStatus view = new ViewedStatus();
+            view.setContactId(contactId);
+            viewedStatusRepo.save(view);
+            Messages message = new Messages(
+                    userRepo.findById(userId).get().getFullName() + " đã tham gia nhóm",
+                    false);
+            String encodedString = Base64.getEncoder().encodeToString(message.getContent().getBytes());
+            message.setContent(encodedString);
+            message.setContact(contact);
+            messageRepo.save(message);
+
             return entity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
@@ -522,11 +542,33 @@ public class GroupServiceImpl implements GroupService {
             Members[] list = entity.getBody();
             for (int i = 0; i < list.length; i++) {
                 NotificationsDTO notiDTO = new NotificationsDTO(
-                    String.format(ContentNotifications.NOTI_CONTENT_CONFIRM_MEMBER,
-                            userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get().getFullName(),
-                            groupRepo.findById(groupId).get().getName()),
-                    TypeNotifications.NOTI_TYPE_CONFIRM_MEMBER, list[i].getUserId());
-            notificationsService.createNoti(notiDTO);
+                        String.format(ContentNotifications.NOTI_CONTENT_CONFIRM_MEMBER,
+                                userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get()
+                                        .getFullName(),
+                                groupRepo.findById(groupId).get().getName()),
+                        TypeNotifications.NOTI_TYPE_CONFIRM_MEMBER, list[i].getUserId());
+                notificationsService.createNoti(notiDTO);
+
+                Long roomChatId = roomChatRepo.getRoomChatByGroupId(groupId).getRoomId();
+                RoomChats room = roomChatRepo.findById(roomChatId).get();
+                room.setLastMessage("Có thành viên vừa tham gia nhóm");
+                // encodedString
+                String encodedStringRoom = Base64.getEncoder().encodeToString(room.getLastMessage().getBytes());
+                room.setLastMessage(encodedStringRoom);
+                roomChatRepo.save(room);
+                Contacts contact = new Contacts(list[i].getUserId(), roomChatId);
+                Long contactId = contactRepo.save(contact).getContactId();
+                ViewedStatus view = new ViewedStatus();
+                view.setContactId(contactId);
+                viewedStatusRepo.save(view);
+                Messages message = new Messages(
+                        userRepo.findById(list[i].getUserId()).get().getFullName() + " đã tham gia nhóm",
+                        false);
+                String encodedString = Base64.getEncoder().encodeToString(message.getContent().getBytes());
+                message.setContent(encodedString);
+                message.setContact(contact);
+                messageRepo.save(message);
+    
             }
 
             return entity.getBody();
