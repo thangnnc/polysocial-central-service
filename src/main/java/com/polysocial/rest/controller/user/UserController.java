@@ -159,10 +159,9 @@ public class UserController {
     }
 
     @GetMapping(UserAPI.API_SEARCH_USER_BY_KEYWORD)
-    public ResponseEntity searchUserByKeywordResponseEntity(@RequestParam String keyword){
+    public ResponseEntity searchUserByKeywordResponseEntity(@RequestParam String keyword, @RequestHeader("Authorization") String token){
         try{
-            List<UserDTO> list = userService.searchByKeyWord(keyword);
-            return ResponseEntity.ok(list);
+            return ResponseEntity.ok(userService.searchByKeyWord(keyword, jwt.getIdFromJWT(token)));
         }catch(Exception e){
             e.printStackTrace();
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);

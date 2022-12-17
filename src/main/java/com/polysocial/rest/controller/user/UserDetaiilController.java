@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.polysocial.config.jwt.JwtTokenProvider;
@@ -42,6 +43,18 @@ public class UserDetaiilController {
     public ResponseEntity getAllUserDetail(){
         try{
             return ResponseEntity.ok(userDetailService.getAllUserDetail());
+        }catch(Exception e){
+            e.printStackTrace();
+            ResponseDTO response = new ResponseDTO();
+            response.setStatus(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(UserAPI.API_GET_ONE_USER_DETAILS)
+    public ResponseEntity getOneUserDetail(@RequestParam Long userId){
+        try{
+            return ResponseEntity.ok(userDetailService.getOne(userId));
         }catch(Exception e){
             e.printStackTrace();
             ResponseDTO response = new ResponseDTO();

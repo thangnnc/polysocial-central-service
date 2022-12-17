@@ -32,6 +32,8 @@ public class UserAPI {
 
     public static final String API_UPDATE_USER_DETAILS = "/user/update-user-detail";
 
-    public static final String API_GET_ALL_USER_DETAILS = "user/get-all-user-details";
+    public static final String API_GET_ALL_USER_DETAILS = "/user/get-all-user-details";
+
+    public static final String API_GET_ONE_USER_DETAILS = "/user/get-one-user-details";
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import com.polysocial.dto.FriendDTO;
 import com.polysocial.dto.FriendDetailDTO;
 import com.polysocial.dto.UserDTO;
+import com.polysocial.dto.UserFriendDTO;
 import com.polysocial.entity.Friends;
 
 public interface UserService {
@@ -30,6 +31,6 @@ public interface UserService {
 
     List<FriendDetailDTO> getAllRequestAddFriendByUserIntive(Long userId);
 
-    List<UserDTO> searchByKeyWord(String keyword);
+    List<UserFriendDTO> searchByKeyWord(String keyword, Long userId);
 
 }

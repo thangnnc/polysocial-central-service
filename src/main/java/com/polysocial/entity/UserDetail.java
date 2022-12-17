@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -21,7 +22,7 @@ public class UserDetail implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userDetailId;
 
-    private LocalDate birthday;
+    private LocalDateTime birthday;
 
     private boolean gender;
 
@@ -31,9 +32,11 @@ public class UserDetail implements Serializable {
 
     private String course;
 
+    private Long userId;
+
     @JsonBackReference
     @OneToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "userId" ,insertable=false ,updatable=false)
     private Users user;
 
     @Override

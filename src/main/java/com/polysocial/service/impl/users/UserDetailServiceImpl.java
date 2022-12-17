@@ -42,5 +42,13 @@ public class UserDetailServiceImpl implements UserDetailService{
         return listDTO;
     }
 
+    @Override
+    public UserDetailDTO getOne(Long userDetailId) {
+        UserDetail user = userDetailRepo.findByUserId(userDetailId);
+        return modelMapper.map(user, UserDetailDTO.class);
+    }
+
+    
+
     
 }

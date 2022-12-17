@@ -15,6 +15,7 @@ import com.polysocial.dto.FriendDTO;
 import com.polysocial.dto.FriendDetailDTO;
 import com.polysocial.dto.NotificationsDTO;
 import com.polysocial.dto.UserDTO;
+import com.polysocial.dto.UserFriendDTO;
 import com.polysocial.entity.Contacts;
 import com.polysocial.entity.Friends;
 import com.polysocial.entity.Groups;
@@ -105,11 +106,13 @@ public class UserServiceImpl implements UserService {
                 friendDTO.setFriendName(userInvite.getFullName());
                 friendDTO.setFriendAvatar(userInvite.getAvatar());
                 friendDTO.setFriendEmail(userInvite.getEmail());
+                friendDTO.setFriendUserId(userInvite.getUserId());
             }
             else{
                 friendDTO.setFriendName(userConfirm.getFullName());
                 friendDTO.setFriendAvatar(userConfirm.getAvatar());
                 friendDTO.setFriendEmail(userConfirm.getEmail());
+                friendDTO.setFriendUserId(userConfirm.getUserId());
             }
             friendDTO.setStatus(friend.getStatus());
             Long groupId = friendRepo.getFriendByUserInviteIdAndUserConfirm(userInvite.getUserId(), userConfirm.getUserId()).get(0).getGroup().getGroupId();
@@ -147,10 +150,25 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<UserDTO> searchByKeyWord(String keyword) {
+    public List<UserFriendDTO> searchByKeyWord(String keyword, Long userId) {
         List<Users> list = userRepo.searchByKeyWord(keyword);
-        List<UserDTO> listDTO = list.stream().map(element -> modelMapper.map(element, UserDTO.class))
-                .collect(Collectors.toList());
+        List<UserFriendDTO> listDTO = new ArrayList();
+        for (int i = 0; i < list.size(); i++) {
+            if(list.get(i).getUserId() == userId ) continue;
+            UserFriendDTO userFr = new UserFriendDTO();
+            userFr.setAvatar(list.get(i).getAvatar());
+            userFr.setEmail(list.get(i).getEmail());
+            userFr.setFullName(list.get(i).getFullName());
+            userFr.setStudentCode(list.get(i).getStudentCode());
+            List<Friends> listFr = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, list.get(i).getUserId());
+           
+            try{
+                userFr.setStatus(listFr.get(0).getStatus());
+            }catch(Exception e){
+            }           
+
+            listDTO.add(userFr);
+        }
         return listDTO;
     }
 
@@ -171,7 +189,7 @@ public class UserServiceImpl implements UserService {
               
                 Groups group = new Groups();
                 group.setName(userConfirm.getFullName() + "," + userInvite.getFullName());
-                group.setTotalMember(2L);
+                group.setTotalMember(0L);
                 group.setDescription("Friend with chat rooms");
                 group.setClassName("Friend Chat");
 
