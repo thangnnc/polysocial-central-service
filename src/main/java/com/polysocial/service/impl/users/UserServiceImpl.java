@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService {
             userFr.setFullName(list.get(i).getFullName());
             userFr.setStudentCode(list.get(i).getStudentCode());
             List<Friends> listFr = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, list.get(i).getUserId());
-           
+            userFr.setUserId(list.get(i).getUserId());
             try{
                 userFr.setStatus(listFr.get(0).getStatus());
             }catch(Exception e){

@@ -22,4 +22,6 @@ public class UserFriendDTO implements Serializable{
     private String avatar;
 
     private String role;
+
+    private Long userId;
 }
