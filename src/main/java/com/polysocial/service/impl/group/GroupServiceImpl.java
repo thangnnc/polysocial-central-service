@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
@@ -505,6 +506,8 @@ public class GroupServiceImpl implements GroupService {
             notificationsService.createNoti(notiDTO);
             Long roomChatId = roomChatRepo.getRoomChatByGroupId(groupId).getRoomId();
             RoomChats room = roomChatRepo.findById(roomChatId).get();
+            LocalDateTime now = LocalDateTime.now();
+            room.setLastUpdateDate(now);
             room.setLastMessage("Có thành viên vừa tham gia nhóm");
             // encodedString
             String encodedStringRoom = Base64.getEncoder().encodeToString(room.getLastMessage().getBytes());
