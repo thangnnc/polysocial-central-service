@@ -1,9 +1,12 @@
 package com.polysocial.service.impl.notifications;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.polysocial.dto.NotificationsDTO;
@@ -62,14 +65,30 @@ public class NotificationsImpl implements NotificationsService {
 
     @Override
     public List<NotificationsDTO> getNotiByUserId(Long userId) {
-        List<Notifications> notis = notificationsRepo.findByUserId(userId);
-        return modelMapper.map(notis, List.class);
+       
+        return null;
     }
 
     @Override
-    public List<NotificationsDTO> getAllNotifications(Long userId) {
+    public Page<NotificationsDTO> getAllNotifications(Long userId, Pageable pageable) {
+        Page<Notifications> notis = notificationsRepo.findByUserId(userId, pageable);
+        return notis.map(noti -> modelMapper.map(noti, NotificationsDTO.class));
+    }
+
+    @Override
+    public NotificationsDTO updateOneStatus(Long userId, Long notiId) {
+        notificationsRepo.updateOneStatus(userId, notiId);
+        Notifications noti = notificationsRepo.findById(notiId).get();
+        return modelMapper.map(noti, NotificationsDTO.class);
+    }
+
+    @Override
+    public List<NotificationsDTO> updateAllStatus(Long userId) {
+        notificationsRepo.updateAllStatus(userId);
         List<Notifications> notis = notificationsRepo.findByUserId(userId);
-        return modelMapper.map(notis, List.class);
+        List<NotificationsDTO> notiDTOs = notis.stream().map(noti -> modelMapper.map(noti, NotificationsDTO.class))
+                .collect(Collectors.toList());
+        return notiDTOs;
     }
 
     

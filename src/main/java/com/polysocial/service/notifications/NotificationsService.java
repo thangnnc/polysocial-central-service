@@ -2,6 +2,9 @@ package com.polysocial.service.notifications;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.polysocial.dto.NotificationsDTO;
 import com.polysocial.entity.Members;
 
@@ -17,5 +20,9 @@ public interface NotificationsService {
 
     List<NotificationsDTO> getNotiByUserId(Long userId);
 
-    List<NotificationsDTO> getAllNotifications(Long userId);
+    Page<NotificationsDTO> getAllNotifications(Long userId, Pageable pageable);
+
+    NotificationsDTO updateOneStatus(Long userId, Long notiId);
+
+    List<NotificationsDTO> updateAllStatus(Long userId);
 }
