@@ -2,6 +2,8 @@ package com.polysocial.dto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
@@ -29,5 +31,9 @@ public class GroupDTO implements Serializable{
     private Long adminId;
 
     private String avatar;
+
+    private List<ContactDTO> listContact;
+
+    private Long roomId;
 
 }
