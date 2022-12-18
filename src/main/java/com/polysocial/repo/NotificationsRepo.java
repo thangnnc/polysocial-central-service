@@ -17,7 +17,7 @@ import com.polysocial.entity.Notifications;
 @Repository
 public interface NotificationsRepo extends JpaRepository<Notifications, Long> {
 
-    @Query("SELECT n FROM Notifications n WHERE n.user.userId = ?1")
+    @Query("SELECT n FROM Notifications n WHERE n.user.userId = ?1 ORDER BY n.createdDate DESC ")
     Page<Notifications> findByUserId(Long userId, Pageable pageable);
 
     @Query("SELECT n FROM Notifications n WHERE n.user.userId = ?1")

@@ -23,7 +23,7 @@ public class Notifications implements Serializable {
 
     private Integer type;
 
-    private Boolean status;
+    private Boolean status = false;
 
     private LocalDateTime createdDate = LocalDateTime.now();
 
