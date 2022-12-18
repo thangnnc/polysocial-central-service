@@ -21,7 +21,7 @@ public class NotificationsDTO implements Serializable{
     private Long notificationId;
     private String content;
     private Integer type;
-    private Boolean status = true;
+    private Boolean status = false;
     private LocalDateTime createdDate = LocalDateTime.now();
     private Long user;
 
