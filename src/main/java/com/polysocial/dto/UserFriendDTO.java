@@ -1,6 +1,7 @@
 package com.polysocial.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -26,5 +27,9 @@ public class UserFriendDTO implements Serializable{
     private String role;
 
     private Long userId;
+
+    private List<ContactDTO> listContact;
+
+    private Long roomId;
 
 }

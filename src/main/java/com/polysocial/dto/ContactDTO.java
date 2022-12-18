@@ -7,13 +7,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.polysocial.entity.RoomChats;
 import com.polysocial.entity.Users;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@AllArgsConstructor
+@NoArgsConstructor
 public class ContactDTO implements Serializable{
     private Long userId;
     private String fullName;
@@ -22,12 +26,4 @@ public class ContactDTO implements Serializable{
     private String studentCode;
     private Long contactId;
 
-    public ContactDTO(Long userId, String fullName, String email, String avatar, String studentCode, Long contactId) {
-        this.userId = userId;
-        this.fullName = fullName;
-        this.email = email;
-        this.avatar = avatar;
-        this.studentCode = studentCode;
-        this.contactId = contactId;
-    }
 }

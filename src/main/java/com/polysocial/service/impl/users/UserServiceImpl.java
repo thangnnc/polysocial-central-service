@@ -170,9 +170,33 @@ public class UserServiceImpl implements UserService {
             userFr.setStudentCode(list.get(i).getStudentCode());
             List<Friends> listFr = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, list.get(i).getUserId());
             userFr.setUserId(list.get(i).getUserId());
+            List<Friends> listFr2 = friendRepo.getFriendByUserInviteIdAndUserConfirm(list.get(i).getUserId(), userId);
+            
+            Long groupId = 0L;
+            if(listFr2.size() > 0){
+                groupId = listFr2.get(0).getGroup().getGroupId();
+                Long roomId = roomChatRepo.getRoomChatByGroupId(groupId).getRoomId();
+                List<Contacts> contacts = contactRepo.getContactByRoomId(roomId);
+                List<ContactDTO> listContactDTO = contacts.stream()
+                        .map(element -> modelMapper.map(element, ContactDTO.class))
+                        .collect(Collectors.toList());
+                
+                for (int j = 0; j < listContactDTO.size(); j++) {
+                    Users user = userRepo.findById(listContactDTO.get(j).getUserId()).get();
+                    listContactDTO.get(j).setAvatar(user.getAvatar());
+                    listContactDTO.get(j).setEmail(user.getEmail());
+                    listContactDTO.get(j).setFullName(user.getFullName());
+                    listContactDTO.get(j).setStudentCode(user.getStudentCode());
+                }
+                userFr.setRoomId(roomId);
+                userFr.setListContact(listContactDTO);
+            } 
             try {
+
                 userFr.setStatus(listFr.get(0).getStatus());
+
             } catch (Exception e) {
+                e.printStackTrace();
             }
 
             listDTO.add(userFr);
