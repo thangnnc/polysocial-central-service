@@ -20,7 +20,7 @@ public class UserFriendDTO implements Serializable{
 
     private String email;
 
-    private Boolean status;
+    private Long status;
 
     private Boolean isConfirm;
 

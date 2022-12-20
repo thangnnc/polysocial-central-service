@@ -35,4 +35,5 @@ public interface UserRepo extends JpaRepository<Users, Long> {
     @Query("SELECT o FROM Users o WHERE o.role.roleId not like 2")
     List<Users> findUserByRoleNotStudent();
 
+
 }

@@ -79,14 +79,29 @@ public class UserServiceImpl implements UserService {
         Users user = userRepo.findByUserId(userId);
         UserFriendDTO userDTO = modelMapper.map(user, UserFriendDTO.class);
         try {
-            Boolean status = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userBytoken).get(0).getStatus();
-            userDTO.setStatus(status);
+            List<Friends> th1 = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userBytoken);
+            Friends th2 = friendRepo.findFriendByUserInviteIdAndUserConfirmId(userBytoken, userId);
+            if (th1.size() == 0) {
+                userDTO.setStatus(1L);
+            } else {
+                if (th1.get(0).getStatus() == true) {
+                    userDTO.setStatus(2L);
+                } else {
+                    if (th2 != null && th2.getStatus() == false) {
+                        userDTO.setStatus(3L);
+                    } else if (th2 == null) {
+                        userDTO.setStatus(4L);
+                    }
+                }
+            }
+
+            // userDTO.setStatus(status);
             List<Friends> fr = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userBytoken);
             if (fr.size() > 0) {
                 userDTO.setIsConfirm(fr.get(0).getStatus());
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return userDTO;
     }
@@ -198,11 +213,26 @@ public class UserServiceImpl implements UserService {
                     userFr.setListContact(listContactDTO);
 
                 }
+                List<Friends> th1 = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userFr.getUserId());
+                Friends th2 = friendRepo.findFriendByUserInviteIdAndUserConfirmId(userFr.getUserId(), userId);
+                if (th1.size() == 0) {
+                    userFr.setStatus(1L);
+                } else {
+                    if (th1.get(0).getStatus() == true) {
+                        userFr.setStatus(2L);
+                    } else {
+                        if (th2 != null && th2.getStatus() == false) {
+                            userFr.setStatus(3L);
+                        } else if (th2 == null) {
+                            userFr.setStatus(4L);
+                        }
+                    }
+                }
             } catch (Exception e) {
 
             }
             try {
-                userFr.setStatus(listFr.get(0).getStatus());
+                // userFr.setStatus(listFr.get(0).getStatus());
             } catch (Exception e) {
                 // e.printStackTrace();
             }
