@@ -54,6 +54,7 @@ import com.polysocial.repo.ViewedStatusRepo;
 import com.polysocial.service.group.GroupService;
 import com.polysocial.service.notifications.NotificationsService;
 import com.polysocial.type.TypeNotifications;
+import com.polysocial.utils.UploadToCloud;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -87,6 +88,9 @@ public class GroupServiceImpl implements GroupService {
 
     @Autowired
     private RoomChatRepo roomChatRepo;
+
+    @Autowired
+	private UploadToCloud uploadToCloud;
 
     @Override
     public PageObject<GroupDTO> getAll(Integer page, Integer limit) {
@@ -194,6 +198,14 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO createGroup(GroupDTO group) {
+        try{
+            String urlFile = uploadToCloud.saveFile(group.getAvatarFile());
+            group.setAvatar(urlFile);
+            group.setAvatarFile(null);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
         try {
             String url = GroupAPI.API_CREATE_GROUP;
             HttpHeaders header = new HttpHeaders();

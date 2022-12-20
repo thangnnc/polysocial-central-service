@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -107,8 +108,8 @@ public class GroupController {
         }
     }
 
-    @PostMapping(value = CentralAPI.API_CREATE_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity createGroup(@RequestBody GroupDTO group) {
+    @PostMapping(value = CentralAPI.API_CREATE_GROUP)
+    public ResponseEntity createGroup(@ModelAttribute GroupDTO group) {
         try {
             GroupDTO groups = groupService.createGroup(group);
             return new ResponseEntity(groups, HttpStatus.OK);
@@ -161,6 +162,7 @@ public class GroupController {
             List<GroupDTO> response = groupService.findByKeywork(keywork, jwt.getIdFromJWT(token));
             return new ResponseEntity(response, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
