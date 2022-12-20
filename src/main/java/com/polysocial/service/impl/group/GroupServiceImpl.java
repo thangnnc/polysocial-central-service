@@ -264,6 +264,7 @@ public class GroupServiceImpl implements GroupService {
             Long roomChatId = roomChatRepo.getRoomChatByGroupId(groupId).getRoomId();
             RoomChats room = roomChatRepo.findById(roomChatId).get();
             room.setLastMessage("Có thành viên vừa tham gia nhóm");
+            room.setLastUpdateDate(LocalDateTime.now());
             // encodedString
             String encodedStringRoom = Base64.getEncoder().encodeToString(room.getLastMessage().getBytes());
             room.setLastMessage(encodedStringRoom);

@@ -31,4 +31,15 @@ public class ViewedStatusController {
 			return ResponseEntity.ok(viewedStatusService.updateViewedStatusDTO(dto));
 		}
 	}
+	
+	@PostMapping(CentralAPI.UPDATE_All_VIEW_STATUS)
+	public ResponseEntity updateAllviewedStatus(@RequestBody ViewedStatusDTO dto) {
+		if (ValidateUtils.isNullOrEmpty(dto.getUserId())) {
+			ResponseDTO response = new ResponseDTO();
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+		} else {
+			return ResponseEntity.ok(viewedStatusService.updateAllViewedStatusDTO(dto));
+		}
+	}
 }

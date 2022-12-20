@@ -6,4 +6,6 @@ import lombok.Data;
 public class ViewedStatusDTO {
 	
 	private Long contactId;
+	
+	private Long userId;
 }

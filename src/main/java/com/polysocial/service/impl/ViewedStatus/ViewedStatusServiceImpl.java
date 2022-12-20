@@ -33,4 +33,19 @@ public class ViewedStatusServiceImpl implements ViewedStatusService{
 			return null;
 		}
 	}
+	
+	@Override
+	public ViewedStatusDTO updateAllViewedStatusDTO(ViewedStatusDTO dto) {
+		try {
+			String url = ViewedStatusAPI.API_UPDATE_All_VIEWEDSTATUS;
+			HttpHeaders hedear = new HttpHeaders();
+			hedear.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity<ViewedStatusDTO> httpEntity = new HttpEntity(dto, hedear);
+			ResponseEntity<ViewedStatusDTO> entity= restTemplate.exchange(url, HttpMethod.POST, httpEntity,ViewedStatusDTO.class);
+			return entity.getBody();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

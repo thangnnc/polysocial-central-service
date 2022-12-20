@@ -200,7 +200,7 @@ public class UserServiceImpl implements UserService {
                 userFr.setStatus(listFr.get(0).getStatus());
 
             } catch (Exception e) {
-                e.printStackTrace();
+//                e.printStackTrace();
             }
 
             listDTO.add(userFr);
