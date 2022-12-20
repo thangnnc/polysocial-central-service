@@ -15,6 +15,7 @@ import com.polysocial.dto.FriendDetailDTO;
 import com.polysocial.dto.NotificationsDTO;
 import com.polysocial.dto.UserDTO;
 import com.polysocial.dto.UserFriendDTO;
+import com.polysocial.dto.UsersDTO;
 import com.polysocial.entity.Contacts;
 import com.polysocial.entity.Friends;
 import com.polysocial.entity.Groups;
@@ -80,6 +81,10 @@ public class UserServiceImpl implements UserService {
         try {
             Boolean status = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userBytoken).get(0).getStatus();
             userDTO.setStatus(status);
+            List<Friends> fr = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userBytoken);
+            if (fr.size() > 0) {
+                userDTO.setIsConfirm(fr.get(0).getStatus());
+            }
         } catch (Exception e) {
 
         }
@@ -363,6 +368,18 @@ public class UserServiceImpl implements UserService {
                     userRepo.findById(friend.getUserConfirm().getUserId()).get().getAvatar());
             friendDTO.setStatus(friend.getStatus());
             listDTO.add(friendDTO);
+        }
+        return listDTO;
+    }
+
+    @Override
+    public List<UsersDTO> getAllUserNotStudent() {
+        List<Users> list = userRepo.findUserByRoleNotStudent();
+        List<UsersDTO> listDTO = new ArrayList<>();
+        for (Users user : list) {
+            UsersDTO userDTO = modelMapper.map(user, UsersDTO.class);
+            userDTO.setRole(user.getRole().getName());
+            listDTO.add(userDTO);
         }
         return listDTO;
     }

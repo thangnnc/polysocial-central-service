@@ -6,6 +6,7 @@ import com.polysocial.dto.FriendDTO;
 import com.polysocial.dto.FriendDetailDTO;
 import com.polysocial.dto.UserDTO;
 import com.polysocial.dto.UserFriendDTO;
+import com.polysocial.dto.UsersDTO;
 import com.polysocial.entity.Friends;
 
 public interface UserService {
@@ -32,5 +33,7 @@ public interface UserService {
     List<FriendDetailDTO> getAllRequestAddFriendByUserIntive(Long userId);
 
     List<UserFriendDTO> searchByKeyWord(String keyword, Long userId);
+
+    List<UsersDTO> getAllUserNotStudent();
 
 }

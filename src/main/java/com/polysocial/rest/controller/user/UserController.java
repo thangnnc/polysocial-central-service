@@ -168,4 +168,14 @@ public class UserController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(UserAPI.API_GET_ALL_USER_NOT_STUDENT)
+    public ResponseEntity getAllUserNotStudent(){
+        try{
+            return ResponseEntity.ok(userService.getAllUserNotStudent());
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

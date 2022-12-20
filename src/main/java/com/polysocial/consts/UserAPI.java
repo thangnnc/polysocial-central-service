@@ -36,4 +36,6 @@ public class UserAPI {
 
     public static final String API_GET_ONE_USER_DETAILS = "/user/get-one-user-details";
 
+    public static final String API_GET_ALL_USER_NOT_STUDENT = "/user/get-all-user-not-student";
+
 }
