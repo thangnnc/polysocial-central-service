@@ -16,6 +16,8 @@ public class LikeResponseDTO {
 
 	private String studentCode;
 
+	private Long userId;
+
 	private Boolean status;
 
 }
