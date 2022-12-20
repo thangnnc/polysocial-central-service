@@ -13,6 +13,7 @@ public class MemberGroupDTO implements Serializable{
     private Long userId;
     private String groupName;
     private Long totalMember;
+    private String className;
     private String avatarGroup;
     private Long roomId;
     private List<ContactDTO> listContact;
