@@ -191,16 +191,19 @@ public class UserServiceImpl implements UserService {
                     }
                     userFr.setRoomId(roomId);
                     userFr.setListContact(listContactDTO);
+
                 }
             } catch (Exception e) {
 
             }
             try {
-
                 userFr.setStatus(listFr.get(0).getStatus());
-
             } catch (Exception e) {
-//                e.printStackTrace();
+                // e.printStackTrace();
+            }
+            List<Friends> fr = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userFr.getUserId());
+            if (fr.size() > 0) {
+                userFr.setIsConfirm(fr.get(0).getStatus());
             }
 
             listDTO.add(userFr);

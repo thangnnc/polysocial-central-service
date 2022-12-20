@@ -22,6 +22,8 @@ public class UserFriendDTO implements Serializable{
 
     private Boolean status;
 
+    private Boolean isConfirm;
+
     private String avatar;
 
     private String role;
