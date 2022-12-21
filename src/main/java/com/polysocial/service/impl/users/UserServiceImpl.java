@@ -298,16 +298,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public FriendDetailDTO acceptFriend(Long userConfirmId, Long userInviteId) {
         friendRepo.acceptFriend(userConfirmId, userInviteId);
-
         FriendDetailDTO friendDetailDTO = new FriendDetailDTO(userConfirmId, userInviteId,
                 userRepo.findById(userConfirmId).get().getFullName(),
                 userRepo.findById(userInviteId).get().getFullName(), userRepo.findById(userInviteId).get().getAvatar(),
                 userRepo.findById(userConfirmId).get().getAvatar());
         String nameGroup = friendDetailDTO.getFullNameUserConfirm() + "," + friendDetailDTO.getFullNameUserInvite();
-        Groups groupCheck = groupRepo.findGroupByName(nameGroup);
-        if(groupCheck != null){
-            return friendDetailDTO;
-        }
+        // Groups groupCheck = groupRepo.findGroupByName(nameGroup);
         friendDetailDTO.setStatus(true);
         friendDetailDTO.setEmailInvite(userRepo.findById(userInviteId).get().getEmail());
         Groups group = new Groups(nameGroup, null,
