@@ -110,6 +110,7 @@ public class GroupController {
 
     @PostMapping(value = CentralAPI.API_CREATE_GROUP)
     public ResponseEntity createGroup(@ModelAttribute GroupDTO group) {
+    	System.out.println("group--->"+group.getClassName());
         try {
             GroupDTO groups = groupService.createGroup(group);
             return new ResponseEntity(groups, HttpStatus.OK);
