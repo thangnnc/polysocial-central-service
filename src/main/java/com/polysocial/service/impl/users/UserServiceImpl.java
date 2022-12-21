@@ -298,19 +298,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public FriendDetailDTO acceptFriend(Long userConfirmId, Long userInviteId) {
         friendRepo.acceptFriend(userConfirmId, userInviteId);
+        Friends fr = friendRepo.findFriendByUserInviteIdAndUserConfirmId(userConfirmId, userInviteId);
         FriendDetailDTO friendDetailDTO = new FriendDetailDTO(userConfirmId, userInviteId,
                 userRepo.findById(userConfirmId).get().getFullName(),
                 userRepo.findById(userInviteId).get().getFullName(), userRepo.findById(userInviteId).get().getAvatar(),
                 userRepo.findById(userConfirmId).get().getAvatar());
         String nameGroup = friendDetailDTO.getFullNameUserConfirm() + "," + friendDetailDTO.getFullNameUserInvite();
-        // Groups groupCheck = groupRepo.findGroupByName(nameGroup);
+        Groups groupCheck = groupRepo.findGroupByName(nameGroup);
+        if(groupCheck == null){
+            return friendDetailDTO;
+        }
         friendDetailDTO.setStatus(true);
         friendDetailDTO.setEmailInvite(userRepo.findById(userInviteId).get().getEmail());
-        Groups group = new Groups(nameGroup, null,
+        groupCheck = new Groups(nameGroup, null,
                 "Friend with chat rooms", "Friends chat");
-        group.setAvatar(friendDetailDTO.getAvatarUserConfirm() + "," + friendDetailDTO.getAvatarUserInvite());
-        Groups groupCreated = groupRepo.save(group);
-
+        groupCheck.setAvatar(friendDetailDTO.getAvatarUserConfirm() + "," + friendDetailDTO.getAvatarUserInvite());
+        Groups groupCreated = groupRepo.save(groupCheck);
+        fr.setGroup(groupCreated);
         RoomChats roomChat = new RoomChats(groupCreated);
         roomChat.setLastMessage("Hai bạn đã trở thành bạn bè của nhau");
         // encodedString
