@@ -261,17 +261,17 @@ public class UserServiceImpl implements UserService {
                         userInvite.getFullName(), userConfirm.getFullName(), userInvite.getAvatar(),
                         userConfirm.getAvatar());
 
-                Groups group = new Groups();
-                group.setName(userConfirm.getFullName() + "," + userInvite.getFullName());
-                group.setTotalMember(0L);
-                group.setDescription("Friend with chat rooms");
-                group.setClassName("Friend Chat");
+                // Groups group = new Groups();
+                // group.setName(userConfirm.getFullName() + "," + userInvite.getFullName());
+                // group.setTotalMember(0L);
+                // group.setDescription("Friend with chat rooms");
+                // group.setClassName("Friend Chat");
 
-                Groups groupCreate = groupRepo.save(group);
+                // Groups groupCreate = groupRepo.save(group);
                 Friends friend = new Friends();
                 friend.setUserInviteId(userInvite.getUserId());
                 friend.setUserConfirmId(userConfirm.getUserId());
-                friend.setGroup(groupCreate);
+                // friend.setGroup(groupCreate);
                 friendRepo.save(friend);
 
                 String nameFriend = userInvite.getFullName();
