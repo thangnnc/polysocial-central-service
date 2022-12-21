@@ -304,23 +304,22 @@ public class UserServiceImpl implements UserService {
                 userRepo.findById(userInviteId).get().getFullName(), userRepo.findById(userInviteId).get().getAvatar(),
                 userRepo.findById(userConfirmId).get().getAvatar());
         String nameGroup = friendDetailDTO.getFullNameUserConfirm() + "," + friendDetailDTO.getFullNameUserInvite();
-        Groups groupCheck = groupRepo.findGroupByName(nameGroup);
-        if(groupCheck == null){
-            return friendDetailDTO;
-        }
         friendDetailDTO.setStatus(true);
         friendDetailDTO.setEmailInvite(userRepo.findById(userInviteId).get().getEmail());
-        groupCheck = new Groups(nameGroup, null,
+        Groups groupCheck = new Groups(nameGroup, null,
                 "Friend with chat rooms", "Friends chat");
         groupCheck.setAvatar(friendDetailDTO.getAvatarUserConfirm() + "," + friendDetailDTO.getAvatarUserInvite());
         Groups groupCreated = groupRepo.save(groupCheck);
-        fr.setGroup(groupCreated);
+        // fr.setGroup(groupCreated);
+        // friendRepo.save(fr);
         RoomChats roomChat = new RoomChats(groupCreated);
         roomChat.setLastMessage("Hai bạn đã trở thành bạn bè của nhau");
         // encodedString
         String encodedStringRoom = Base64.getEncoder().encodeToString(roomChat.getLastMessage().getBytes());
         roomChat.setLastMessage(encodedStringRoom);
+        System.out.println("123");
         Long roomChatId = roomChatRepo.save(roomChat).getRoomId();
+        System.out.println("213");
         friendDetailDTO.setRoomId(roomChatId);
         friendDetailDTO.setGroupId(groupCreated.getGroupId());
         Contacts contact = new Contacts(userConfirmId, roomChatId);
