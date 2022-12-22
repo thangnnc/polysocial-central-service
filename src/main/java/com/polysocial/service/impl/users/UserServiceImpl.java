@@ -2,6 +2,8 @@ package com.polysocial.service.impl.users;
 
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -167,6 +169,17 @@ public class UserServiceImpl implements UserService {
         return listDTO;
     }
 
+    class Status implements Comparator<UserFriendDTO> {
+        public int compare(UserFriendDTO s1, UserFriendDTO s2) {
+            if (s1.getStatus() == s2.getStatus())
+                return 0;
+            else if (s1.getStatus() > s2.getStatus())
+                return 1;
+            else
+                return -1;
+        }
+    }
+
     @Override
     public List<UserFriendDTO> searchByKeyWord(String keyword, Long userId) {
         List<Users> list = userRepo.searchByKeyWord(keyword);
@@ -221,6 +234,7 @@ public class UserServiceImpl implements UserService {
 
             listDTO.add(userFr);
         }
+        Collections.sort(listDTO, new Status());
         return listDTO;
     }
 
@@ -400,7 +414,7 @@ public class UserServiceImpl implements UserService {
         }
         return listDTO;
     }
-
+    
     @Override
     public List<FriendDetailDTO> getAllRequestAddFriendByUserIntive(Long userId) {
         List<Friends> list = friendRepo.getAllRequestAddFriendByUserInviteId(userId);
