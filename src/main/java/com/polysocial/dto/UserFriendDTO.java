@@ -34,4 +34,8 @@ public class UserFriendDTO implements Serializable{
 
     private Long roomId;
 
+    private Long userConfirmId;
+
+    private Long userInviteId;
+
 }

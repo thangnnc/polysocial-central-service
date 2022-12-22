@@ -80,25 +80,16 @@ public class UserServiceImpl implements UserService {
         UserFriendDTO userDTO = modelMapper.map(user, UserFriendDTO.class);
         try {
             List<Friends> th1 = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userBytoken);
-            Friends th2 = friendRepo.findFriendByUserInviteIdAndUserConfirmId(userBytoken, userId);
             if (th1.size() == 0) {
-                userDTO.setStatus(1L);
+                userDTO.setStatus(2L);
             } else {
+                userDTO.setUserConfirmId(th1.get(0).getUserConfirm().getUserId());
+                userDTO.setUserInviteId(th1.get(0).getUserInvite().getUserId());
                 if (th1.get(0).getStatus() == true) {
-                    userDTO.setStatus(2L);
-                } else {
-                    if (th2 != null && th2.getStatus() == false) {
-                        userDTO.setStatus(3L);
-                    } else if (th2 == null) {
-                        userDTO.setStatus(4L);
-                    }
+                    userDTO.setStatus(1L);
+                } else if(th1.get(0).getStatus() == false){
+                    userDTO.setStatus(0L);
                 }
-            }
-
-            // userDTO.setStatus(status);
-            List<Friends> fr = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userBytoken);
-            if (fr.size() > 0) {
-                userDTO.setIsConfirm(fr.get(0).getStatus());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -188,7 +179,6 @@ public class UserServiceImpl implements UserService {
             userFr.setEmail(list.get(i).getEmail());
             userFr.setFullName(list.get(i).getFullName());
             userFr.setStudentCode(list.get(i).getStudentCode());
-            List<Friends> listFr = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, list.get(i).getUserId());
             userFr.setUserId(list.get(i).getUserId());
             List<Friends> listFr2 = friendRepo.getFriendByUserInviteIdAndUserConfirm(list.get(i).getUserId(), userId);
 
@@ -213,32 +203,20 @@ public class UserServiceImpl implements UserService {
                     userFr.setListContact(listContactDTO);
 
                 }
-                List<Friends> th1 = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userFr.getUserId());
-                Friends th2 = friendRepo.findFriendByUserInviteIdAndUserConfirmId(userFr.getUserId(), userId);
-                if (th1.size() == 0) {
-                    userFr.setStatus(1L);
-                } else {
-                    if (th1.get(0).getStatus() == true) {
-                        userFr.setStatus(2L);
-                    } else {
-                        if (th2 != null && th2.getStatus() == false) {
-                            userFr.setStatus(3L);
-                        } else if (th2 == null) {
-                            userFr.setStatus(4L);
-                        }
-                    }
-                }
-            } catch (Exception e) {
 
-            }
-            try {
-                // userFr.setStatus(listFr.get(0).getStatus());
             } catch (Exception e) {
-                // e.printStackTrace();
             }
-            List<Friends> fr = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userFr.getUserId());
-            if (fr.size() > 0) {
-                userFr.setIsConfirm(fr.get(0).getStatus());
+            List<Friends> th1 = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userFr.getUserId());
+            if (th1.size() == 0) {
+                userFr.setStatus(2L);
+            } else {
+                userFr.setUserConfirmId(th1.get(0).getUserConfirm().getUserId());
+                userFr.setUserInviteId(th1.get(0).getUserInvite().getUserId());
+                if (th1.get(0).getStatus() == true) {
+                    userFr.setStatus(1L);
+                } else if(th1.get(0).getStatus() == false){
+                    userFr.setStatus(0L);
+                }
             }
 
             listDTO.add(userFr);
@@ -302,7 +280,7 @@ public class UserServiceImpl implements UserService {
                 userRepo.findById(userConfirmId).get().getFullName(),
                 userRepo.findById(userInviteId).get().getFullName(), userRepo.findById(userInviteId).get().getAvatar(),
                 userRepo.findById(userConfirmId).get().getAvatar());
-        
+
         String nameGroup = friendDetailDTO.getFullNameUserConfirm() + "," + friendDetailDTO.getFullNameUserInvite();
         Groups group = groupRepo.findGroupByName(nameGroup);
         if (group != null) {
@@ -315,7 +293,7 @@ public class UserServiceImpl implements UserService {
                 "Friend with chat rooms", "Friends chat");
         groupCheck.setAvatar(friendDetailDTO.getAvatarUserConfirm() + "," + friendDetailDTO.getAvatarUserInvite());
         Groups groupCreated = groupRepo.save(groupCheck);
-    
+
         RoomChats roomChat = new RoomChats(groupCreated);
         roomChat.setLastMessage("Hai bạn đã trở thành bạn bè của nhau");
         // encodedString
