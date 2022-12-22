@@ -131,7 +131,11 @@ public class UserController {
     public ResponseEntity rejectFriend(@RequestBody FriendDTO friendDTO, @RequestHeader("Authorization") String token) {
     	System.out.println("----->"+friendDTO);
         try {
+<<<<<<< Updated upstream
             userService.deleteRequestAddFriend(friendDTO.getUserInviteId(),friendDTO.getUserConfirmId());
+=======
+            userService.deleteRequestAddFriend(friendDTO.getUserConfirmId(), friendDTO.getUserInviteId());
+>>>>>>> Stashed changes
             return ResponseEntity.ok("Delete success");
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);

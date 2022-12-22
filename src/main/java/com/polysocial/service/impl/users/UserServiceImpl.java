@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
                 userDTO.setUserInviteId(th1.get(0).getUserInvite().getUserId());
                 if (th1.get(0).getStatus() == true) {
                     userDTO.setStatus(1L);
-                } else if(th1.get(0).getStatus() == false){
+                } else if (th1.get(0).getStatus() == false) {
                     userDTO.setStatus(0L);
                 }
             }
@@ -214,7 +214,7 @@ public class UserServiceImpl implements UserService {
                 userFr.setUserInviteId(th1.get(0).getUserInvite().getUserId());
                 if (th1.get(0).getStatus() == true) {
                     userFr.setStatus(1L);
-                } else if(th1.get(0).getStatus() == false){
+                } else if (th1.get(0).getStatus() == false) {
                     userFr.setStatus(0L);
                 }
             }
@@ -346,7 +346,38 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteRequestAddFriend(Long userInviteId,Long userConfirmId) {
         try {
+            Friends friends = friendRepo.getFriendByUserInviteIdAndUserConfirm(userInviteId, userConfirmId).get(0);
+            Long userId = 0L;
+            String nameFriend = "";
+            if (friends.getStatus() == true) {
+                if (friends.getUserConfirmId() == userConfirmId) {
+                    userId = userConfirmId;
+                    nameFriend = friends.getUserInvite().getFullName();
+                } else {
+                    userId = userInviteId;
+                    nameFriend = friends.getUserConfirm().getFullName();
+                }
+                friendRepo.deleteRequestAddFriend(userInviteId, userConfirmId);
+                NotificationsDTO notificationsDTO = new NotificationsDTO(
+                        String.format(ContentNotifications.NOTI_DELETE_FRIEND, nameFriend),
+                        TypeNotifications.NOTI_TYPE_DELETE_FRIEND, userId);
+                notificationsService.createNoti(notificationsDTO);
+                return;
+            } else {
+                if (friends.getUserConfirmId() == userConfirmId) {
+                    userId = userConfirmId;
+                    nameFriend = friends.getUserInvite().getFullName();
+                } else {
+                    userId = userInviteId;
+                    nameFriend = friends.getUserConfirm().getFullName();
+                }
+            }
+
             friendRepo.deleteRequestAddFriend(userInviteId, userConfirmId);
+            NotificationsDTO notificationsDTO = new NotificationsDTO(
+                    String.format(ContentNotifications.NOTI_CONTENT_CANCEL_FRIEND, nameFriend),
+                    TypeNotifications.NOTI_TYPE_CANCEL_FRIEND, userId);
+            notificationsService.createNoti(notificationsDTO);
         } catch (Exception e) {
             e.printStackTrace();
         }
