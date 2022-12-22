@@ -17,6 +17,7 @@ public class ContentNotifications {
     public static final String NOTI_CONTENT_ADD_MEMBER_GROUP = "%s đã thêm bạn vào nhóm %s";
     public static final String NOTI_CONTENT_JOIN_GROUP = "%s đã yêu cầu tham gia nhóm %s";
     public static final String NOTI_CONTENT_CONFIRM_MEMBER = "%s đã phê duyệt yêu cầu tham gia nhóm %s của bạn";
+    public static final String NOTI_CONTENT_ADMIN_JOIN_GROUP = "Bạn đã được thêm vào nhóm %s";
   
 
 }

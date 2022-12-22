@@ -90,7 +90,7 @@ public class GroupServiceImpl implements GroupService {
     private RoomChatRepo roomChatRepo;
 
     @Autowired
-	private UploadToCloud uploadToCloud;
+    private UploadToCloud uploadToCloud;
 
     @Override
     public PageObject<GroupDTO> getAll(Integer page, Integer limit) {
@@ -198,11 +198,11 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO createGroup(GroupDTO group) {
-        try{
+        try {
             String urlFile = uploadToCloud.saveFile(group.getAvatarFile());
             group.setAvatar(urlFile);
             group.setAvatarFile(null);
-        }catch(Exception e){
+        } catch (Exception e) {
         }
 
         try {
@@ -212,7 +212,10 @@ public class GroupServiceImpl implements GroupService {
             HttpEntity entity = new HttpEntity(group, header);
             ResponseEntity<GroupDTO> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity,
                     GroupDTO.class);
-            
+            NotificationsDTO notiDTO = new NotificationsDTO(
+                    String.format(ContentNotifications.NOTI_CONTENT_ADMIN_JOIN_GROUP, group.getName()),
+                    TypeNotifications.NOTI_TYPE_ADMIN_JOIN_GROUP, group.getAdminId());
+            notificationsService.createNoti(notiDTO);
             return responseEntity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
@@ -583,7 +586,7 @@ public class GroupServiceImpl implements GroupService {
                 message.setContent(encodedString);
                 message.setContact(contact);
                 messageRepo.save(message);
-    
+
             }
 
             return entity.getBody();
