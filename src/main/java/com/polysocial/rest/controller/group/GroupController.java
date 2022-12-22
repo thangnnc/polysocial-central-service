@@ -253,7 +253,7 @@ public class GroupController {
     public ResponseEntity leaveGroup(@RequestParam("groupId") Long groupId, @RequestHeader("Authorization") String token) {
         try {
             groupService.memberLeaveGroup(groupId, jwt.getIdFromJWT(token));
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity("Leave group success", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }

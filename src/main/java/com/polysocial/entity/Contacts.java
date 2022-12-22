@@ -26,6 +26,8 @@ public class Contacts implements Serializable {
 
     private Long roomId;
 
+    private Boolean status = true;
+
 
     public Contacts(Long userId, Long roomId) {
         this.userId = userId;

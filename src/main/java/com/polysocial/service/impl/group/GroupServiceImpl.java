@@ -607,7 +607,6 @@ public class GroupServiceImpl implements GroupService {
             restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, null,
                     Object.class);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
