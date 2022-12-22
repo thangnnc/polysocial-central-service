@@ -246,20 +246,13 @@ public class UserServiceImpl implements UserService {
                 return null;
             }
             List<Friends> list = friendRepo.getFriendByUserInviteIdAndUserConfirm(userConfirmId, user.getUserId());
+            
             if (list.size() == 0) {
                 Users userConfirm = userRepo.findByUserId(user.getUserId());
                 Users userInvite = userRepo.findByUserId(userConfirmId);
                 FriendDetailDTO friendDetailDTO = new FriendDetailDTO(user.getUserId(), userConfirmId,
                         userInvite.getFullName(), userConfirm.getFullName(), userInvite.getAvatar(),
                         userConfirm.getAvatar());
-
-                // Groups group = new Groups();
-                // group.setName(userConfirm.getFullName() + "," + userInvite.getFullName());
-                // group.setTotalMember(0L);
-                // group.setDescription("Friend with chat rooms");
-                // group.setClassName("Friend Chat");
-
-                // Groups groupCreate = groupRepo.save(group);
                 Friends friend = new Friends();
                 friend.setUserInviteId(userInvite.getUserId());
                 friend.setUserConfirmId(userConfirm.getUserId());
@@ -272,8 +265,10 @@ public class UserServiceImpl implements UserService {
                         TypeNotifications.NOTI_TYPE_ADD_FRIEND, userConfirm.getUserId());
                 notificationsService.createNoti(notificationsDTO);
                 return friendDetailDTO;
+            }else{
+                FriendDetailDTO friendDetailDTO = modelMapper.map(list.get(0), FriendDetailDTO.class);
+                return friendDetailDTO;
             }
-            return null;
         } catch (Exception e) {
             Users user = userRepo.findByStudentCode(studentCode);
             Users userConfirm = userRepo.findByUserId(user.getUserId());
@@ -371,7 +366,9 @@ public class UserServiceImpl implements UserService {
                     userId = userInviteId;
                     nameFriend = friends.getUserConfirm().getFullName();
                 }
-                friendRepo.deleteRequestAddFriend(userInviteId, userConfirmId);
+                friends.setIsFriend(false);
+                friends.setStatus(false);
+                friendRepo.save(friends);
                 NotificationsDTO notificationsDTO = new NotificationsDTO(
                         String.format(ContentNotifications.NOTI_DELETE_FRIEND, nameFriend),
                         TypeNotifications.NOTI_TYPE_DELETE_FRIEND, userId);

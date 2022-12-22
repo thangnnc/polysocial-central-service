@@ -32,6 +32,8 @@ public class Friends implements Serializable {
 
     private LocalDateTime createdDate = LocalDateTime.now();
 
+    private Boolean isFriend  = true;
+
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
