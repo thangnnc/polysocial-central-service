@@ -8,6 +8,7 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -28,6 +29,8 @@ public class Friends implements Serializable {
     private Groups group;
 
     private Boolean status = false;
+
+    private LocalDateTime createdDate = LocalDateTime.now();
 
 
     @JsonIgnore

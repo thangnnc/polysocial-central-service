@@ -29,7 +29,7 @@ public interface FriendRepo extends JpaRepository<Friends, Long> {
     @Query("DELETE Friends o WHERE o.userInvite.userId =?1 and o.userConfirm.userId =?2 or o.userConfirm.userId =?1 and o.userInvite.userId =?2")
     void deleteRequestAddFriend(Long userInviteId, Long userConfirmId);
 
-    @Query("SELECT o FROM Friends o WHERE o.status = false and o.userConfirm.userId =?1")
+    @Query("SELECT o FROM Friends o WHERE o.status = false and o.userConfirm.userId =?1 order by o.createdDate desc")
     List<Friends> getAllRequestAddFriend(Long userId);
 
     @Query("SELECT o FROM Friends o WHERE o.status = false and o.userInvite.userId =?1")
