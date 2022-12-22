@@ -344,7 +344,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteRequestAddFriend(Long userConfirmId, Long userInviteId) {
+    public void deleteRequestAddFriend(Long userInviteId,Long userConfirmId) {
         try {
             friendRepo.deleteRequestAddFriend(userInviteId, userConfirmId);
         } catch (Exception e) {
