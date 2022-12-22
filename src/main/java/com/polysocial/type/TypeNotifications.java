@@ -15,5 +15,6 @@ public class TypeNotifications {
     public static final Integer NOTI_TYPE_ADD_MEMBER_GROUP = 12;
     public static final Integer NOTI_TYPE_JOIN_GROUP = 13;
     public static final Integer NOTI_TYPE_CONFIRM_MEMBER = 14;
+    public static final Integer NOTI_TYPE_ADMIN_JOIN_GROUP = 15;
 
 }
