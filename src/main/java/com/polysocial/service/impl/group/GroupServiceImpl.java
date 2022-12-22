@@ -203,7 +203,6 @@ public class GroupServiceImpl implements GroupService {
             group.setAvatar(urlFile);
             group.setAvatarFile(null);
         }catch(Exception e){
-            e.printStackTrace();
         }
 
         try {
@@ -213,7 +212,7 @@ public class GroupServiceImpl implements GroupService {
             HttpEntity entity = new HttpEntity(group, header);
             ResponseEntity<GroupDTO> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity,
                     GroupDTO.class);
-
+            
             return responseEntity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
