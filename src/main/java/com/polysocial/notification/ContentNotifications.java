@@ -19,7 +19,8 @@ public class ContentNotifications {
     public static final String NOTI_CONTENT_CONFIRM_MEMBER = "%s đã phê duyệt yêu cầu tham gia nhóm %s của bạn";
     public static final String NOTI_CONTENT_ADMIN_JOIN_GROUP = "Bạn đã được thêm vào nhóm %s";
     public static final String NOTI_CONTENT_CANCEL_FRIEND = "%s đã hủy lời mời kết bạn";
-    public static final String NOTI_DELETE_FRIEND = "%s đã xóa bạn khỏi danh sách bạn bè";
+    public static final String NOTI_DELETE_FRIEND = "%s đã xóa bạn khỏi danh sách bạn bè, giờ đây 2 bạn không thể nhắn tin cho nhau";
+    public static final String NOTI_DELETE_FRIEND2 = "Bạn đã xóa %s khỏi danh sách bạn bè, giờ đây 2 bạn không thể nhắn tin cho nhau";
   
 
 }

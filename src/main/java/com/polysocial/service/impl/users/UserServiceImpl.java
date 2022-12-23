@@ -457,6 +457,10 @@ public class UserServiceImpl implements UserService {
                     String.format(ContentNotifications.NOTI_DELETE_FRIEND, userRepo.findById(userId).get().getFullName()),
                     TypeNotifications.NOTI_TYPE_DELETE_FRIEND, userFriendId);
             notificationsService.createNoti(notificationsDTO);
+            NotificationsDTO notificationsDTO2 = new NotificationsDTO(
+                    String.format(ContentNotifications.NOTI_DELETE_FRIEND2, userRepo.findById(userFriendId).get().getFullName()),
+                    TypeNotifications.NOTI_TYPE_DELETE_FRIEND, userFriendId);
+            notificationsService.createNoti(notificationsDTO2);
         } catch (Exception e) {
             e.printStackTrace();
         }
