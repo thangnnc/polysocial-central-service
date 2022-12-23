@@ -249,10 +249,10 @@ public class GroupController {
         }
     }
 
-    @DeleteMapping(value = CentralAPI.API_LEAVE_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity leaveGroup(@RequestParam("groupId") Long groupId, @RequestHeader("Authorization") String token) {
+    @PutMapping(value = CentralAPI.API_LEAVE_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity leaveGroup(@RequestParam("groupId") Long groupId, @RequestParam Long userId) {
         try {
-            groupService.memberLeaveGroup(groupId, jwt.getIdFromJWT(token));
+            groupService.memberLeaveGroup(groupId,userId);
             return new ResponseEntity("Leave group success", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);

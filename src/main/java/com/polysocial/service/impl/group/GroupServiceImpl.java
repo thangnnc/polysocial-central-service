@@ -604,7 +604,7 @@ public class GroupServiceImpl implements GroupService {
                     .queryParam("groupId", groupId)
                     .queryParam("userId", userId)
                     .build();
-            restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, null,
+            restTemplate.exchange(builder.toUriString(), HttpMethod.PUT, null,
                     Object.class);
         } catch (Exception e) {
         }
