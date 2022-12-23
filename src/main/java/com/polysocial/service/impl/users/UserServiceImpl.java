@@ -80,6 +80,10 @@ public class UserServiceImpl implements UserService {
     public UserFriendDTO getOneUser(Long userId, Long userBytoken) {
         Users user = userRepo.findByUserId(userId);
         UserFriendDTO userDTO = modelMapper.map(user, UserFriendDTO.class);
+        List<Friends> friend = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userBytoken);
+        if(friend.size() != 0){
+            userDTO.setIsFriend(friend.get(0).getIsFriend());
+        }
         try {
             List<Friends> th1 = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userBytoken);
             if (th1.size() == 0) {

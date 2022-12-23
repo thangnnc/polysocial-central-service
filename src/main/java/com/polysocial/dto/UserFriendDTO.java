@@ -38,4 +38,6 @@ public class UserFriendDTO implements Serializable{
 
     private Long userInviteId;
 
+    private Boolean isFriend;
+
 }
