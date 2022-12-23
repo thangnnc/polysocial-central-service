@@ -226,6 +226,7 @@ public class GroupController {
             List<MemberDTO2> response = groupService.getAllMemberJoinGroupFalse(groupId);
             return new ResponseEntity(response, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
