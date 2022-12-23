@@ -103,6 +103,7 @@ public class UserServiceImpl implements UserService {
             if(friend.get(0).getIsFriend() ==false){
                 userDTO.setStatus(2L);
         }
+    }
         return userDTO;
     }
 
