@@ -18,4 +18,6 @@ public class FriendDTO implements Serializable{
     private Long userConfirmId;
 
     private Boolean status;
+
+    private Long userId;
 }

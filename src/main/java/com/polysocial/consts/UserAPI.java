@@ -38,4 +38,6 @@ public class UserAPI {
 
     public static final String API_GET_ALL_USER_NOT_STUDENT = "/user/get-all-user-not-student";
 
+    public static final String API_UNFRIEND = "/user/unfriend";
+
 }

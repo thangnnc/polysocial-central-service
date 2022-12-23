@@ -605,8 +605,16 @@ public class GroupServiceImpl implements GroupService {
                     .queryParam("userId", userId)
                     .build();
             restTemplate.exchange(builder.toUriString(), HttpMethod.PUT, null,
-                    Object.class);
+                    String.class);
+            NotificationsDTO notiDTO = new NotificationsDTO(
+                    String.format(ContentNotifications.NOTI_CONTENT_DELETE_USER_GROUP,
+                            userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get()
+                                    .getFullName(),
+                            groupRepo.findById(groupId).get().getName()),
+                    TypeNotifications.NOTI_TYPE_DELETE_MEMBER_GROUP, userId);
+            notificationsService.createNoti(notiDTO);
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

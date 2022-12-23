@@ -16,7 +16,7 @@ public interface FriendRepo extends JpaRepository<Friends, Long> {
     @Query("SELECT o FROM Friends o WHERE (o.userInvite.userId =?1 and o.userConfirm.userId =?2) or (o.userConfirm.userId =?1 and o.userInvite.userId =?2)")
     List<Friends> getFriendByUserInviteIdAndUserConfirm(Long userInviteId, Long userConfirm);
 
-    @Query("SELECT o FROM Friends o WHERE o.status = true and (o.userInvite.userId =?1 or o.userConfirm.userId =?1)")
+    @Query("SELECT o FROM Friends o WHERE o.status = true and (o.userInvite.userId =?1 or o.userConfirm.userId =?1) and o.isFriend = true")
     List<Friends> getAllFriends(Long userId);
 
     @Modifying
@@ -43,5 +43,11 @@ public interface FriendRepo extends JpaRepository<Friends, Long> {
 
     @Query("SELECT o FROM Friends o WHERE o.userConfirm.userId =?1 and o.userInvite.userId =?2")
     Friends findFriendByUserConfirmIdAndUserInviteId(Long userConfirmId, Long userInviteId);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Friends o SET o.isFriend = 0 WHERE o.userInvite.userId =?1 and o.userConfirm.userId =?2 or o.userConfirm.userId =?1 and o.userInvite.userId =?2")
+    void deleteFriend(Long userInviteId, Long userConfirmId);
+
 
 }

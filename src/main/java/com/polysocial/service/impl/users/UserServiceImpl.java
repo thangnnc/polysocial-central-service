@@ -441,4 +441,26 @@ public class UserServiceImpl implements UserService {
         return listDTO;
     }
 
+    @Override
+    public void deleteFriend(Long userId, Long userFriendId) {
+        try {
+            friendRepo.deleteFriend(userId, userFriendId);
+            Friends fr = friendRepo.getFriendByUserInviteIdAndUserConfirm(userFriendId, userId).get(0);
+            Long roomId = roomChatRepo.getRoomChatByGroupId(fr.getGroup().getGroupId()).getRoomId();
+            Contacts contact = contactRepo.getContactByUserIdAndRoomIdContacts(userId,roomId).get(0);
+            contact.setStatus(false);
+            contactRepo.save(contact);
+            Contacts contact2 = contactRepo.getContactByUserIdAndRoomIdContacts(userFriendId,roomId).get(0);
+            contact2.setStatus(false);
+            contactRepo.save(contact2);
+            NotificationsDTO notificationsDTO = new NotificationsDTO(
+                    String.format(ContentNotifications.NOTI_DELETE_FRIEND, userRepo.findById(userId).get().getFullName()),
+                    TypeNotifications.NOTI_TYPE_DELETE_FRIEND, userFriendId);
+            notificationsService.createNoti(notificationsDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+    }
+
 }

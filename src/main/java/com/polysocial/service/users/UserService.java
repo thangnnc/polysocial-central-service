@@ -36,4 +36,6 @@ public interface UserService {
 
     List<UsersDTO> getAllUserNotStudent();
 
+    void deleteFriend(Long userId, Long userFriendId);
+
 }

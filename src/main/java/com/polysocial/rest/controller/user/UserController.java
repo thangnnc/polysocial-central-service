@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -173,6 +174,17 @@ public class UserController {
     public ResponseEntity getAllUserNotStudent(){
         try{
             return ResponseEntity.ok(userService.getAllUserNotStudent());
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(UserAPI.API_UNFRIEND)
+    public ResponseEntity unFriend(@RequestBody FriendDTO friendDTO, @RequestHeader("Authorization") String token){
+        try{
+            userService.deleteFriend(jwt.getIdFromJWT(token), friendDTO.getUserId());
+            return ResponseEntity.ok("Unfriend success");
         }catch(Exception e){
             e.printStackTrace();
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
