@@ -81,9 +81,7 @@ public class UserServiceImpl implements UserService {
         Users user = userRepo.findByUserId(userId);
         UserFriendDTO userDTO = modelMapper.map(user, UserFriendDTO.class);
         List<Friends> friend = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userBytoken);
-        if(friend.size() != 0){
-            userDTO.setIsFriend(friend.get(0).getIsFriend());
-        }
+        
         try {
             List<Friends> th1 = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userBytoken);
             if (th1.size() == 0) {
@@ -99,6 +97,11 @@ public class UserServiceImpl implements UserService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        if(friend.size() != 0){
+            userDTO.setIsFriend(friend.get(0).getIsFriend());
+            if(friend.get(0).getIsFriend() ==false){
+                userDTO.setStatus(2L);
         }
         return userDTO;
     }
@@ -250,7 +253,7 @@ public class UserServiceImpl implements UserService {
                 return null;
             }
             List<Friends> list = friendRepo.getFriendByUserInviteIdAndUserConfirm(userConfirmId, user.getUserId());
-            
+
             if (list.size() == 0) {
                 Users userConfirm = userRepo.findByUserId(user.getUserId());
                 Users userInvite = userRepo.findByUserId(userConfirmId);
@@ -269,7 +272,7 @@ public class UserServiceImpl implements UserService {
                         TypeNotifications.NOTI_TYPE_ADD_FRIEND, userConfirm.getUserId());
                 notificationsService.createNoti(notificationsDTO);
                 return friendDetailDTO;
-            }else{
+            } else {
                 FriendDetailDTO friendDetailDTO = modelMapper.map(list.get(0), FriendDetailDTO.class);
                 return friendDetailDTO;
             }
@@ -357,7 +360,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteRequestAddFriend(Long userInviteId,Long userConfirmId) {
+    public void deleteRequestAddFriend(Long userInviteId, Long userConfirmId) {
         try {
             Friends friends = friendRepo.getFriendByUserInviteIdAndUserConfirm(userInviteId, userConfirmId).get(0);
             Long userId = 0L;
@@ -415,7 +418,7 @@ public class UserServiceImpl implements UserService {
         }
         return listDTO;
     }
-    
+
     @Override
     public List<FriendDetailDTO> getAllRequestAddFriendByUserIntive(Long userId) {
         List<Friends> list = friendRepo.getAllRequestAddFriendByUserInviteId(userId);
@@ -451,24 +454,26 @@ public class UserServiceImpl implements UserService {
             friendRepo.deleteFriend(userId, userFriendId);
             Friends fr = friendRepo.getFriendByUserInviteIdAndUserConfirm(userFriendId, userId).get(0);
             Long roomId = roomChatRepo.getRoomChatByGroupId(fr.getGroup().getGroupId()).getRoomId();
-            Contacts contact = contactRepo.getContactByUserIdAndRoomIdContacts(userId,roomId).get(0);
+            Contacts contact = contactRepo.getContactByUserIdAndRoomIdContacts(userId, roomId).get(0);
             contact.setStatus(false);
             contactRepo.save(contact);
-            Contacts contact2 = contactRepo.getContactByUserIdAndRoomIdContacts(userFriendId,roomId).get(0);
+            Contacts contact2 = contactRepo.getContactByUserIdAndRoomIdContacts(userFriendId, roomId).get(0);
             contact2.setStatus(false);
             contactRepo.save(contact2);
             NotificationsDTO notificationsDTO = new NotificationsDTO(
-                    String.format(ContentNotifications.NOTI_DELETE_FRIEND, userRepo.findById(userId).get().getFullName()),
+                    String.format(ContentNotifications.NOTI_DELETE_FRIEND,
+                            userRepo.findById(userId).get().getFullName()),
                     TypeNotifications.NOTI_TYPE_DELETE_FRIEND, userFriendId);
             notificationsService.createNoti(notificationsDTO);
             NotificationsDTO notificationsDTO2 = new NotificationsDTO(
-                    String.format(ContentNotifications.NOTI_DELETE_FRIEND2, userRepo.findById(userFriendId).get().getFullName()),
+                    String.format(ContentNotifications.NOTI_DELETE_FRIEND2,
+                            userRepo.findById(userFriendId).get().getFullName()),
                     TypeNotifications.NOTI_TYPE_DELETE_FRIEND, userId);
             notificationsService.createNoti(notificationsDTO2);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
     }
 
 }
