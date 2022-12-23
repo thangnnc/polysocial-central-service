@@ -21,7 +21,7 @@ public interface FriendRepo extends JpaRepository<Friends, Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Friends o SET o.status = 1 and o.isFriend = 1 WHERE o.userInvite.userId =?1 and o.userConfirm.userId =?2")
+    @Query("UPDATE Friends o SET o.status = 1, o.isFriend = 1 WHERE o.userInvite.userId =?1 and o.userConfirm.userId =?2")
     void acceptFriend(Long userInviteId, Long userConfirmId);
 
     @Modifying
