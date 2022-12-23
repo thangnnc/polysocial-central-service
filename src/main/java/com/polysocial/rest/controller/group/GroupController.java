@@ -29,6 +29,7 @@ import com.polysocial.dto.MemberGroupDTO;
 import com.polysocial.dto.PageObject;
 import com.polysocial.dto.StudentDTO;
 import com.polysocial.dto.UserDTO;
+import com.polysocial.dto.UserGroupDTO;
 import com.polysocial.entity.Members;
 import com.polysocial.service.group.GroupService;
 import com.twilio.rest.api.v2010.account.queue.Member;
@@ -250,9 +251,9 @@ public class GroupController {
     }
 
     @PutMapping(value = CentralAPI.API_LEAVE_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity leaveGroup(@RequestParam("groupId") Long groupId, @RequestParam Long userId) {
+    public ResponseEntity leaveGroup(@RequestBody UserGroupDTO userGroup) {
         try {
-            groupService.memberLeaveGroup(groupId,userId);
+            groupService.memberLeaveGroup(userGroup.getGroupId(),userGroup.getUserId());
             return new ResponseEntity("Leave group success", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
