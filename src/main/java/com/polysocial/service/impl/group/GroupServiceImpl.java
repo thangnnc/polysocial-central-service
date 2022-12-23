@@ -616,6 +616,16 @@ public class GroupServiceImpl implements GroupService {
                             groupRepo.findById(groupId).get().getName()),
                     TypeNotifications.NOTI_TYPE_DELETE_MEMBER_GROUP, userId);
             notificationsService.createNoti(notiDTO);
+
+            Long roomId = roomChatRepo.getRoomChatByGroupId(groupId).getRoomId();
+            Contacts contact = contactRepo.getContactByUserIdAndRoomIdContacts(userId, roomId).get(0);
+            Messages message = new Messages(
+                    userRepo.findById(userId).get().getFullName() + " đã rời khỏi nhóm",
+                    false);
+            String encodedString = Base64.getEncoder().encodeToString(message.getContent().getBytes());
+            message.setContent(encodedString);
+            message.setContact(contact);
+            messageRepo.save(message);
         } catch (Exception e) {
             e.printStackTrace();
         }
