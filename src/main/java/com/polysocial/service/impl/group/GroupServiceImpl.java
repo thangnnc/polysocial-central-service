@@ -618,6 +618,12 @@ public class GroupServiceImpl implements GroupService {
             notificationsService.createNoti(notiDTO);
 
             Long roomId = roomChatRepo.getRoomChatByGroupId(groupId).getRoomId();
+            RoomChats room = roomChatRepo.findById(roomId).get();
+            String roomMess = Base64.getEncoder().encodeToString("Vừa có thành viên rời nhóm".getBytes());
+            room.setLastMessage(roomMess);
+            LocalDateTime now = LocalDateTime.now();
+            room.setLastUpdateDate(now);
+            roomChatRepo.save(room);
             Contacts contact = contactRepo.getContactByUserIdAndRoomIdContacts(userId, roomId).get(0);
             Messages message = new Messages(
                     userRepo.findById(userId).get().getFullName() + " đã rời khỏi nhóm",
