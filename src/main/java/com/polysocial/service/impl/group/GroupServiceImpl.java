@@ -283,14 +283,17 @@ public class GroupServiceImpl implements GroupService {
             String encodedStringRoom = Base64.getEncoder().encodeToString(room.getLastMessage().getBytes());
             room.setLastMessage(encodedStringRoom);
             roomChatRepo.save(room);
+            Long adminId = memberRepo.getTeacherByMember(groupId).getUserId();
             for (Members members : member) {
                 String nameTeacher = userRepo.findById(memberRepo.getTeacherByMember(groupId).getUserId()).get()
                         .getFullName();
                 String nameGroup = groupRepo.findById(groupId).get().getName();
-                NotificationsDTO notiDTO = new NotificationsDTO(
-                        String.format(ContentNotifications.NOTI_CONTENT_ADD_MEMBER_GROUP, nameTeacher, nameGroup),
-                        TypeNotifications.NOTI_TYPE_ADD_MEMBER_GROUP, members.getUserId());
-                notificationsService.createNoti(notiDTO);
+                if (members.getUserId() != adminId) {
+                    NotificationsDTO notiDTO = new NotificationsDTO(
+                            String.format(ContentNotifications.NOTI_CONTENT_ADD_MEMBER_GROUP, nameTeacher, nameGroup),
+                            TypeNotifications.NOTI_TYPE_ADD_MEMBER_GROUP, members.getUserId());
+                    notificationsService.createNoti(notiDTO);
+                }
 
                 List<Contacts> getContact = contactRepo.getContactByUserIdAndRoomIdContacts(members.getUserId(),
                         roomChatId);
