@@ -33,6 +33,7 @@ public class UserUpdateDTO implements Serializable{
     private String major;
     private String course;
     private String roleName; 
+    private String studentCode;
     
     public void formatEndDate() {
     	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");

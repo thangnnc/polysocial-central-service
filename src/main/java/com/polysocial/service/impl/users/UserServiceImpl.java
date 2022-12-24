@@ -527,6 +527,10 @@ public class UserServiceImpl implements UserService {
         userUpdateDTO.setEmail(user.getEmail());
         userUpdateDTO.setFullName(user.getFullName());
         userUpdateDTO.setBirthdays(null);
+        userUpdateDTO.setCourse(userDetail.getCourse());
+        userUpdateDTO.setAddress(userDetail.getAddress());
+        userUpdateDTO.setGender(userDetail.isGender());
+        userUpdateDTO.setStudentCode(user.getStudentCode());
         return userUpdateDTO;
 
     }
@@ -541,7 +545,6 @@ public class UserServiceImpl implements UserService {
                 return modelMapper.map(user, UserUpdateDTO.class);
             }
         }
-        System.out.println("false");
         return null;
     }
 

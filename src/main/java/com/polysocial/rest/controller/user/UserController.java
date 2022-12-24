@@ -209,7 +209,6 @@ public class UserController {
     @PostMapping(UserAPI.API_UPDATE_ACCOUNT)
     public ResponseEntity updateAccount(@ModelAttribute UserUpdateDTO userUpdateDTO) {
         try {
-            System.out.println(userUpdateDTO.getFullName());
             return ResponseEntity.ok(userService.updateProfile(userUpdateDTO));
         } catch (Exception e) {
             e.printStackTrace();
