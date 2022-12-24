@@ -530,6 +530,7 @@ public class UserServiceImpl implements UserService {
         userUpdateDTO.setCourse(userDetail.getCourse());
         userUpdateDTO.setAddress(userDetail.getAddress());
         userUpdateDTO.setGender(userDetail.isGender());
+        userUpdateDTO.setMajor(userDetail.getMajor());
         userUpdateDTO.setStudentCode(user.getStudentCode());
         return userUpdateDTO;
 
