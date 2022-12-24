@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 import com.polysocial.repo.UserRepo;
 
 @Controller
-public class SendMail {
+public class SendMailDeadline {
     @Autowired
     UserRepo userRepo ;
     
@@ -71,7 +71,7 @@ public class SendMail {
           message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
           // Set Subject: header field
-          message.setSubject("Restore Password!");
+          message.setSubject("Bạn có một bài tập mới");
           TemplateTest temp = new TemplateTest();
           String sb = temp.setContent(name, password);
           // Now set the actual message

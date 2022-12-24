@@ -75,9 +75,9 @@ public class UserController {
     }
 
     @GetMapping(UserAPI.API_GET_ALL_FRIEND)
-    public ResponseEntity getAllFriends(@RequestHeader("Authorization") String token) {
+    public ResponseEntity getAllFriends(@RequestParam Long userId) {
         try{
-            List<FriendDetailDTO> list = userService.getAllFriend(jwt.getIdFromJWT(token));
+            List<FriendDetailDTO> list = userService.getAllFriend(userId);
             return ResponseEntity.ok(list);
         }catch(Exception e){
             e.printStackTrace();
