@@ -23,6 +23,7 @@ import com.polysocial.dto.FriendDetailDTO;
 import com.polysocial.dto.UserDTO;
 import com.polysocial.dto.UserFriendDTO;
 import com.polysocial.dto.UserUpdateDTO;
+import com.polysocial.dto.UserUpdatePasswordDTO;
 import com.polysocial.repo.FriendRepo;
 import com.polysocial.service.users.UserService;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -206,11 +207,35 @@ public class UserController {
     }
 
     @PostMapping(UserAPI.API_UPDATE_ACCOUNT)
-    public ResponseEntity updateAccount(@ModelAttribute UserUpdateDTO userUpdateDTO){
-        try{
+    public ResponseEntity updateAccount(@ModelAttribute UserUpdateDTO userUpdateDTO) {
+        try {
             System.out.println(userUpdateDTO.getFullName());
             return ResponseEntity.ok(userService.updateProfile(userUpdateDTO));
-        }catch(Exception e){
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(UserAPI.API_GET_ALL_USER_USERDETAIL)
+    public ResponseEntity getAllUserDetail() {
+        try {
+            return ResponseEntity.ok(userService.getAllUserFull());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(UserAPI.API_UPDATE_PASSWORD)
+    public ResponseEntity updatePassword(@ModelAttribute UserUpdatePasswordDTO userDTO) {
+        try {
+            UserUpdateDTO user = userService.updatePassword(userDTO);
+            if(user == null){
+                return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+            }
+            return ResponseEntity.ok("Update password success");
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }

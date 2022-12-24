@@ -21,6 +21,7 @@ import com.polysocial.dto.NotificationsDTO;
 import com.polysocial.dto.UserDTO;
 import com.polysocial.dto.UserFriendDTO;
 import com.polysocial.dto.UserUpdateDTO;
+import com.polysocial.dto.UserUpdatePasswordDTO;
 import com.polysocial.dto.UsersDTO;
 import com.polysocial.entity.Contacts;
 import com.polysocial.entity.Friends;
@@ -528,6 +529,42 @@ public class UserServiceImpl implements UserService {
         userUpdateDTO.setBirthdays(null);
         return userUpdateDTO;
 
+    }
+
+    @Override
+    public UserUpdateDTO updatePassword(UserUpdatePasswordDTO userDTO) {
+        Users user = userRepo.findByUserId(userDTO.getUserId());
+        if (bCrypt.matches(userDTO.getOldPassword(), user.getPassword())) {
+            if (userDTO.getNewPassword().equals(userDTO.getConfirmPassword())) {
+                user.setPassword(bCrypt.encode(userDTO.getNewPassword()));
+                userRepo.save(user);
+                return modelMapper.map(user, UserUpdateDTO.class);
+            }
+        }
+        System.out.println("false");
+        return null;
+    }
+
+    @Override
+    public List<UserUpdateDTO> getAllUserFull() {
+        List<Users> list = userRepo.findAll();
+        List<UserUpdateDTO> listDTO = new ArrayList<>();
+        try{
+            for(int i = 0; i < list.size(); i++) {
+                UserUpdateDTO userUpdateDTO = modelMapper.map(list.get(i), UserUpdateDTO.class);
+                UserDetail userDetail = userDetailRepo.findByUserId(list.get(i).getUserId());
+                userUpdateDTO.setBirthday(userDetail.getBirthday());
+                userUpdateDTO.setAvatar(list.get(i).getAvatar());
+                userUpdateDTO.setGender(userDetail.isGender());
+                userUpdateDTO.setAddress(userDetail.getAddress());
+                userUpdateDTO.setEmail(list.get(i).getEmail());
+                userUpdateDTO.setFullName(list.get(i).getFullName());
+                listDTO.add(userUpdateDTO);
+            }
+        }catch(Exception e){
+
+        }
+        return listDTO;
     }
 
 }

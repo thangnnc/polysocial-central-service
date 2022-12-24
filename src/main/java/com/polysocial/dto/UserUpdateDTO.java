@@ -32,7 +32,8 @@ public class UserUpdateDTO implements Serializable{
     private String address;
     private String major;
     private String course;
-
+    private String roleName; 
+    
     public void formatEndDate() {
     	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     	this.birthday = LocalDateTime.parse(birthdays, formatter);

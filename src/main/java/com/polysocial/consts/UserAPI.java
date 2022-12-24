@@ -44,4 +44,8 @@ public class UserAPI {
 
     public static final String API_UPDATE_ACCOUNT = "/user/update-account";
 
+    public static final String API_GET_ALL_USER_USERDETAIL = "/user/get-all-user-userdetail";
+    
+    public static final String API_UPDATE_PASSWORD = "/user/update-password";
+
 }

@@ -7,6 +7,7 @@ import com.polysocial.dto.FriendDetailDTO;
 import com.polysocial.dto.UserDTO;
 import com.polysocial.dto.UserFriendDTO;
 import com.polysocial.dto.UserUpdateDTO;
+import com.polysocial.dto.UserUpdatePasswordDTO;
 import com.polysocial.dto.UsersDTO;
 import com.polysocial.entity.Friends;
 
@@ -42,5 +43,9 @@ public interface UserService {
     void resetPassword(String email);
 
     UserUpdateDTO updateProfile(UserUpdateDTO userUpdateDTO);
+
+    UserUpdateDTO updatePassword(UserUpdatePasswordDTO userDTO);
+
+    List<UserUpdateDTO> getAllUserFull();
 
 }
