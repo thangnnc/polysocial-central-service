@@ -40,4 +40,6 @@ public class UserAPI {
 
     public static final String API_UNFRIEND = "/user/unfriend";
 
+    public static final String API_RESET_PASSWORD = "/user/reset-password";
+
 }

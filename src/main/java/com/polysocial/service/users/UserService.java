@@ -38,4 +38,6 @@ public interface UserService {
 
     void deleteFriend(Long userId, Long userFriendId);
 
+    void resetPassword(String email);
+
 }

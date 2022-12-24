@@ -7,8 +7,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.polysocial.dto.ContactDTO;
@@ -37,6 +39,7 @@ import com.polysocial.service.group.GroupService;
 import com.polysocial.service.notifications.NotificationsService;
 import com.polysocial.service.users.UserService;
 import com.polysocial.type.TypeNotifications;
+import com.polysocial.utils.SendMail;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -67,6 +70,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ViewedStatusRepo viewedStatusRepo;
+
+    @Autowired
+    private BCryptPasswordEncoder bCrypt;
+
+    @Autowired
+    private SendMail sendMail;
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -100,6 +109,7 @@ public class UserServiceImpl implements UserService {
         }
         if(friend.size() != 0){
             userDTO.setIsFriend(friend.get(0).getIsFriend());
+            userDTO.setIsConfirm(friend.get(0).getStatus());
             if(friend.get(0).getIsFriend() ==false){
                 userDTO.setStatus(2L);
         }
@@ -475,6 +485,21 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void resetPassword(String email) {
+        try {
+            Users user = userRepo.findOneByEmail(email);
+            if(user == null ) return;
+            String password = RandomStringUtils.randomAlphanumeric(8);
+            user.setPassword(bCrypt.encode(password));
+            userRepo.save(user);
+            sendMail.sendMail(email, password);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
     }
 
 }

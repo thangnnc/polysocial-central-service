@@ -20,28 +20,30 @@ public class SendMail {
     @Autowired
     UserRepo userRepo ;
     
-  public void sendMail(String email) {
+  public void sendMail(String email, String password) {
    // Recipient's email ID needs to be mentioned.
       System.out.println("start ");
       String to =  email;
 //      String name = userRepo.findById(userRepo.getUserByEmail(email).getUserId()).get().getFullName();
 //      
-      String name = to;
+      String name = userRepo.findOneByEmail(email).getFullName();
       // Sender's email ID needs to be mentioned
       String from = "polysocial.network2022@gmail.com";
 
       // Assuming you are sending email from through gmails smtp
       String host = "smtp.gmail.com";
 
-      // Get system properties
-      Properties properties = System.getProperties();
+
 
       // Setup mail server
-      properties.put("mail.smtp.host", host);
-      properties.put("mail.smtp.port", "456");
-      properties.put("mail.smtp.auth", "true");
-      properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-      properties.put("mail.smtp.ssl.enable", "true");
+      Properties properties = System.getProperties();
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "465");
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.starttls.required", "true");
+        properties.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
 
       // Get the Session object.// and pass username and password
@@ -70,16 +72,13 @@ public class SendMail {
 
           // Set Subject: header field
           message.setSubject("Restore Password!");
-          String code = Math.round(Math.random() * 89999) + 10000+"";
           Template temp = new Template();
-          String sb = temp.setContent(name, code);
+          String sb = temp.setContent(name, password);
           // Now set the actual message
           message.setContent(sb,"text/html; charset=UTF-8");
 
-          System.out.println("sending...");
           // Send message
           Transport.send(message);
-          System.out.println("Sent message successfully....");
       } catch (MessagingException mex) {
           mex.printStackTrace();
       }

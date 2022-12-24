@@ -190,4 +190,15 @@ public class UserController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping(UserAPI.API_RESET_PASSWORD)
+    public ResponseEntity resetPassword(@RequestBody UserDTO userDTO){
+        try{
+            userService.resetPassword(userDTO.getEmail());
+            return ResponseEntity.ok("Reset password success");
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
