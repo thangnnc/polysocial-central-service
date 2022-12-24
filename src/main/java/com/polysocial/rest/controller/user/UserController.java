@@ -206,8 +206,8 @@ public class UserController {
         }
     }
 
-    @PostMapping(UserAPI.API_UPDATE_ACCOUNT)
-    public ResponseEntity updateAccount(@ModelAttribute UserUpdateDTO userUpdateDTO) {
+    @PutMapping(UserAPI.API_UPDATE_ACCOUNT)
+    public ResponseEntity updateAccount(@RequestBody UserUpdateDTO userUpdateDTO) {
         try {
             return ResponseEntity.ok(userService.updateProfile(userUpdateDTO));
         } catch (Exception e) {
