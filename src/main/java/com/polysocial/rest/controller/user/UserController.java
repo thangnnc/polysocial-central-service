@@ -228,7 +228,7 @@ public class UserController {
     }
 
     @PutMapping(UserAPI.API_UPDATE_PASSWORD)
-    public ResponseEntity updatePassword(@ModelAttribute UserUpdatePasswordDTO userDTO) {
+    public ResponseEntity updatePassword(@RequestBody UserUpdatePasswordDTO userDTO) {
         try {
             UserUpdateDTO user = userService.updatePassword(userDTO);
             if(user == null){
