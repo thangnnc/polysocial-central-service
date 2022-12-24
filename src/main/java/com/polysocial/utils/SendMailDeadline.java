@@ -20,7 +20,7 @@ public class SendMailDeadline {
     @Autowired
     UserRepo userRepo ;
     
-  public void sendMail(String email, String password) {
+  public void sendMail(String email, String nameUser, String groupName, String nameTeacher, String deadline) {
    // Recipient's email ID needs to be mentioned.
       System.out.println("start ");
       String to =  email;
@@ -66,14 +66,16 @@ public class SendMailDeadline {
 
           // Set From: header field of the header.
           message.setFrom(new InternetAddress(from));
+          //set utf-8
+          message.addHeader("Content-Type", "text/html; charset=UTF-8");
 
           // Set To: header field of the header.
           message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
           // Set Subject: header field
           message.setSubject("Bạn có một bài tập mới");
-          TemplateTest temp = new TemplateTest();
-          String sb = temp.setContent(name, password);
+          TemplateDealine temp = new TemplateDealine();
+          String sb = temp.setContent(nameUser, groupName, nameTeacher, deadline);
           // Now set the actual message
           message.setContent(sb,"text/html; charset=UTF-8");
 

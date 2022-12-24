@@ -1,5 +1,6 @@
 package com.polysocial.dto;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -16,7 +17,7 @@ import lombok.Setter;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ExercisesDTO {
+public class ExercisesDTO implements Serializable{
     private Long exId;
 
     private String content;
@@ -29,10 +30,10 @@ public class ExercisesDTO {
 
     private Long groupId;
 
-    public void formatEndDate() {
-    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    	this.endDate = LocalDateTime.parse(deadline, formatter);
+    // public void formatEndDate() {
+    // 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    // 	this.endDate = LocalDateTime.parse(deadline, formatter);
     	
-    }
+    // }
 
 }

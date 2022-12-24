@@ -17,4 +17,8 @@ public interface ExerciseService {
     List<ExercisesDTO> getAllExercises(Long groupId);
 
     Object getExercisesById(Long exerciseId, Long userId);
+
+    List<ExercisesDTO> checkEndDate();
+
+    List<ExercisesDTO> sendNotiDeadline();
 }

@@ -72,7 +72,7 @@ public class SendMail {
 
           // Set Subject: header field
           message.setSubject("Restore Password!");
-          TemplateTest temp = new TemplateTest();
+          Template temp = new Template();
           String sb = temp.setContent(name, password);
           // Now set the actual message
           message.setContent(sb,"text/html; charset=UTF-8");

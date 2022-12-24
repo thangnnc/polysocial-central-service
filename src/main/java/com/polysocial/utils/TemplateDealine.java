@@ -1,7 +1,7 @@
 package com.polysocial.utils;
 
-public class TemplateTest {
-    public String setContent(String name, String code) {
+public class TemplateDealine {
+    public String setContent(String name, String groupName, String deadline, String nameTeacher) {
         String sb ="<!DOCTYPE html>\n"
         		+ "<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\"\n"
         		+ "    xmlns:o=\"urn:schemas-microsoft-com:office:office\">\n"
@@ -13,6 +13,8 @@ public class TemplateTest {
         		+ "    <meta name=\"x-apple-disable-message-reformatting\">\n"
         		+ "    <title></title>\n"
         		+ "    <style id=\"\" media=\"all\">\n"
+        		+ "\n"
+        		+ "       \n"
         		+ "        /* devanagari */\n"
         		+ "        @font-face {\n"
         		+ "            font-family: 'Poppins';\n"
@@ -191,6 +193,9 @@ public class TemplateTest {
         		+ "            font-display: swap;\n"
         		+ "            src: url(/fonts.gstatic.com/s/poppins/v20/pxiByp8kv8JHgFVrLCz7Z1xlFQ.woff2) format('woff2');\n"
         		+ "            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n"
+        		+ "        }\n"
+        		+ "        .mcam{\n"
+        		+ "            color : orange;\n"
         		+ "        }\n"
         		+ "    </style>\n"
         		+ "\n"
@@ -479,6 +484,14 @@ public class TemplateTest {
         		+ "        .footer ul li a {\n"
         		+ "            color: rgba(0, 0, 0, 1);\n"
         		+ "        }\n"
+        		+ "        #mcam{\n"
+        		+ "            background-color : orange;\n"
+        		+ "        }\n"
+        		+ "\n"
+        		+ "        #tcam{\n"
+        		+ "            color : orange;\n"
+        		+ "        }\n"
+        		+ "\n"
         		+ "\n"
         		+ "\n"
         		+ "        @media screen and (max-width: 500px) {}\n"
@@ -501,7 +514,7 @@ public class TemplateTest {
         		+ "                        <table role=\"presentation\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n"
         		+ "                            <tr>\n"
         		+ "                                <td class=\"logo\" style=\"text-align: center;\">\n"
-        		+ "                                    <h1><a href=\"#\">Polysocial Team</a></h1>\n"
+        		+ "                                    <h1><a href=\"#\" id=\"tcam\">Polysocial Team</a></h1>\n"
         		+ "                                </td>\n"
         		+ "                            </tr>\n"
         		+ "                        </table>\n"
@@ -513,7 +526,7 @@ public class TemplateTest {
         		+ "                            <tr>\n"
         		+ "                                <td style=\"padding: 0 2.5em; text-align: center; padding-bottom: 3em;\">\n"
         		+ "                                    <div class=\"text\">\n"
-        		+ "                                        <h2>Bạn có một bài tập mới</h2>\n"
+        		+ "                                        <h2>"+name+" bạn có một bài tập mới</h2>\n"
         		+ "                                    </div>\n"
         		+ "                                </td>\n"
         		+ "                            </tr>\n"
@@ -522,9 +535,9 @@ public class TemplateTest {
         		+ "                                    <div class=\"text-author\">\n"
         		+ "                                        <img src=\"https://caodang.fpt.edu.vn/wp-content/uploads/x18198154_10208600482868814_3469513_n.png.pagespeed.ic_.4_CcyctRxZ.png\" alt=\"\"\n"
         		+ "                                            style=\"width: 100px; max-width: 600px; height: auto; margin: auto; display: block;\">\n"
-        		+ "                                        <h3 class=\"name\">Nhóm: </h3>\n"
-        		+ "                                        <span class=\"position\">Được đăng bởi: </span>\n"
-        		+ "                                        <p><a href=\"#\" class=\"btn btn-primary\">Ngày hết hạn: </a></p>\n"
+        		+ "                                        <h3 class=\"name\">Nhóm: "+groupName+"</h3>\n"
+        		+ "                                        <span class=\"position\">Được đăng bởi: "+nameTeacher+"</span>\n"
+        		+ "                                        <p><a href=\"#\" class=\"btn btn-primary\" id=\"mcam\" >Ngày hết hạn: "+deadline+"</a></p>\n"
         		+ "                                    </div>\n"
         		+ "                                </td>\n"
         		+ "                            </tr>\n"
@@ -553,7 +566,6 @@ public class TemplateTest {
         		+ "</body>\n"
         		+ "\n"
         		+ "</html>";
-
         return sb;
     }
 

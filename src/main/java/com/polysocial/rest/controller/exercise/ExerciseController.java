@@ -33,7 +33,6 @@ public class ExerciseController {
         try {
             return ResponseEntity.ok().body(exerciseService.createOne(e, jwt.getIdFromJWT(token)));
         } catch (Exception ex) {
-            System.out.println("weqwe");
             ex.printStackTrace();
             return ResponseEntity.badRequest().body(null);
         }
@@ -84,6 +83,26 @@ public class ExerciseController {
     public ResponseEntity getExercisesById(@RequestParam Long exId, @RequestHeader("Authorization") String token) {
         try {
             return ResponseEntity.ok().body(exerciseService.getExercisesById(exId, jwt.getIdFromJWT(token)));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @GetMapping(value = CentralAPI.API_CHECK_END_DATE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity checkEndDate() {
+        try {
+            return ResponseEntity.ok().body(exerciseService.checkEndDate());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @GetMapping(value = CentralAPI.API_SEND_NOTI_DEADLINE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity sendNotiDeadline() {
+        try {
+            return ResponseEntity.ok().body(exerciseService.sendNotiDeadline());
         } catch (Exception ex) {
             ex.printStackTrace();
             return ResponseEntity.badRequest().body(null);
