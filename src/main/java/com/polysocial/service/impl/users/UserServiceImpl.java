@@ -1,5 +1,6 @@
 package com.polysocial.service.impl.users;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
@@ -19,12 +20,14 @@ import com.polysocial.dto.FriendDetailDTO;
 import com.polysocial.dto.NotificationsDTO;
 import com.polysocial.dto.UserDTO;
 import com.polysocial.dto.UserFriendDTO;
+import com.polysocial.dto.UserUpdateDTO;
 import com.polysocial.dto.UsersDTO;
 import com.polysocial.entity.Contacts;
 import com.polysocial.entity.Friends;
 import com.polysocial.entity.Groups;
 import com.polysocial.entity.Messages;
 import com.polysocial.entity.RoomChats;
+import com.polysocial.entity.UserDetail;
 import com.polysocial.entity.Users;
 import com.polysocial.entity.ViewedStatus;
 import com.polysocial.notification.ContentNotifications;
@@ -33,6 +36,7 @@ import com.polysocial.repo.FriendRepo;
 import com.polysocial.repo.GroupRepo;
 import com.polysocial.repo.MessageRepo;
 import com.polysocial.repo.RoomChatRepo;
+import com.polysocial.repo.UserDetailRepo;
 import com.polysocial.repo.UserRepo;
 import com.polysocial.repo.ViewedStatusRepo;
 import com.polysocial.service.group.GroupService;
@@ -40,6 +44,7 @@ import com.polysocial.service.notifications.NotificationsService;
 import com.polysocial.service.users.UserService;
 import com.polysocial.type.TypeNotifications;
 import com.polysocial.utils.SendMail;
+import com.polysocial.utils.UploadToCloud;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -77,6 +82,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private SendMail sendMail;
 
+    @Autowired
+    private UserDetailRepo userDetailRepo;
+
+    @Autowired
+    private UploadToCloud uploadToCloud;
+
     @Override
     public List<UserDTO> getAllUsers() {
         List<Users> list = userRepo.findAll();
@@ -90,7 +101,7 @@ public class UserServiceImpl implements UserService {
         Users user = userRepo.findByUserId(userId);
         UserFriendDTO userDTO = modelMapper.map(user, UserFriendDTO.class);
         List<Friends> friend = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userBytoken);
-        
+
         try {
             List<Friends> th1 = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userBytoken);
             if (th1.size() == 0) {
@@ -107,13 +118,13 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(friend.size() != 0){
+        if (friend.size() != 0) {
             userDTO.setIsFriend(friend.get(0).getIsFriend());
             userDTO.setIsConfirm(friend.get(0).getStatus());
-            if(friend.get(0).getIsFriend() ==false){
+            if (friend.get(0).getIsFriend() == false) {
                 userDTO.setStatus(2L);
+            }
         }
-    }
         return userDTO;
     }
 
@@ -491,7 +502,8 @@ public class UserServiceImpl implements UserService {
     public void resetPassword(String email) {
         try {
             Users user = userRepo.findOneByEmail(email);
-            if(user == null ) return;
+            if (user == null)
+                return;
             String password = RandomStringUtils.randomAlphanumeric(8);
             user.setPassword(bCrypt.encode(password));
             userRepo.save(user);
@@ -499,7 +511,23 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
+    }
+
+    @Override
+    public UserUpdateDTO updateProfile(UserUpdateDTO userUpdateDTO) {
+        userUpdateDTO.formatEndDate();
+        UserDetail userDetail = modelMapper.map(userUpdateDTO, UserDetail.class);
+        Long userDetailId = userDetailRepo.findByUserId(userUpdateDTO.getUserId()).getUserDetailId();
+        userDetail.setUserDetailId(userDetailId);
+        userDetailRepo.save(userDetail);
+        Users user = userRepo.findByUserId(userUpdateDTO.getUserId());
+        userUpdateDTO.setAvatar(user.getAvatar());
+        userUpdateDTO.setEmail(user.getEmail());
+        userUpdateDTO.setFullName(user.getFullName());
+        userUpdateDTO.setBirthdays(null);
+        return userUpdateDTO;
+
     }
 
 }

@@ -42,4 +42,6 @@ public class UserAPI {
 
     public static final String API_RESET_PASSWORD = "/user/reset-password";
 
+    public static final String API_UPDATE_ACCOUNT = "/user/update-account";
+
 }
