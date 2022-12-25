@@ -10,7 +10,7 @@
 	<groupId>com</groupId>
 	<artifactId>polysocial-central-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>polysocial-central-service</name>
 	<description>polysocial-central-service</description>
 	<properties>
@@ -22,6 +22,10 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
