@@ -264,10 +264,10 @@ public class GroupServiceImpl implements GroupService {
             Files.write(tempFile, file.getBytes());
             File fileToSend = tempFile.toFile();
             MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
-            Long teacherId = memberRepo.getTeacherByMember(groupId).getUserId();
+            Members teacherId = memberRepo.getTeacherByMember(groupId);
             parameters.add("file", new FileSystemResource(fileToSend));
             parameters.add("groupId", groupId);
-            parameters.add("teacherId", teacherId);
+            parameters.add("teacherId", teacherId.getUserId());
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "multipart/form-data");
             HttpEntity httpEntity = new HttpEntity<>(parameters, headers);

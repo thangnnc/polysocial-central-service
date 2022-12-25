@@ -141,44 +141,49 @@ public class UserServiceImpl implements UserService {
     public List<FriendDetailDTO> getAllFriend(Long userId) {
         List<Friends> list = friendRepo.getAllFriends(userId);
         List<FriendDetailDTO> listDTO = new ArrayList<>();
-        for (Friends friend : list) {
-            Users userInvite = userRepo.findById(friend.getUserInviteId()).get();
-            Users userConfirm = userRepo.findById(friend.getUserConfirmId()).get();
-            Long roomChatId = roomChatRepo.getRoomChatByGroupId(friend.getGroup().getGroupId()).getRoomId();
-            FriendDetailDTO friendDTO = new FriendDetailDTO(userConfirm.getUserId(), userInvite.getUserId(),
-                    userConfirm.getFullName(), userInvite.getFullName(), userInvite.getAvatar(),
-                    userConfirm.getAvatar());
-            friendDTO.setRoomId(roomChatId);
-            Long group_Id = friendRepo.getGroupByUser(userConfirm.getUserId(), userInvite.getUserId()).get(0).getGroup()
-                    .getGroupId();
-            friendDTO.setGroupId(group_Id);
-            if (userId == userConfirm.getUserId()) {
-                friendDTO.setFriendName(userInvite.getFullName());
-                friendDTO.setFriendAvatar(userInvite.getAvatar());
-                friendDTO.setFriendEmail(userInvite.getEmail());
-                friendDTO.setFriendUserId(userInvite.getUserId());
-            } else {
-                friendDTO.setFriendName(userConfirm.getFullName());
-                friendDTO.setFriendAvatar(userConfirm.getAvatar());
-                friendDTO.setFriendEmail(userConfirm.getEmail());
-                friendDTO.setFriendUserId(userConfirm.getUserId());
-            }
-            friendDTO.setStatus(friend.getStatus());
-            Long groupId = friendRepo
-                    .getFriendByUserInviteIdAndUserConfirm(userInvite.getUserId(), userConfirm.getUserId()).get(0)
-                    .getGroup().getGroupId();
-            Long roomId = roomChatRepo.getRoomChatByGroupId(groupId).getRoomId();
-            List<Contacts> contacts = contactRepo.getContactByRoomId(roomId);
-            List<ContactDTO> listContactDTO = new ArrayList<>();
-            for (Contacts contact : contacts) {
-                Users user = userRepo.findById(contact.getUserId()).get();
-                ContactDTO contactDTO = new ContactDTO(user.getUserId(), user.getFullName(), user.getEmail(),
-                        user.getAvatar(), user.getStudentCode(), contact.getContactId());
-                listContactDTO.add(contactDTO);
-                friendDTO.setListContact(listContactDTO);
-            }
+        try {
+            for (Friends friend : list) {
+                Users userInvite = userRepo.findById(friend.getUserInviteId()).get();
+                Users userConfirm = userRepo.findById(friend.getUserConfirmId()).get();
+                Long roomChatId = roomChatRepo.getRoomChatByGroupId(friend.getGroup().getGroupId()).getRoomId();
+                FriendDetailDTO friendDTO = new FriendDetailDTO(userConfirm.getUserId(), userInvite.getUserId(),
+                        userConfirm.getFullName(), userInvite.getFullName(), userInvite.getAvatar(),
+                        userConfirm.getAvatar());
+                friendDTO.setRoomId(roomChatId);
+                Long group_Id = friendRepo.getGroupByUser(userConfirm.getUserId(), userInvite.getUserId()).get(0)
+                        .getGroup()
+                        .getGroupId();
+                friendDTO.setGroupId(group_Id);
+                if (userId == userConfirm.getUserId()) {
+                    friendDTO.setFriendName(userInvite.getFullName());
+                    friendDTO.setFriendAvatar(userInvite.getAvatar());
+                    friendDTO.setFriendEmail(userInvite.getEmail());
+                    friendDTO.setFriendUserId(userInvite.getUserId());
+                } else {
+                    friendDTO.setFriendName(userConfirm.getFullName());
+                    friendDTO.setFriendAvatar(userConfirm.getAvatar());
+                    friendDTO.setFriendEmail(userConfirm.getEmail());
+                    friendDTO.setFriendUserId(userConfirm.getUserId());
+                }
+                friendDTO.setStatus(friend.getStatus());
+                Long groupId = friendRepo
+                        .getFriendByUserInviteIdAndUserConfirm(userInvite.getUserId(), userConfirm.getUserId()).get(0)
+                        .getGroup().getGroupId();
+                Long roomId = roomChatRepo.getRoomChatByGroupId(groupId).getRoomId();
+                List<Contacts> contacts = contactRepo.getContactByRoomId(roomId);
+                List<ContactDTO> listContactDTO = new ArrayList<>();
+                for (Contacts contact : contacts) {
+                    Users user = userRepo.findById(contact.getUserId()).get();
+                    ContactDTO contactDTO = new ContactDTO(user.getUserId(), user.getFullName(), user.getEmail(),
+                            user.getAvatar(), user.getStudentCode(), contact.getContactId());
+                    listContactDTO.add(contactDTO);
+                    friendDTO.setListContact(listContactDTO);
+                }
 
-            listDTO.add(friendDTO);
+                listDTO.add(friendDTO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return listDTO;
     }
@@ -250,7 +255,7 @@ public class UserServiceImpl implements UserService {
             } catch (Exception e) {
             }
             List<Friends> th1 = friendRepo.getFriendByUserInviteIdAndUserConfirm(userId, userFr.getUserId());
-            if (th1.size() == 0) {
+            if (th1.size() == 0 || th1.get(0).getIsFriend() == false) {
                 userFr.setStatus(2L);
             } else {
                 userFr.setUserConfirmId(th1.get(0).getUserConfirm().getUserId());
@@ -553,8 +558,8 @@ public class UserServiceImpl implements UserService {
     public List<UserUpdateDTO> getAllUserFull() {
         List<Users> list = userRepo.findAll();
         List<UserUpdateDTO> listDTO = new ArrayList<>();
-        try{
-            for(int i = 0; i < list.size(); i++) {
+        try {
+            for (int i = 0; i < list.size(); i++) {
                 UserUpdateDTO userUpdateDTO = modelMapper.map(list.get(i), UserUpdateDTO.class);
                 UserDetail userDetail = userDetailRepo.findByUserId(list.get(i).getUserId());
                 userUpdateDTO.setBirthday(userDetail.getBirthday());
@@ -567,7 +572,7 @@ public class UserServiceImpl implements UserService {
                 userUpdateDTO.setFullName(list.get(i).getFullName());
                 listDTO.add(userUpdateDTO);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
         return listDTO;

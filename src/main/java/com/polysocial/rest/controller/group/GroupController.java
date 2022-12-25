@@ -111,7 +111,7 @@ public class GroupController {
 
     @PostMapping(value = CentralAPI.API_CREATE_GROUP)
     public ResponseEntity createGroup(@ModelAttribute GroupDTO group) {
-    	System.out.println("group--->"+group.getClassName());
+        System.out.println("group--->" + group.getClassName());
         try {
             GroupDTO groups = groupService.createGroup(group);
             return new ResponseEntity(groups, HttpStatus.OK);
@@ -147,10 +147,14 @@ public class GroupController {
     }
 
     @PostMapping(value = CentralAPI.API_CREATE_GROUP_EXCEL, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity createExcel(@RequestParam(value = "file", required = false) MultipartFile file, @RequestParam Long groupId)
+    public ResponseEntity createExcel(@RequestParam(value = "file", required = false) MultipartFile file,
+            @RequestParam Long groupId)
             throws IOException {
         try {
             List<MemberDTO> group = groupService.createExcel(file, groupId);
+            if (group == null) {
+                return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+            }
             return new ResponseEntity(group, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -159,7 +163,8 @@ public class GroupController {
     }
 
     @GetMapping(value = CentralAPI.API_FIND_GROUP_BY_KEYWORK, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity findGroup(@RequestParam("keywork") String keywork, @RequestHeader("Authorization") String token) {
+    public ResponseEntity findGroup(@RequestParam("keywork") String keywork,
+            @RequestHeader("Authorization") String token) {
         try {
             List<GroupDTO> response = groupService.findByKeywork(keywork, jwt.getIdFromJWT(token));
             return new ResponseEntity(response, HttpStatus.OK);
@@ -211,7 +216,8 @@ public class GroupController {
     }
 
     @PostMapping(value = CentralAPI.API_JOIN_GROUP)
-    public ResponseEntity joinGroup(@RequestParam("groupId") Long groupId, @RequestHeader("Authorization") String token) {
+    public ResponseEntity joinGroup(@RequestParam("groupId") Long groupId,
+            @RequestHeader("Authorization") String token) {
         try {
             MemberDTO response = groupService.memberJoinGroup(groupId, jwt.getIdFromJWT(token));
             return new ResponseEntity(response, HttpStatus.OK);
@@ -230,9 +236,10 @@ public class GroupController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
-    
+
     @PostMapping(value = CentralAPI.API_CONFIRM_MEMBER_GROUP)
-    public ResponseEntity confirmMemberGroup(@RequestParam("groupId") Long groupId, @RequestParam("userId") Long userId) {
+    public ResponseEntity confirmMemberGroup(@RequestParam("groupId") Long groupId,
+            @RequestParam("userId") Long userId) {
         try {
             UserDTO response = groupService.confirmOneMemberGroup(groupId, userId);
             return new ResponseEntity(response, HttpStatus.OK);
@@ -254,13 +261,11 @@ public class GroupController {
     @PutMapping(value = CentralAPI.API_LEAVE_GROUP, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity leaveGroup(@RequestBody UserGroupDTO userGroup) {
         try {
-            groupService.memberLeaveGroup(userGroup.getGroupId(),userGroup.getUserId());
+            groupService.memberLeaveGroup(userGroup.getGroupId(), userGroup.getUserId());
             return new ResponseEntity("Leave group success", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
         }
     }
-
-
 
 }
