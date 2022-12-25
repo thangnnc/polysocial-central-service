@@ -8,6 +8,7 @@ import com.polysocial.entity.Roles;
 import com.polysocial.entity.UserDetail;
 import com.polysocial.entity.Users;
 import com.polysocial.repo.RoleRepo;
+import com.polysocial.repo.UserDetailRepo;
 import com.polysocial.repo.UserRepo;
 import com.polysocial.service.LoginService;
 import com.polysocial.utils.Logger;
@@ -20,12 +21,16 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private UserDetailRepo userDetailRepo;
 
     @Autowired
     private RoleRepo roleRepo;
@@ -74,32 +79,34 @@ public class LoginServiceImpl implements LoginService {
             if (ValidateUtils.isNotNullOrEmpty(userRepo.findByEmailAndIsActive(requestDTO.getEmail(), true))) {
                 return null;
             }
-            requestDTO.setBirthday(LocalDate.parse(requestDTO.getBirthdayStr()));
-            if (requestDTO.getAvatar() == null && requestDTO.getAvatarFile() != null) {
-                 String url = uploadToCloud.saveFile(requestDTO.getAvatarFile());    
-                 requestDTO.setAvatar(url);     
+            if (requestDTO.getAvatarFile() != null) {
+                String url = uploadToCloud.saveFile(requestDTO.getAvatarFile());
+                requestDTO.setAvatar(url);
             }
-               BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
-               Users user = modelMapper.map(requestDTO, Users.class);
-               user.setPassword(bCrypt.encode(user.getPassword()));
-               user.setActive(true);
-               UserDetail userDetail = modelMapper.map(requestDTO, UserDetail.class);
-               Roles role = roleRepo.findByName(requestDTO.getRole());
+
+            BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
+            Users user = modelMapper.map(requestDTO, Users.class);
+            user.setPassword(bCrypt.encode(user.getPassword()));
+            user.setActive(true);
+            UserDetail userDetail = modelMapper.map(requestDTO, UserDetail.class);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            userDetail.setBirthday(LocalDate.parse(requestDTO.getBirthdayStr(), formatter).atStartOfDay());
+            Roles role = roleRepo.findByName(requestDTO.getRole());
 
             if (ValidateUtils.isNullOrEmpty(role)) {
                 return null;
             }
-               user.setRoleId(role.getRoleId());
-               user.setUserDetail(userDetail);
-               user.setCreatedDate(LocalDateTime.now());
-               userDetail.setUser(user);
+            user.setRoleId(role.getRoleId());
+            user.setCreatedDate(LocalDateTime.now());
+            user = userRepo.save(user);
 
-               user = userRepo.save(user);
-               UserDTO response = modelMapper.map(user, UserDTO.class);
-               response.setPassword(null);
-               response.setToken(tokenProvider.generateToken(new CustomUserDetails(user)));
-               response.setRole(role.getName());
-               return response;
+            userDetail.setUserId(user.getUserId());
+            userDetailRepo.save(userDetail);
+            UserDTO response = modelMapper.map(user, UserDTO.class);
+            response.setPassword(null);
+            response.setToken(tokenProvider.generateToken(new CustomUserDetails(user)));
+            response.setRole(role.getName());
+            return response;
 
         } catch (Exception e) {
             Logger.error("Error register new user: " + e.getMessage());

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,7 +26,7 @@ public class RegisterRequestDTO {
 
     private String birthdayStr;
 
-    private LocalDate birthday;
+    private LocalDateTime birthday;
 
     private boolean gender;
 
