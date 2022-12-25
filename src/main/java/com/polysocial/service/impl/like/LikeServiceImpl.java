@@ -61,7 +61,7 @@ public class LikeServiceImpl implements LikeService {
 				if (likes.getUserId() == tokenId &&likes.getStatus() == true) {
 					NotificationsDTO notificationsDTO = new NotificationsDTO(
 							String.format(ContentNotifications.NOTI_CONTENT_LIKE_POST,
-									userRepo.findById(tokenId).get().getFullName(), post.getContent().substring(0, 10)+"..."),
+									userRepo.findById(tokenId).get().getFullName(), post.getContent().length()<20?post.getContent().substring(0)+"...":post.getContent().substring(0, 20)+"..."),
 							TypeNotifications.NOTI_TYPE_LIKE_POST, post.getCreatedBy());
 					notificationsService.createNoti(notificationsDTO);
 				}
