@@ -21,4 +21,7 @@ public class TaskAPI {
 
     public static final String API_GET_ALL_TASK_EX_NOTi = HostURL.GROUP_HOST + "/api/task/get-all-task-ex";
 
+    public static final String API_GET_ALL_TASK_EX_BY_EX_ID =HostURL.GROUP_HOST +  "/api/task/get-task-by-exId";
+
+
 }

@@ -90,4 +90,8 @@ public class CentralAPI {
 	public static final String UPDATE_VIEW_STATUS = "/api/updateViewedStatus";
 	
 	public static final String UPDATE_All_VIEW_STATUS = "/api/updateAllViewedStatus";
+
+
+    public static final String API_GET_ALL_TASK_EX_BY_EX_ID = "/task/get-task-by-exId";
+
 }

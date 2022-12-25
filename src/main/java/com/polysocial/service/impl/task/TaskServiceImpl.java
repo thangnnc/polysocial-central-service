@@ -19,6 +19,7 @@ import com.polysocial.dto.NotificationsDTO;
 import com.polysocial.dto.TaskDetailDTO;
 import com.polysocial.dto.TaskExDTO;
 import com.polysocial.dto.TaskExDetailDTO;
+import com.polysocial.dto.TaskExDetailGroup;
 import com.polysocial.dto.TaskFileCreateDTO;
 import com.polysocial.dto.TaskFileDTO;
 import com.polysocial.entity.Members;
@@ -218,7 +219,7 @@ public class TaskServiceImpl implements TaskService {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
-    }
+        }
     }
 
     @Override
@@ -232,6 +233,24 @@ public class TaskServiceImpl implements TaskService {
             ResponseEntity<Object> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
                     Object.class);
             return (List<TaskExDetailDTO>) entity.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public TaskExDetailGroup countTaskEx(Long exId) {
+        try {
+            String url = TaskAPI.API_GET_ALL_TASK_EX_BY_EX_ID;
+            UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("exId", exId)
+                    .build();
+
+            ResponseEntity<TaskExDetailGroup> entity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,
+                    null,
+                    TaskExDetailGroup.class);
+            return entity.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

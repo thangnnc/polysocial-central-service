@@ -119,5 +119,15 @@ public class TaskController {
             return null;
         }
     }
+
+    @GetMapping(value = CentralAPI.API_GET_ALL_TASK_EX_BY_EX_ID)
+    public ResponseEntity countTask(@RequestParam Long exId) {
+        try {
+            return ResponseEntity.ok(taskService.countTaskEx(exId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     
 }
