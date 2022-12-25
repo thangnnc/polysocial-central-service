@@ -632,6 +632,11 @@ public class GroupServiceImpl implements GroupService {
             message.setContent(encodedString);
             message.setContact(contact);
             messageRepo.save(message);
+
+            ViewedStatus view = viewedStatusRepo.findByContactId(contact.getContactId());
+            view.setLastUpdateDate(now);
+            viewedStatusRepo.save(view);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

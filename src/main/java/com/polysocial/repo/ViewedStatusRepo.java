@@ -9,5 +9,7 @@ import com.polysocial.entity.ViewedStatus;
 @Repository
 public interface ViewedStatusRepo  extends JpaRepository<ViewedStatus, Long> {
 
+    //find by contact
+    ViewedStatus findByContactId(Long contactId);
     
 }
