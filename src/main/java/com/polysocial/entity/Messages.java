@@ -15,6 +15,7 @@ import java.util.Objects;
 @Setter
 @RequiredArgsConstructor
 @Entity
+@Table(name = "`Messages`")
 public class Messages implements Serializable {
 
     @Id
