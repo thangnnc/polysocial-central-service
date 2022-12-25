@@ -64,11 +64,10 @@ public class CommentServiceImpl implements CommentService {
 
 			Posts post = postRepo.findByPostId(dto.getPostId());
 			if (dto.getIdReply() != null) {
-
 				Comments comments = commentRepo.findById(dto.getIdReply()).get();
 				NotificationsDTO noti = new NotificationsDTO(
 						String.format(ContentNotifications.NOTI_CONTENT_REPLY_COMMENT,
-								userRepo.findById(tokenId).get().getFullName()),
+								userRepo.findById(tokenId).get().getFullName(), post.getContent().substring(0, 10)+"..."),
 						TypeNotifications.NOTI_TYPE_COMMENT_POST, comments.getUserId());
 				notificationsService.createNoti(noti);
 			} else {
@@ -77,7 +76,7 @@ public class CommentServiceImpl implements CommentService {
 				}
 				NotificationsDTO noti = new NotificationsDTO(
 						String.format(ContentNotifications.NOTI_CONTENT_COMMENT_POST,
-								userRepo.findById(tokenId).get().getFullName()),
+								userRepo.findById(tokenId).get().getFullName(), post.getContent().substring(0, 10)+"..."),
 						TypeNotifications.NOTI_TYPE_COMMENT_POST,
 						postRepo.findByPostId(dto.getPostId()).getCreatedBy());
 				notificationsService.createNoti(noti);
