@@ -28,6 +28,7 @@ import com.polysocial.repo.CommentRepo;
 import com.polysocial.repo.PostRepo;
 import com.polysocial.repo.UserRepo;
 import com.polysocial.type.TypeNotifications;
+import com.polysocial.entity.Posts;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -60,7 +61,10 @@ public class CommentServiceImpl implements CommentService {
 			HttpEntity entity = new HttpEntity(dto, header);
 			ResponseEntity<CommentDTO> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity,
 					CommentDTO.class);
+
+			Posts post = postRepo.findByPostId(dto.getPostId());
 			if (dto.getIdReply() != null) {
+
 				Comments comments = commentRepo.findById(dto.getIdReply()).get();
 				NotificationsDTO noti = new NotificationsDTO(
 						String.format(ContentNotifications.NOTI_CONTENT_REPLY_COMMENT,
@@ -68,6 +72,9 @@ public class CommentServiceImpl implements CommentService {
 						TypeNotifications.NOTI_TYPE_COMMENT_POST, comments.getUserId());
 				notificationsService.createNoti(noti);
 			} else {
+				if (post.getUser().getUserId() == tokenId) {
+					return responseEntity.getBody();
+				}
 				NotificationsDTO noti = new NotificationsDTO(
 						String.format(ContentNotifications.NOTI_CONTENT_COMMENT_POST,
 								userRepo.findById(tokenId).get().getFullName()),
