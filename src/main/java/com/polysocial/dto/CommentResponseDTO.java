@@ -8,6 +8,8 @@ import com.polysocial.entity.Users;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -17,9 +19,21 @@ public class CommentResponseDTO {
     
     private String content;
 
-    private Date createdDate;
+    private LocalDateTime createdDate = LocalDateTime.now();
 
     private Long userId;
     
     private Users user;
+
+    private List<CommentReplyDTO> commentReplies;
+
+    private Long idReply;
+
+    public CommentResponseDTO(String content, Long userId, List<CommentReplyDTO> commentReplies) {
+        this.content = content;
+        this.userId = userId;
+        this.commentReplies = commentReplies;
+    }
+
 }
+
