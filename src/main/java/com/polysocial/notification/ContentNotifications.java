@@ -9,6 +9,7 @@ public class ContentNotifications {
     public static final String NOTI_CONTENT_ADMIN_POST = "%s đã đăng bài viết lên nhóm %s";
     public static final String NOTI_CONTENT_LIKE_POST = "%s đã thích bài viết của bạn";
     public static final String NOTI_CONTENT_COMMENT_POST = "%s đã bình luận bài viết của bạn";
+    public static final String NOTI_CONTENT_REPLY_COMMENT = "%s đã trả lời bình luận của bạn";
     public static final String NOTI_CONTENT_CREATE_DEADLINE = "%s đã tạo deadline";
     public static final String NOTI_CONTENT_UPLOAD_FILE_GROUP = "%s đã tải tài liệu lên nhóm %s";
     public static final String NOTI_CONTENT_UPLOAD_FILE_GROUP_UPDATE = "%s đã cập nhật tài liệu lên nhóm %s";

@@ -13,7 +13,7 @@ public interface StatisticalRepo extends JpaRepository<Users, Long>{
     @Query(value = "SELECT COUNT(o) FROM Users o WHERE o.role.roleId = 2")
     Long countStudent();
 
-    @Query(value = "SELECT COUNT(o) FROM Groups o WHERE  o.totalMember not like 0 and o.status = 1")
+    @Query(value = "SELECT COUNT(o) FROM Groups o WHERE  o.totalMember not like null and o.status = 1")
     Long countGroups();
 
     @Query(value = "SELECT COUNT(o) FROM Users o WHERE o.role.roleId = 1")

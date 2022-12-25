@@ -55,10 +55,21 @@ public class CommentServiceImpl implements CommentService {
 			HttpEntity entity = new HttpEntity(dto, header);
 			ResponseEntity<CommentDTO> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity,
 					CommentDTO.class);
-			NotificationsDTO noti = new NotificationsDTO(
-					String.format(ContentNotifications.NOTI_CONTENT_COMMENT_POST,  userRepo.findById(tokenId).get().getFullName()),
-					TypeNotifications.NOTI_TYPE_COMMENT_POST, postRepo.findByPostId(dto.getPostId()).getCreatedBy());
-			notificationsService.createNoti(noti);
+			if (dto.getIdReply() != null) {
+				NotificationsDTO noti = new NotificationsDTO(
+						String.format(ContentNotifications.NOTI_CONTENT_REPLY_COMMENT,
+								userRepo.findById(tokenId).get().getFullName()),
+						TypeNotifications.NOTI_TYPE_COMMENT_POST, dto.getIdReply());
+				notificationsService.createNoti(noti);
+			} else {
+				NotificationsDTO noti = new NotificationsDTO(
+						String.format(ContentNotifications.NOTI_CONTENT_COMMENT_POST,
+								userRepo.findById(tokenId).get().getFullName()),
+						TypeNotifications.NOTI_TYPE_COMMENT_POST,
+						postRepo.findByPostId(dto.getPostId()).getCreatedBy());
+				notificationsService.createNoti(noti);
+			}
+
 			return responseEntity.getBody();
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -15,8 +15,11 @@ import com.polysocial.dto.NotificationsDTO;
 import com.polysocial.service.like.LikeService;
 import com.polysocial.service.notifications.NotificationsService;
 import com.polysocial.notification.ContentNotifications;
+import com.polysocial.repo.PostRepo;
 import com.polysocial.repo.UserRepo;
 import com.polysocial.type.TypeNotifications;
+import com.polysocial.entity.Posts;
+
 @Service
 public class LikeServiceImpl implements LikeService {
 
@@ -29,6 +32,9 @@ public class LikeServiceImpl implements LikeService {
 	@Autowired
 	private UserRepo userRepo;
 
+	@Autowired
+	private PostRepo postRepo;
+
 	@Override
 	public LikeDTO likeUnLike(LikeDTO dto, Long tokenId) {
 		try {
@@ -38,10 +44,16 @@ public class LikeServiceImpl implements LikeService {
 			dto.setUserId(tokenId);
 			HttpEntity<LikeDTO> httpEntity = new HttpEntity(dto, hedear);
 			ResponseEntity<LikeDTO> entity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, LikeDTO.class);
-			NotificationsDTO notificationsDTO = new NotificationsDTO(
-					String.format(ContentNotifications.NOTI_CONTENT_LIKE_POST, userRepo.findById(tokenId).get().getFullName()),
-					TypeNotifications.NOTI_TYPE_LIKE_POST, dto.getUserId());
-			notificationsService.createNoti(notificationsDTO);
+
+			Posts post = postRepo.findByPostId(dto.getPostId());
+			if (post == null) {
+				NotificationsDTO notificationsDTO = new NotificationsDTO(
+						String.format(ContentNotifications.NOTI_CONTENT_LIKE_POST,
+								userRepo.findById(tokenId).get().getFullName()),
+						TypeNotifications.NOTI_TYPE_LIKE_POST, post.getCreatedBy());
+				notificationsService.createNoti(notificationsDTO);
+			}
+
 			return entity.getBody();
 		} catch (Exception e) {
 			e.printStackTrace();
