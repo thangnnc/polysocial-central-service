@@ -23,4 +23,6 @@ public class CommentReplyDTO {
     private Long userId;
     
     private Users user;
+
+    private Long cmtId;
 }
