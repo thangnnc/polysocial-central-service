@@ -35,14 +35,14 @@ public class Comments implements Serializable {
 
     private Long idReply;
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name="manageCmt", insertable = false, updatable = false)
-    private Comments manager;
+    // @JsonBackReference
+    // @ManyToOne
+    // @JoinColumn(name="manageCmt", insertable = false, updatable = false)
+    // private Comments manager;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy="manager")
-    private List<Comments> comments;
+    // @JsonManagedReference
+    // @OneToMany(mappedBy="manager")
+    // private List<Comments> comments;
 
     @ManyToOne
     @JoinColumn(name = "userId", insertable = false, updatable = false)
